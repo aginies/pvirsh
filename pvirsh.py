@@ -41,7 +41,6 @@ def check_group(groupfile,group):
                 found = True
 
         if found:
-            print('DEBUG Found')
             pass
         else:
             print(group+ 'Not found!')
@@ -117,8 +116,8 @@ def para_cmd(file,group,cmd,cmdoptions=''):
     vms = find_matching_vm(file,group)
     # splitlines because of \n
     vms = str(vms).splitlines()
-    print("Number of processors: ", mp.cpu_count())
-    print('Will launch: "' +str(cmd) + ' VM ' +str(cmdoptions) + '"\n')
+    #print("Number of processors: ", mp.cpu_count())
+    print('Will launch: "' +str(cmd) + ' VirtualMachineName ' +str(cmdoptions) + '"\n')
     pool = mp.Pool(mp.cpu_count())
     results = [pool.apply(do_virsh_cmd, args=(vm, cmd, cmdoptions)) for vm in vms]
     pool.close()

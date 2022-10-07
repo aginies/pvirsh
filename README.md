@@ -1,6 +1,6 @@
 # Goal
 
-Being able to execute the same command on a pool of guest.
+Being able to execute the same command on an group of Virtual Machine.
 If you want to destroy more than 5 VM this is really annoying with current tool.
 What about adding/removing the same device to 10 VM?
 
@@ -10,11 +10,12 @@ A lot... this is experimental:
 * use libvirt api directly instead of virsh
 * detect VM state before doing anything
 * collect error in a better way
+* validate the yaml file before using it
 * etc....
 
 # Define Virtual Machine group
 
-This should be done in a yaml file like:
+This should be done in a **yaml** file like:
 
 ```yaml
 suse:
@@ -30,7 +31,7 @@ windows:
   - win10
 ```
 
-By default the script will use '''groups.yaml''' in the same path.
+By default the script will use **groups.yaml** in the same path.
 * sle15sp31$ : will match exactly this machine name
 * sle15sp4 : will match all VM, including sle15sp4*
 
@@ -56,10 +57,10 @@ Options:
 
 # Example
 
-Get the state of all virtual Machine in '''suse''' group:
+Get the state of all virtual Machine in **suse** group:
 
 ```bash
-./pvirsh.py -g suse -c domstate
+./pvirsh.py -f groups.yaml -g suse -c domstate
 
 Selected group is suse: ['sle15sp31$', 'sle15sp4']
 Number of processors:  12
