@@ -27,11 +27,22 @@ def esc(code):
 def show_file_example():
     """ Show an example of a groups.yaml file"""
 
-    delimiter = "------------------\n"
-    example = "suse:\n  - sle15sp31$\n  - sle15sp4\nrhel:\n  - rhe\n  - fedora\n"
-    info = "\nInformation/tips:\n- use NAME$ to match exact NAME (add $ at the end)\n- NAME will match everything starting with NAME*\n  ie: NAMEguibo,NAME,NAME15SP4"
+    example = """
+--------------------
+suse:
+  - sle15sp31$
+  - sle15sp4
+rhel:
+  - rhe
+  - fedora
+--------------------
+
+Information/tips:
+- use NAME$ to match exact NAME (add $ at the end)
+- NAME will match everything starting with NAME* 
+  ie: NAMEguibo,NAME,NAME15SP4"""
     print('Example of a group yaml file:')
-    print(delimiter + example + delimiter + info)
+    print(example)
 
 def check_group(groupfile,group):
     """check that the group exist in the yaml file"""
