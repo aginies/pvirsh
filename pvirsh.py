@@ -139,8 +139,10 @@ def para_cmd(file,group,cmd,cmdoptions=''):
     #print("Number of processors: ", mp.cpu_count())
     print('Will launch: "' +str(cmd) + ' VirtualMachineName ' +str(cmdoptions) + '"\n')
     pool = mp.Pool(mp.cpu_count())
-    results = [pool.apply(do_virsh_cmd, args=(vm, cmd, cmdoptions)) for vm in vms]
+    for vm in vms:
+        pool.apply_async(do_virsh_cmd, args = (vm, cmd, cmdoptions))
     pool.close()
+    pool.join()
     print(results) #[:10])
 
 # list of domain command available with virsh
