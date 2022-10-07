@@ -1,0 +1,11 @@
+suse:
+  - sle15sp31$
+  - sle15sp4
+
+rhel:
+  - rhe
+  - fedora
+
+windows:
+  - win7
+  - win10
