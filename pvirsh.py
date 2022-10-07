@@ -143,6 +143,37 @@ def para_cmd(file,group,cmd,cmdoptions=''):
     pool.close()
     print(results) #[:10])
 
+# list of domain command available with virsh
+listdomaincmd = [ 'attach-device','attach-disk','attach-interface',
+                   'autostart','blkdeviotune','blkiotune','blockcommit',
+                   'blockcopy','blockjob','blockpull','blockresize',
+                   'change-media','cpu-stats','create','define',
+                   'desc','destroy','detach-device','detach-device-alias',
+                   'detach-disk','detach-interface','domdisplay','domfsfreeze',
+                   'domfsthaw','domfsinfo','domfstrim','domhostname','domid',
+                   'domif-setlink','domiftune','domjobabort','domjobinfo',
+                   'domlaunchsecinfo','domsetlaunchsecstate','domname',
+                   'domrename','dompmsuspend','dompmwakeup','domuuid',
+                   'domxml-from-native','domxml-to-native','dump','dumpxml',
+                   'event','get-user-sshkeys','inject-nmi','iothreadinfo',
+                   'iothreadpin','iothreadadd','iothreadset','iothreaddel',
+                   'send-key','send-process-signal','lxc-enter-namespace',
+                   'managedsave','managedsave-remove','managedsave-edit',
+                   'managedsave-dumpxml','managedsave-define','memtune',
+                   'perf','metadata','migrate','migrate-setmaxdowntime',
+                   'migrate-getmaxdowntime','migrate-compcache',
+                   'migrate-setspeed','migrate-getspeed','migrate-postcopy',
+                   'numatune','qemu-attach','qemu-monitor-command',
+                   'qemu-monitor-event','qemu-agent-command',
+                   'guest-agent-timeout','reboot','reset','restore',
+                   'resume','save','save-image-define','save-image-dumpxml',
+                   'save-image-edit','schedinfo','screenshot',
+                   'set-lifecycle-action','set-user-sshkeys','set-user-password',
+                   'setmaxmem','setmem','setvcpus','shutdown','start','suspend',
+                   'undefine','update-device','update-memory-device','vcpucount',
+                   'vcpuinfo','vcpupin','emulatorpin','vncdisplay','guestvcpus',
+                   'setvcpu','domblkthreshold','guestinfo','domdirtyrate-calc' ]
+
 def main():
     """ main function"""
 
@@ -161,6 +192,7 @@ def main():
     parser.add_option('-c', '--cmd',
         dest = 'cmd',
         action = 'store',
+        choices = listdomaincmd,
         help = 'Command to execute on a group of VM')
     parser.add_option('-o', '--options',
         dest = 'cmdoptions',
@@ -177,6 +209,7 @@ def main():
     parser.add_option('-d', '--cmddoc',
         dest = 'cmddoc',
         action = 'store',
+        choices = listdomaincmd,
         help = 'Show the virsh CMD documentation')
 
     print('\n')
@@ -226,7 +259,8 @@ def main():
         if options.cmd is None:
             print('You have an option but no command to execute...')
     if options.cmd is None:
-        print('Nothing todo, no command to execute...')
+        print('Nothing todo, no command to execute... Available are:')
+        print(listdomaincmd)
     else:
         check_group(options.file,options.group)
         # for now launch a virsh commande line
