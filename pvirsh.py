@@ -144,10 +144,11 @@ def para_cmd(file,group,cmd,cmdoptions=''):
     print(results) #[:10])
 
 # list of domain command available with virsh
+# remove some: create, console
 listdomaincmd = [ 'attach-device','attach-disk','attach-interface',
                    'autostart','blkdeviotune','blkiotune','blockcommit',
                    'blockcopy','blockjob','blockpull','blockresize',
-                   'change-media','cpu-stats','create','define',
+                   'change-media','cpu-stats','define','domstate',
                    'desc','destroy','detach-device','detach-device-alias',
                    'detach-disk','detach-interface','domdisplay','domfsfreeze',
                    'domfsthaw','domfsinfo','domfstrim','domhostname','domid',
