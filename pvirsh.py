@@ -19,8 +19,13 @@ import optparse
 def validate_file():
     print('todo')
 
+def esc(code):
+    """ Better layout with some color"""
+
+    return f'\033[{code}m'
+
 def show_file_example():
-    """ Show an example of a group.yaml file"""
+    """ Show an example of a groups.yaml file"""
 
     delimiter = "------------------\n"
     example = "suse:\n  - sle15sp31$\n  - sle15sp4\nrhel:\n  - rhe\n  - fedora\n"
@@ -94,20 +99,24 @@ def find_matching_vm(groupfile,group):
 
         return vms
 
+
 def do_virsh_cmd(vm,cmd,cmdoptions):
     """execute the command on all the VM defined"""
 
     # 'attach-device' requires <domain> option
     # 'domstate' requires <domain> option
     cmdtolaunch = cmd + ' ' + vm + ' ' + cmdoptions
-    print(cmdtolaunch)
     proc = subprocess.Popen(cmdtolaunch,shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
     rc = proc.wait()
     out, errs = proc.communicate(timeout=2)
     out = str(out, 'utf-8')
-    print(vm  + ": " + out)
+    out = out.strip("\n")
     if errs:
-        print('ERROR: ' +str(vm)+ ': ' +str(errs))
+        print('Command was:' +str(cmdtolaunch))
+        print(esc('31;1;4') + 'ERROR: ' +str(vm)+ ': ' +str(errs)+ esc(0) + '\n')
+    else:
+        print(cmdtolaunch, end= " ")
+        print(out + " " + esc('32;1;4') + 'Done' + esc(0))
 
 def para_cmd(file,group,cmd,cmdoptions=''):
     """Start pool of command"""
@@ -121,7 +130,7 @@ def para_cmd(file,group,cmd,cmdoptions=''):
     pool = mp.Pool(mp.cpu_count())
     results = [pool.apply(do_virsh_cmd, args=(vm, cmd, cmdoptions)) for vm in vms]
     pool.close()
-    print(results[:10])
+    print(results) #[:10])
 
 def main():
     """ main function"""

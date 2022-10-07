@@ -60,30 +60,33 @@ Options:
 Get the state of all virtual Machine in **suse** group:
 
 ```bash
-./pvirsh.py -f groups.yaml -g suse -c domstate
+./pvirsh.py -g suse -c domstate
 
 Selected group is suse: ['sle15sp31$', 'sle15sp4']
-Number of processors:  12
-Will launch: "virsh domstate VM "
+Will launch: "virsh domstate VirtualMachineName "
 
-virsh domstate sle15sp4 
-sle15sp4: shut off
+virsh domstate sle15sp4  shut off Done
+virsh domstate sle15sp4-2  shut off Done
+virsh domstate sle15sp41  shut off Done
+virsh domstate sle15sp42  shut off Done
+virsh domstate sle15sp43  shut off Done
+virsh domstate sle15sp44  shut off Done
+virsh domstate sle15sp31  shut off Done
+```
 
-virsh domstate sle15sp4-2 
-sle15sp4-2: shut off
+Setting hard-limit memory to 1.024GB for all VM:
 
-virsh domstate sle15sp41 
-sle15sp41: shut off
+```bash
+./pvirsh.py -g suse -c memtune -o "--hard-limit 1000000"
 
-virsh domstate sle15sp42 
-sle15sp42: shut off
+Selected group is suse: ['sle15sp31$', 'sle15sp4']
+Will launch: "virsh memtune VirtualMachineName --hard-limit 1000000"
 
-virsh domstate sle15sp43 
-sle15sp43: shut off
-
-virsh domstate sle15sp44 
-sle15sp44: shut off
-
-virsh domstate sle15sp31 
-sle15sp31: shut off
+virsh memtune sle15sp4 --hard-limit 1000000  Done
+virsh memtune sle15sp4-2 --hard-limit 1000000  Done
+virsh memtune sle15sp41 --hard-limit 1000000  Done
+virsh memtune sle15sp42 --hard-limit 1000000  Done
+virsh memtune sle15sp43 --hard-limit 1000000  Done
+virsh memtune sle15sp44 --hard-limit 1000000  Done
+virsh memtune sle15sp31 --hard-limit 1000000  Done
 ```
