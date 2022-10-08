@@ -40,6 +40,8 @@ By default the script will use **groups.yaml** in the same path.
 Usage:
         pvirsh.py -f GROUP.yaml -g VM_GROUP -c 'command command_option'
 
+        example:
+        pvirsh.py -g suse -c 'domstate --reason'
 
 Options:
   -h, --help            show this help message and exit
