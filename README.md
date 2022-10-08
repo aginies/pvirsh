@@ -7,10 +7,9 @@ What about adding/removing the same device to 10 VM?
 # TODO
 
 A lot... this is experimental:
-* use libvirt api directly instead of virsh
 * detect VM state before doing anything
-* collect error in a better way
 * validate the yaml file before using it
+* use libvirt api directly instead of virsh?
 * etc....
 
 # Define Virtual Machine group

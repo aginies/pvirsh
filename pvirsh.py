@@ -109,7 +109,10 @@ def find_matching_vm(groupfile,group):
                     out, errs = system_command(cmd)
                     if errs:
                         print(errs)
-                    vms = out + vms
+                    if (len(out) == 0):
+                        print(esc('31;1;1') +vm +' Virtual Machine Not found' +esc(0))
+                    else:
+                        vms = out + vms
             else:
                 # not correct group
                 pass
