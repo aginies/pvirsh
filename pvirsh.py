@@ -175,7 +175,7 @@ def para_cmd(file, group, cmd):
         cmd, cmdoptions = cmd.split(" ", 1)
     else:
         cmdoptions = ''
-    #tolaunch = 'virsh ' +str(precmd) + ' VirtualMachineName ' +str(cmdoptions)
+    #tolaunch = 'virsh ' +str(cmd) + ' VirtualMachineName ' +str(cmdoptions)
     #print('Will launch: ' +tolaunch +'\n')
     cmd = 'virsh ' +cmd
     pool = mp.Pool(mp.cpu_count())
@@ -186,8 +186,15 @@ def para_cmd(file, group, cmd):
     print(results) #[:10])
 
 # list of domain command available with virsh
-# remove some: create, console
-list_domaincmd = ['attach-device', 'attach-disk', 'attach-interface', 'autostart', 'blkdeviotune', 'blkiotune', 'blockcommit', 'blockcopy', 'blockjob', 'blockpull', 'blockresize', 'change-media', 'console', 'cpu-stats', 'create', 'define', 'desc', 'destroy', 'detach-device', 'detach-device-alias', 'detach-disk', 'detach-interface', 'domdisplay', 'domfsfreeze', 'domfsthaw', 'domfsinfo', 'domfstrim', 'domhostname', 'domid', 'domif-setlink', 'domiftune', 'domjobabort', 'domjobinfo', 'domlaunchsecinfo', 'domsetlaunchsecstate', 'domname', 'domrename', 'dompmsuspend', 'domstate', 'dompmwakeup', 'domuuid', 'domxml-from-native', 'domxml-to-native', 'dump', 'dumpxml', 'edit', 'event', 'get-user-sshkeys', 'inject-nmi', 'iothreadinfo', 'iothreadpin', 'iothreadadd', 'iothreadset', 'iothreaddel', 'send-key', 'send-process-signal', 'lxc-enter-namespace', 'managedsave', 'managedsave-remove', 'managedsave-edit', 'managedsave-dumpxml', 'managedsave-define', 'memtune', 'perf', 'metadata', 'migrate', 'migrate-setmaxdowntime', 'migrate-getmaxdowntime', 'migrate-compcache', 'migrate-setspeed', 'migrate-getspeed', 'migrate-postcopy', 'numatune', 'qemu-attach', 'qemu-monitor-command', 'qemu-monitor-event', 'qemu-agent-command', 'guest-agent-timeout', 'reboot', 'reset', 'restore', 'resume', 'save', 'save-image-define', 'save-image-dumpxml', 'save-image-edit', 'schedinfo', 'screenshot', 'set-lifecycle-action', 'set-user-sshkeys', 'set-user-password', 'setmaxmem', 'setmem', 'setvcpus', 'shutdown', 'start', 'suspend', 'ttyconsole', 'undefine', 'update-device', 'update-memory-device', 'vcpucount', 'vcpuinfo', 'vcpupin', 'emulatorpin', 'vncdisplay', 'guestvcpus', 'setvcpu', 'domblkthreshold', 'guestinfo', 'domdirtyrate-calc']
+# remove some: create console domrename define managedsave-define managedsave-edit domid
+list_domain_cmd = ['attach-device', 'attach-disk', 'attach-interface', 'autostart', 'blkdeviotune', 'blkiotune', 'blockcommit', 'blockcopy', 'blockjob', 'blockpull', 'blockresize', 'change-media', 'cpu-stats', 'desc', 'destroy', 'detach-device', 'detach-device-alias', 'detach-disk', 'detach-interface', 'domdisplay', 'domfsfreeze', 'domfsthaw', 'domfsinfo', 'domfstrim', 'domhostname', 'domid', 'domif-setlink', 'domiftune', 'domjobabort', 'domjobinfo', 'domlaunchsecinfo', 'domsetlaunchsecstate', 'domname', 'dompmsuspend', 'domstate', 'dompmwakeup', 'domuuid', 'domxml-from-native', 'domxml-to-native', 'dump', 'dumpxml', 'edit', 'event', 'get-user-sshkeys', 'inject-nmi', 'iothreadinfo', 'iothreadpin', 'iothreadadd', 'iothreadset', 'iothreaddel', 'send-key', 'send-process-signal', 'managedsave', 'managedsave-remove', 'managedsave-dumpxml', 'memtune', 'perf', 'metadata', 'migrate', 'migrate-setmaxdowntime', 'migrate-getmaxdowntime', 'migrate-compcache', 'migrate-setspeed', 'migrate-getspeed', 'migrate-postcopy', 'numatune', 'qemu-attach', 'qemu-monitor-command', 'qemu-monitor-event', 'qemu-agent-command', 'guest-agent-timeout', 'reboot', 'reset', 'restore', 'resume', 'save', 'save-image-define', 'save-image-dumpxml', 'save-image-edit', 'schedinfo', 'screenshot', 'set-lifecycle-action', 'set-user-sshkeys', 'set-user-password', 'setmaxmem', 'setmem', 'setvcpus', 'shutdown', 'start', 'suspend', 'ttyconsole', 'undefine', 'update-device', 'update-memory-device', 'vcpucount', 'vcpuinfo', 'vcpupin', 'emulatorpin', 'vncdisplay', 'guestvcpus', 'setvcpu', 'domblkthreshold', 'guestinfo', 'domdirtyrate-calc']
+
+list_domain_monitoring = ['domblkerror', 'domblkinfo', 'domblklist', 'domblkstat',
+                          'domcontrol', 'domif-getlink', 'domifaddr', 'domiflist',
+                          'domifstat', 'dominfo', 'dommemstat', 'domstate',
+                          'domstats', 'domtimedomain', 'list']
+
+list_domain_all_cmd = list_domain_cmd + list_domain_monitoring
 
 def main():
     """ main function"""
@@ -216,7 +223,7 @@ def main():
     parser.add_option('-v', '--virsh', dest='virsh', action='store_false',
                       help='Show all virsh domain commands available')
     parser.add_option('-d', '--cmddoc', dest='cmddoc', action='store',
-                      choices=list_domaincmd,
+                      choices=list_domain_all_cmd,
                       help='Show the virsh CMD documentation')
 
     print('\n')
@@ -259,7 +266,7 @@ def main():
             print(esc('31;1;1') + 'Nothing todo, no COMMAND to execute...' +esc(0))
             print('-c COMMAND')
             print(esc('32;1;4') + 'Available are:' +esc(0))
-            print(list_domaincmd)
+            print(list_domain_all_cmd)
         else:
             if ',' in options.group:
                 mgroup = options.group.split(",")
@@ -359,23 +366,40 @@ Type:  'help' for help with commands
         if group is None:
             print('Please seclect a group of VM: select_group GROUP_VM')
         else:
-            if cmd in list_domaincmd:
+            testcmd = cmd.split(" ")
+            if testcmd[0] in list_domain_all_cmd:
                 para_cmd(self.file, group, cmd)
             else:
-                print(list_domaincmd)
+                print(list_domain_all_cmd)
 
     def complete_cmd(self, text, line, begidx, endidx):
         if not text:
-            completions = list_domaincmd[:]
+            completions = list_domain_all_cmd[:]
         else:
-            completions = [f
-                           for f in list_domaincmd
-                           if f.startswith(text)
-                          ]
+            completions = [f for f in list_domain_all_cmd if f.startswith(text) ]
         return completions
 
     def help_cmd(self):
         print("Command to execute on a group of VM")
+
+    # same as complete_hcmd but sadly cant not copy it as it will not work...
+    def complete_hcmd(self, text, line, begidx, endidx):
+        if not text:
+            completions = list_domain_all_cmd[:]
+        else:
+            completions = [f for f in list_domain_all_cmd if f.startswith(text) ]
+        return completions
+
+    def do_hcmd(self, cmd):
+        if cmd in list_domain_all_cmd:
+            fcmd = 'virsh help ' +cmd
+            out, errs = system_command(fcmd)
+            print(str(out) +str(errs))
+        else:
+            print(list_domain_all_cmd)
+
+    def help_hcmd(self):
+        print("Show the option of a virsh command")
 
     do_EOF = do_quit
     help_EOF = help_quit
