@@ -1,20 +1,29 @@
 # Goal
 
-Being able to execute the same command on an group of Virtual Machine.
+EXPERIMENTATION FOR [ALP OS](https://documentation.suse.com/alp/all/)
+
+Being able to execute the same **command** on an **group of Virtual Machine**.
 If you want to destroy more than 5 VM this is really annoying with current tool.
 What about adding/removing the same device to 10 VM?
 
+* A yaml file define the group of your VM (list)
+* select the group and launch a domain command on it (async)
+* reports error/success per VM
+* help available (list of command and help)
+* directly launch the **virsh** on the group
+
 # TODO
 
-A lot... this is experimental:
-* detect VM state before doing anything
+Probablu a lot as this is for testing purpose...
+* detect VM state before doing anything for some command
 * validate the yaml file before using it
 * use libvirt api directly instead of virsh?
 * etc....
 
-# Define Virtual Machine group
+# Define Virtual Machine groups
 
-This should be done in a **yaml** file like:
+By default the script will use **groups.yaml** in the same path.
+The **yaml** file looks like:
 
 ```yaml
 suse:
@@ -30,7 +39,6 @@ windows:
   - win10
 ```
 
-By default the script will use **groups.yaml** in the same path.
 * sle15sp31$ : will match exactly this machine name
 * sle15sp4 : will match all VM, including sle15sp4*
 
@@ -56,13 +64,12 @@ Options:
                         Show the virsh CMD documentation
 ```
 
-# Example
+# Examples
 
 Get the state of all virtual Machine in **suse** group:
 
 ```bash
 ./pvirsh.py -g suse,rhel -c domstate
-
 
 Multiple group selected
 Selected group is suse: ['sle15sp31$', 'sle15sp4']
@@ -79,11 +86,10 @@ virsh domstate sle15sp44  shut off Done
 virsh domstate sle15sp43  shut off Done
 ```
 
-Setting hard-limit memory to 1.024GB for all VM:
+Setting hard-limit memory to 1.024GB for all VM in **suse** group:
 
 ```bash
 ./pvirsh.py -g suse -c "memtune --hard-limit 1000000"
-
 
 Selected group is suse: ['sle15sp31$', 'sle15sp4']
 virsh memtune sle15sp31 --hard-limit 1000000  Done
@@ -95,7 +101,7 @@ virsh memtune sle15sp4 --hard-limit 1000000  Done
 virsh memtune sle15sp43 --hard-limit 1000000  Done
 ```
 
-Adding an RNG device to all VM:
+Adding an RNG device to all VM in **suse** group:
 ```bash
 cat rng.xml 
 <rng model="virtio">
@@ -107,11 +113,13 @@ cat rng.xml
 
 
 Selected group is suse: ['sle15sp31$', 'sle15sp4']
-virsh attach-device sle15sp31 --current --file rng.xml Device attached successfully Done
-virsh attach-device sle15sp43 --current --file rng.xml Device attached successfully Done
-virsh attach-device sle15sp4 --current --file rng.xml Device attached successfully Done
-virsh attach-device sle15sp44 --current --file rng.xml Device attached successfully Done
-virsh attach-device sle15sp42 --current --file rng.xml Device attached successfully Done
-virsh attach-device sle15sp41 --current --file rng.xml Device attached successfully Done
 virsh attach-device sle15sp4-2 --current --file rng.xml Device attached successfully Done
+virsh attach-device sle15sp31 --current --file rng.xml Device attached successfully Done
+virsh attach-device sle15sp4 --current --file rng.xml Device attached successfully Done
+virsh attach-device sle15sp41 --current --file rng.xml Device attached successfully Done
+Command was:virsh attach-device sle15sp44 --current --file rng.xml
+ERROR: sle15sp44: b'error: Failed to attach device from rng.xml\nerror: unsupported configuration: a device with the same address already exists \n'
+
+virsh attach-device sle15sp42 --current --file rng.xml Device attached successfully Done
+virsh attach-device sle15sp43 --current --file rng.xml Device attached successfully Done
 ```
