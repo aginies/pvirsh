@@ -47,8 +47,6 @@ Options:
   -f FILE, --file=FILE  Group file to use as yaml file (default will be
                         groups.yaml)
   -c CMD, --cmd=CMD     Command to execute on a group of VM
-  -o CMDOPTIONS, --options=CMDOPTIONS
-                        Option to the command to execute
   -s, --showgroup       Show group of VM file content
   -v, --virsh           Show all virsh domain commands available
   -d CMDDOC, --cmddoc=CMDDOC
@@ -77,16 +75,36 @@ virsh domstate sle15sp31  shut off Done
 Setting hard-limit memory to 1.024GB for all VM:
 
 ```bash
-./pvirsh.py -g suse -c memtune -o "--hard-limit 1000000"
+./pvirsh.py -g suse -c "memtune --hard-limit 1000000"
+
 
 Selected group is suse: ['sle15sp31$', 'sle15sp4']
-Will launch: "virsh memtune VirtualMachineName --hard-limit 1000000"
-
-virsh memtune sle15sp4 --hard-limit 1000000  Done
-virsh memtune sle15sp4-2 --hard-limit 1000000  Done
-virsh memtune sle15sp41 --hard-limit 1000000  Done
-virsh memtune sle15sp42 --hard-limit 1000000  Done
-virsh memtune sle15sp43 --hard-limit 1000000  Done
-virsh memtune sle15sp44 --hard-limit 1000000  Done
 virsh memtune sle15sp31 --hard-limit 1000000  Done
+virsh memtune sle15sp41 --hard-limit 1000000  Done
+virsh memtune sle15sp44 --hard-limit 1000000  Done
+virsh memtune sle15sp4-2 --hard-limit 1000000  Done
+virsh memtune sle15sp42 --hard-limit 1000000  Done
+virsh memtune sle15sp4 --hard-limit 1000000  Done
+virsh memtune sle15sp43 --hard-limit 1000000  Done
+```
+
+Adding an RNG device to all VM:
+```bash
+cat rng.xml 
+<rng model="virtio">
+  <backend model="random">/dev/urandom</backend>
+  <address type="pci" domain="0x0000" bus="0x0a" slot="0x00" function="0x0"/>
+</rng>
+
+./pvirsh.py -g suse -c "attach-device --current --file rng.xml"
+
+
+Selected group is suse: ['sle15sp31$', 'sle15sp4']
+virsh attach-device sle15sp31 --current --file rng.xml Device attached successfully Done
+virsh attach-device sle15sp43 --current --file rng.xml Device attached successfully Done
+virsh attach-device sle15sp4 --current --file rng.xml Device attached successfully Done
+virsh attach-device sle15sp44 --current --file rng.xml Device attached successfully Done
+virsh attach-device sle15sp42 --current --file rng.xml Device attached successfully Done
+virsh attach-device sle15sp41 --current --file rng.xml Device attached successfully Done
+virsh attach-device sle15sp4-2 --current --file rng.xml Device attached successfully Done
 ```

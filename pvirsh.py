@@ -120,8 +120,6 @@ def find_matching_vm(groupfile,group):
 def do_virsh_cmd(vm,cmd,cmdoptions):
     """execute the command on all the VM defined"""
 
-    # 'attach-device' requires <domain> option
-    # 'domstate' requires <domain> option
     cmdtolaunch = cmd + ' ' + vm + ' ' + cmdoptions
     out, errs = system_command(cmdtolaunch)
     out = out.strip("\n")
@@ -132,7 +130,7 @@ def do_virsh_cmd(vm,cmd,cmdoptions):
         print(cmdtolaunch, end= " ")
         print(out + " " + esc('32;1;4') + 'Done' + esc(0))
 
-def para_cmd(file,group,cmd,cmdoptions=''):
+def para_cmd(file,group,cmd):
     """Start pool of command"""
 
     results = []
@@ -140,7 +138,14 @@ def para_cmd(file,group,cmd,cmdoptions=''):
     # splitlines because of \n
     vms = str(vms).splitlines()
     #print("Number of processors: ", mp.cpu_count())
-    print('Will launch: "' +str(cmd) + ' VirtualMachineName ' +str(cmdoptions) + '"\n')
+    # check if there is an option
+    if ' ' in cmd:
+        cmd, cmdoptions = cmd.split(" ", 1)
+    else:
+        cmdoptions = ''
+    #tolaunch = 'virsh ' +str(precmd) + ' VirtualMachineName ' +str(cmdoptions)
+    #print('Will launch: ' +tolaunch +'\n')
+    cmd = 'virsh ' +cmd
     pool = mp.Pool(mp.cpu_count())
     for vm in vms:
         pool.apply_async(do_virsh_cmd, args = (vm, cmd, cmdoptions))
@@ -183,7 +188,9 @@ listdomaincmd = [ 'attach-device','attach-disk','attach-interface',
 def main():
     """ main function"""
 
-    usage = """usage: %prog -h """
+    usage = """usage: 
+        %prog -f GROUP.yaml -g VM_GROUP -c 'command command_option' 
+        """
     parser = optparse.OptionParser(usage=usage)
 
     parser.add_option('-g', '--group',
@@ -197,13 +204,8 @@ def main():
         help = 'Group file to use as yaml file (default will be groups.yaml)')
     parser.add_option('-c', '--cmd',
         dest = 'cmd',
-        action = 'store',
-        choices = listdomaincmd,
+        #choices = listdomaincmd,
         help = 'Command to execute on a group of VM')
-    parser.add_option('-o', '--options',
-        dest = 'cmdoptions',
-        action = 'store',
-        help = 'Option to the command to execute')
     parser.add_option('-s', '--showgroup',
         dest = 'show',
         action = 'store_false',
@@ -243,7 +245,7 @@ def main():
     else:
         cmd = "virsh help " +options.cmddoc
         out, errs = system_command(cmd)
-        out = str(out, 'utf-8')
+        #out = str(out, 'utf-8')
         print(out)
         if errs:
             print(errs)
@@ -253,21 +255,13 @@ def main():
         parser.error('Group of VM to use not given')
         print(usage)
 
-    if options.cmdoptions is None:
-        # if no cmd options given be sure to get this as empty string
-        options.cmdoptions = ''
-    else:
-        if options.cmd is None:
-            print('You have an option but no command to execute...')
     if options.cmd is None:
         print('Nothing todo, no command to execute... Available are:')
         print(listdomaincmd)
     else:
         check_group(options.file,options.group)
         # for now launch a virsh commande line
-        options.cmd = 'virsh ' + options.cmd
-        cmdoptions = options.cmdoptions
-        para_cmd(options.file,options.group,options.cmd,cmdoptions)
+        para_cmd(options.file,options.group,options.cmd)
         return 0
 
 if __name__ == "__main__":
