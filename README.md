@@ -15,7 +15,7 @@ What about adding/removing the same device to 10 VM?
 
 # Demo
 
-[image](https://github.com/aginies/pvirsh/blob/ca235fec869022f7dbbaca46208df54d88e66606/demo_pvirsh.gif)
+![image](https://github.com/aginies/pvirsh/blob/ca235fec869022f7dbbaca46208df54d88e66606/demo_pvirsh.gif)
 
 # TODO
 
