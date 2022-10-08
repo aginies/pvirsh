@@ -235,7 +235,6 @@ def main():
     else:
         cmd = "virsh help domain"
         out, errs = system_command(cmd)
-        out = str(out, 'utf-8')
         print(out)
         if errs:
             print(errs)
@@ -245,7 +244,6 @@ def main():
     else:
         cmd = "virsh help " +options.cmddoc
         out, errs = system_command(cmd)
-        #out = str(out, 'utf-8')
         print(out)
         if errs:
             print(errs)
