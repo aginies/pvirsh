@@ -202,7 +202,10 @@ def main():
     """ main function"""
 
     usage = """usage: 
-        %prog -f GROUP.yaml -g VM_GROUP -c 'command command_option' 
+        %prog -f GROUP.yaml -g VM_GROUP,VM_GROUP2 -c 'CMD CMD_OPTION'
+
+        example:
+        %prog -g suse -c 'domstate --reason'
         """
     parser = optparse.OptionParser(usage=usage)
 
