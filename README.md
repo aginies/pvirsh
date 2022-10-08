@@ -14,7 +14,7 @@ What about adding/removing the same device to 10 VM?
 
 # TODO
 
-Probablu a lot as this is for testing purpose...
+Probably a lot as this is for testing purpose...
 * detect VM state before doing anything for some command
 * validate the yaml file before using it
 * use libvirt api directly instead of virsh?
@@ -69,7 +69,7 @@ Options:
 Get the state of all virtual Machine in **suse** group:
 
 ```bash
-./pvirsh.py -g suse,rhel -c domstate
+./pvirsh.py -n -g suse,rhel -c domstate
 
 Multiple group selected
 Selected group is suse: ['sle15sp31$', 'sle15sp4']
@@ -89,7 +89,7 @@ virsh domstate sle15sp43  shut off Done
 Setting hard-limit memory to 1.024GB for all VM in **suse** group:
 
 ```bash
-./pvirsh.py -g suse -c "memtune --hard-limit 1000000"
+./pvirsh.py -n -g suse -c "memtune --hard-limit 1000000"
 
 Selected group is suse: ['sle15sp31$', 'sle15sp4']
 virsh memtune sle15sp31 --hard-limit 1000000  Done
@@ -109,8 +109,7 @@ cat rng.xml
   <address type="pci" domain="0x0000" bus="0x0a" slot="0x00" function="0x0"/>
 </rng>
 
-./pvirsh.py -g suse -c "attach-device --current --file rng.xml"
-
+./pvirsh.py -n -g suse -c "attach-device --current --file rng.xml"
 
 Selected group is suse: ['sle15sp31$', 'sle15sp4']
 virsh attach-device sle15sp4-2 --current --file rng.xml Device attached successfully Done

@@ -3,17 +3,21 @@
 #
 # EXPERIMENTAL
 # draft of a scalable VM management tool for a group of VM
+# Interactive or non interactive mode
 #
-# Goal at the end is being able to
+# Goal at the end is being able to on this group of VM
 # - execute command
 # - add / remov devices
-# - ???
+# - plenty of other stuff :)
 
 import multiprocessing as mp
 import subprocess
 from pathlib import Path
 import optparse
+from cmd import Cmd
 import yaml
+
+VERSION = "0.1"
 
 # TODO: validate the yaml file
 def validate_file():
@@ -61,24 +65,40 @@ def check_group(groupfile, group):
             pass
         else:
             print(esc('31;1;1') +group +' Group Not found!' +esc(0))
-            exit(1)
+            return 666
+    return 0
 
-def show_group(groupfile):
-    """show all group and machines"""
-
+def check_file_exist(groupfile):
     my_file = Path(groupfile)
     if my_file.is_file():
-        print('File: ' +groupfile)
+        pass
     else:
         print('File ' +groupfile + ' Doesnt exist!\n')
         show_file_example()
         exit(1)
+
+def show_group(groupfile):
+    """show all group and machines"""
+
+    check_file_exist(groupfile)
     with open(groupfile) as file:
         groups = yaml.full_load(file)
         print('Available groups are:')
         for item, value in groups.items():
             print('Group ' +str(item) + ': '  +str(value))
         print('\n')
+
+def list_group(groupfile):
+    """show all group and machines"""
+
+    check_file_exist(groupfile)
+    with open(groupfile) as file:
+        groups = yaml.full_load(file)
+        l_group = []
+        for item, value in groups.items():
+            #print(item)
+            l_group.append(item)
+        return l_group
 
 def system_command(cmd):
     """ Launch a system command  """
@@ -167,26 +187,32 @@ def para_cmd(file, group, cmd):
 
 # list of domain command available with virsh
 # remove some: create, console
-list_domaincmd = ['attach-device', 'attach-disk', 'attach-interface', 'autostart', 'blkdeviotune', 'blkiotune', 'blockcommit', 'blockcopy', 'blockjob', 'blockpull', 'blockresize', 'change-media', 'console', 'cpu-stats', 'create', 'define', 'desc', 'destroy', 'detach-device', 'detach-device-alias', 'detach-disk', 'detach-interface', 'domdisplay', 'domfsfreeze', 'domfsthaw', 'domfsinfo', 'domfstrim', 'domhostname', 'domid', 'domif-setlink', 'domiftune', 'domjobabort', 'domjobinfo', 'domlaunchsecinfo', 'domsetlaunchsecstate', 'domname', 'domrename', 'dompmsuspend', 'dompmwakeup', 'domuuid', 'domxml-from-native', 'domxml-to-native', 'dump', 'dumpxml', 'edit', 'event', 'get-user-sshkeys', 'inject-nmi', 'iothreadinfo', 'iothreadpin', 'iothreadadd', 'iothreadset', 'iothreaddel', 'send-key', 'send-process-signal', 'lxc-enter-namespace', 'managedsave', 'managedsave-remove', 'managedsave-edit', 'managedsave-dumpxml', 'managedsave-define', 'memtune', 'perf', 'metadata', 'migrate', 'migrate-setmaxdowntime', 'migrate-getmaxdowntime', 'migrate-compcache', 'migrate-setspeed', 'migrate-getspeed', 'migrate-postcopy', 'numatune', 'qemu-attach', 'qemu-monitor-command', 'qemu-monitor-event', 'qemu-agent-command', 'guest-agent-timeout', 'reboot', 'reset', 'restore', 'resume', 'save', 'save-image-define', 'save-image-dumpxml', 'save-image-edit', 'schedinfo', 'screenshot', 'set-lifecycle-action', 'set-user-sshkeys', 'set-user-password', 'setmaxmem', 'setmem', 'setvcpus', 'shutdown', 'start', 'suspend', 'ttyconsole', 'undefine', 'update-device', 'update-memory-device', 'vcpucount', 'vcpuinfo', 'vcpupin', 'emulatorpin', 'vncdisplay', 'guestvcpus', 'setvcpu', 'domblkthreshold', 'guestinfo', 'domdirtyrate-calc']
+list_domaincmd = ['attach-device', 'attach-disk', 'attach-interface', 'autostart', 'blkdeviotune', 'blkiotune', 'blockcommit', 'blockcopy', 'blockjob', 'blockpull', 'blockresize', 'change-media', 'console', 'cpu-stats', 'create', 'define', 'desc', 'destroy', 'detach-device', 'detach-device-alias', 'detach-disk', 'detach-interface', 'domdisplay', 'domfsfreeze', 'domfsthaw', 'domfsinfo', 'domfstrim', 'domhostname', 'domid', 'domif-setlink', 'domiftune', 'domjobabort', 'domjobinfo', 'domlaunchsecinfo', 'domsetlaunchsecstate', 'domname', 'domrename', 'dompmsuspend', 'domstate', 'dompmwakeup', 'domuuid', 'domxml-from-native', 'domxml-to-native', 'dump', 'dumpxml', 'edit', 'event', 'get-user-sshkeys', 'inject-nmi', 'iothreadinfo', 'iothreadpin', 'iothreadadd', 'iothreadset', 'iothreaddel', 'send-key', 'send-process-signal', 'lxc-enter-namespace', 'managedsave', 'managedsave-remove', 'managedsave-edit', 'managedsave-dumpxml', 'managedsave-define', 'memtune', 'perf', 'metadata', 'migrate', 'migrate-setmaxdowntime', 'migrate-getmaxdowntime', 'migrate-compcache', 'migrate-setspeed', 'migrate-getspeed', 'migrate-postcopy', 'numatune', 'qemu-attach', 'qemu-monitor-command', 'qemu-monitor-event', 'qemu-agent-command', 'guest-agent-timeout', 'reboot', 'reset', 'restore', 'resume', 'save', 'save-image-define', 'save-image-dumpxml', 'save-image-edit', 'schedinfo', 'screenshot', 'set-lifecycle-action', 'set-user-sshkeys', 'set-user-password', 'setmaxmem', 'setmem', 'setvcpus', 'shutdown', 'start', 'suspend', 'ttyconsole', 'undefine', 'update-device', 'update-memory-device', 'vcpucount', 'vcpuinfo', 'vcpupin', 'emulatorpin', 'vncdisplay', 'guestvcpus', 'setvcpu', 'domblkthreshold', 'guestinfo', 'domdirtyrate-calc']
 
 def main():
     """ main function"""
 
     usage = """usage:
-        %prog -f GROUP.yaml -g VM_GROUP,VM_GROUP2 -c 'CMD CMD_OPTION'
+
+        Interactive or Non Interactive command tool to manage multiple VM at the same Time
+
+        Non interactive:
+        %prog -n  -f GROUP.yaml -g VM_GROUP,VM_GROUP2 -c 'CMD CMD_OPTION'
 
         example:
-        %prog -g suse -c 'domstate --reason'
+        %prog -n -g suse -c 'domstate --reason'
         """
     parser = optparse.OptionParser(usage=usage)
 
+    parser.add_option('-n', '--noninteractive', dest='noninteractive', action='store_false',
+                      help='Launch this tool in non interactive mode)')
     parser.add_option('-g', '--group', dest='group', action='store',
                       help='Group of VM to use (could be a list separated by ,)')
     parser.add_option('-f', '--file', dest='file', action='store', default='groups.yaml',
                       help='Group file to use as yaml file (default will be groups.yaml)')
     parser.add_option('-c', '--cmd', dest='cmd', help='Command to execute on a group of VM')
     parser.add_option('-s', '--showgroup', dest='show', action='store_false',
-                      help='Show group of VM file content')
+                      help='Show group from VM file content')
     parser.add_option('-v', '--virsh', dest='virsh', action='store_false',
                       help='Show all virsh domain commands available')
     parser.add_option('-d', '--cmddoc', dest='cmddoc', action='store',
@@ -196,52 +222,164 @@ def main():
     print('\n')
     (options, args) = parser.parse_args()
 
-    if options.file is None:
-        parser.error(esc('31;1;1') + 'Yaml File of group of VM not given' +esc(0))
-    if options.show is None:
-        pass
+    if options.noninteractive is None:
+        MyPrompt().cmdloop()
     else:
-        show_group(options.file)
-        return 0
-    if options.virsh is None:
-        pass
-    else:
-        cmd = "virsh help domain"
-        out, errs = system_command(cmd)
-        print(out)
-        if errs:
-            print(errs)
-        return 0
-    if options.cmddoc is None:
-        pass
-    else:
-        cmd = "virsh help " +options.cmddoc
-        out, errs = system_command(cmd)
-        print(out)
-        if errs:
-            print(errs)
-        return 0
-
-    if options.group is None:
-        parser.error(esc('31;1;1') + 'Group of VM to use not given' +esc(0))
-        print(usage)
-
-    if options.cmd is None:
-        print(esc('31;1;1') + 'Nothing todo, no COMMAND to execute...' +esc(0))
-        print('-c COMMAND')
-        print(esc('32;1;4') + 'Available are:' +esc(0))
-        print(list_domaincmd)
-    else:
-        if ',' in options.group:
-            mgroup = options.group.split(",")
-            for allgroup in mgroup:
-                check_group(options.file, allgroup)
+        if options.file is None:
+            parser.error(esc('31;1;1') + 'Yaml File of group of VM not given' +esc(0))
+        if options.show is None:
+            pass
         else:
-            check_group(options.file, options.group)
-        # for now launch a virsh commande line
-        para_cmd(options.file, options.group, options.cmd)
+            show_group(options.file)
+            return 0
+        if options.virsh is None:
+            pass
+        else:
+            cmd = "virsh help domain"
+            out, errs = system_command(cmd)
+            print(out)
+            if errs:
+                print(errs)
+            return 0
+        if options.cmddoc is None:
+            pass
+        else:
+            cmd = "virsh help " +options.cmddoc
+            out, errs = system_command(cmd)
+            print(out)
+            if errs:
+                print(errs)
+            return 0
+                
+        if options.group is None:
+            parser.error(esc('31;1;1') + 'Group of VM to use not given' +esc(0))
+            print(usage)
+                    
+        if options.cmd is None:
+            print(esc('31;1;1') + 'Nothing todo, no COMMAND to execute...' +esc(0))
+            print('-c COMMAND')
+            print(esc('32;1;4') + 'Available are:' +esc(0))
+            print(list_domaincmd)
+        else:
+            if ',' in options.group:
+                mgroup = options.group.split(",")
+                for allgroup in mgroup:
+                    code = check_group(options.file, allgroup)
+            else:
+                code = check_group(options.file, options.group)
+            # for now launch a virsh commande line
+            if code != 666:
+                para_cmd(options.file, options.group, options.cmd)
+            else:
+                print('Unknow group!')
+            return 0
         return 0
-    return 0
+
+class MyPrompt(Cmd):
+    prompt = '> '
+    intro = " Welcome to pvirsh interactive terminal!\n Version: " +VERSION + """
+
+Type:  'help' for help with commands
+       'quit' to quit
+
+1) Select the group yasml file (default will be groups.yaml)
+    file PATH_TO_FILE/FILE.YAML
+2) Select a group of VM:
+    select group [TAB]
+3) Run a command:
+    cmd [TAB]
+"""
+    Cmd.vm_group = None
+    # define a default file
+    Cmd.file = 'groups.yaml'
+
+    def do_quit(self, args):
+        print("Bye Bye")
+        return True
+
+    def help_quit(self):
+        print('Exit the application. Shorthand: Ctrl-D.')
+
+    def do_select_group(self, args):
+        vm_group = args
+        if ',' in vm_group:
+            mgroup = vm_group.split(",")
+            for allgroup in mgroup:
+                code = check_group(self.file, allgroup)
+        else:
+            code = check_group(self.file, vm_group)
+
+        if code != 666:
+            print("Selected group is '{}'".format(args))
+            self.prompt = vm_group + ' > '
+            Cmd.vm_group = vm_group
+        else:
+            print('Unknow group!')
+
+    def complete_select_group(self, text, line, begidx, endidx):
+        l_group = list_group(self.file)
+        if not text:
+            completions = l_group[:]
+        else:
+            completions = [f
+                           for f in l_group
+                           if f.startswith(text)
+                          ]
+        return completions
+
+    def help_select_group(self):
+        print("Select the group of VM to Manage")
+
+    def do_show_group(self, args):
+        show_group(self.file)
+
+    def help_show_group(self):
+        print('Show group from VM file content')
+
+    def do_file(self, args):
+        file = args
+        my_file = Path(file)
+        if my_file.is_file():
+            print("Selected group yaml file is '{}'".format(file))
+            Cmd.file = file
+        else:
+            print(file +" Doesnt exist!")
+
+    def help_file(self):
+        print('Show slected group yaml file')
+
+    def do_show_file(self, args):
+        print("Group yaml file used is: " +self.file)
+
+    def help_show_file(self):
+        print("Show the Group yaml file used")
+
+    def do_cmd(self, cmd):
+        group = Cmd.vm_group
+        if group is None:
+            print('Please seclect a group of VM: select_group GROUP_VM')
+        else:
+            if cmd in list_domaincmd:
+                para_cmd(self.file, group, cmd)
+            else:
+                print(list_domaincmd)
+
+    def complete_cmd(self, text, line, begidx, endidx):
+        if not text:
+            completions = list_domaincmd[:]
+        else:
+            completions = [f
+                           for f in list_domaincmd
+                           if f.startswith(text)
+                          ]
+        return completions
+
+    def help_cmd(self):
+        print("Command to execute on a group of VM")
+
+    do_EOF = do_quit
+    help_EOF = help_quit
+
 
 if __name__ == "__main__":
     try:
