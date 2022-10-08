@@ -37,12 +37,14 @@ By default the script will use **groups.yaml** in the same path.
 # Usage
 
 ```bash
-Usage: pvirsh.py -h 
+Usage:
+        pvirsh.py -f GROUP.yaml -g VM_GROUP -c 'command command_option'
+
 
 Options:
   -h, --help            show this help message and exit
   -g GROUP, --group=GROUP
-                        Group of VM to use
+                        Group of VM to use (could be a list separated by ,)
   -f FILE, --file=FILE  Group file to use as yaml file (default will be
                         groups.yaml)
   -c CMD, --cmd=CMD     Command to execute on a group of VM
@@ -57,18 +59,22 @@ Options:
 Get the state of all virtual Machine in **suse** group:
 
 ```bash
-./pvirsh.py -g suse -c domstate
+./pvirsh.py -g suse,rhel -c domstate
 
+
+Multiple group selected
 Selected group is suse: ['sle15sp31$', 'sle15sp4']
-Will launch: "virsh domstate VirtualMachineName "
-
-virsh domstate sle15sp4  shut off Done
-virsh domstate sle15sp4-2  shut off Done
-virsh domstate sle15sp41  shut off Done
+Selected group is rhel: ['rhe', 'fedora', 'plop']
+fedora Virtual Machine Not found
+plop Virtual Machine Not found
 virsh domstate sle15sp42  shut off Done
-virsh domstate sle15sp43  shut off Done
-virsh domstate sle15sp44  shut off Done
+virsh domstate sle15sp4  shut off Done
 virsh domstate sle15sp31  shut off Done
+virsh domstate sle15sp41  shut off Done
+virsh domstate sle15sp4-2  shut off Done
+virsh domstate rhel8  shut off Done
+virsh domstate sle15sp44  shut off Done
+virsh domstate sle15sp43  shut off Done
 ```
 
 Setting hard-limit memory to 1.024GB for all VM:

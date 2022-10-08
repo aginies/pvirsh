@@ -137,7 +137,17 @@ def para_cmd(file,group,cmd):
     """Start pool of command"""
 
     results = []
-    vms = find_matching_vm(file,group)
+    vms = ''
+    if ',' in group:
+        print('Multiple group selected')
+        mgroup = group.split(",")
+        for allgroup in mgroup:
+            morevms = find_matching_vm(file,allgroup)
+            vms = vms +morevms
+    else:
+        vms = find_matching_vm(file,group)
+
+    cmdoptions = ''
     # splitlines because of \n
     vms = str(vms).splitlines()
     #print("Number of processors: ", mp.cpu_count())
@@ -199,7 +209,7 @@ def main():
     parser.add_option('-g', '--group',
         dest = 'group',
         action = 'store',
-        help = 'Group of VM to use')
+        help = 'Group of VM to use (could be a list separated by ,)')
     parser.add_option('-f', '--file',
         dest = 'file',
         action = 'store',
@@ -207,7 +217,6 @@ def main():
         help = 'Group file to use as yaml file (default will be groups.yaml)')
     parser.add_option('-c', '--cmd',
         dest = 'cmd',
-        #choices = listdomaincmd,
         help = 'Command to execute on a group of VM')
     parser.add_option('-s', '--showgroup',
         dest = 'show',
@@ -258,10 +267,16 @@ def main():
 
     if options.cmd is None:
         print(esc('31;1;1') + 'Nothing todo, no COMMAND to execute...' +esc(0))
+        print('-c COMMAND')
         print(esc('32;1;4') + 'Available are:' +esc(0))
         print(listdomaincmd)
     else:
-        check_group(options.file,options.group)
+        if ',' in options.group:
+            mgroup = options.group.split(",")
+            for allgroup in mgroup:
+                check_group(options.file,allgroup)
+        else:
+            check_group(options.file,options.group)
         # for now launch a virsh commande line
         para_cmd(options.file,options.group,options.cmd)
         return 0
