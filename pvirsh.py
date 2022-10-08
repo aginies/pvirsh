@@ -187,7 +187,32 @@ def para_cmd(file, group, cmd):
 
 # list of domain command available with virsh
 # remove some: create console domrename define managedsave-define managedsave-edit domid
-list_domain_cmd = ['attach-device', 'attach-disk', 'attach-interface', 'autostart', 'blkdeviotune', 'blkiotune', 'blockcommit', 'blockcopy', 'blockjob', 'blockpull', 'blockresize', 'change-media', 'cpu-stats', 'desc', 'destroy', 'detach-device', 'detach-device-alias', 'detach-disk', 'detach-interface', 'domdisplay', 'domfsfreeze', 'domfsthaw', 'domfsinfo', 'domfstrim', 'domhostname', 'domid', 'domif-setlink', 'domiftune', 'domjobabort', 'domjobinfo', 'domlaunchsecinfo', 'domsetlaunchsecstate', 'domname', 'dompmsuspend', 'domstate', 'dompmwakeup', 'domuuid', 'domxml-from-native', 'domxml-to-native', 'dump', 'dumpxml', 'edit', 'event', 'get-user-sshkeys', 'inject-nmi', 'iothreadinfo', 'iothreadpin', 'iothreadadd', 'iothreadset', 'iothreaddel', 'send-key', 'send-process-signal', 'managedsave', 'managedsave-remove', 'managedsave-dumpxml', 'memtune', 'perf', 'metadata', 'migrate', 'migrate-setmaxdowntime', 'migrate-getmaxdowntime', 'migrate-compcache', 'migrate-setspeed', 'migrate-getspeed', 'migrate-postcopy', 'numatune', 'qemu-attach', 'qemu-monitor-command', 'qemu-monitor-event', 'qemu-agent-command', 'guest-agent-timeout', 'reboot', 'reset', 'restore', 'resume', 'save', 'save-image-define', 'save-image-dumpxml', 'save-image-edit', 'schedinfo', 'screenshot', 'set-lifecycle-action', 'set-user-sshkeys', 'set-user-password', 'setmaxmem', 'setmem', 'setvcpus', 'shutdown', 'start', 'suspend', 'ttyconsole', 'undefine', 'update-device', 'update-memory-device', 'vcpucount', 'vcpuinfo', 'vcpupin', 'emulatorpin', 'vncdisplay', 'guestvcpus', 'setvcpu', 'domblkthreshold', 'guestinfo', 'domdirtyrate-calc']
+list_domain_cmd = ['attach-device', 'attach-disk', 'attach-interface',
+                   'autostart', 'blkdeviotune', 'blkiotune', 'blockcommit',
+                   'blockcopy', 'blockjob', 'blockpull', 'blockresize',
+                   'change-media', 'cpu-stats', 'desc', 'destroy', 'detach-device',
+                   'detach-device-alias', 'detach-disk', 'detach-interface',
+                   'domdisplay', 'domfsfreeze', 'domfsthaw', 'domfsinfo',
+                   'domfstrim', 'domhostname', 'domid', 'domif-setlink',
+                   'domiftune', 'domjobabort', 'domjobinfo', 'domlaunchsecinfo',
+                   'domsetlaunchsecstate', 'domname', 'dompmsuspend', 'domstate',
+                   'dompmwakeup', 'domuuid', 'domxml-from-native', 'domxml-to-native',
+                   'dump', 'dumpxml', 'edit', 'event', 'get-user-sshkeys', 'inject-nmi',
+                   'iothreadinfo', 'iothreadpin', 'iothreadadd', 'iothreadset',
+                   'iothreaddel', 'send-key', 'send-process-signal', 'managedsave',
+                   'managedsave-remove', 'managedsave-dumpxml', 'memtune', 'perf',
+                   'metadata', 'migrate', 'migrate-setmaxdowntime',
+                   'migrate-getmaxdowntime', 'migrate-compcache', 'migrate-setspeed',
+                   'migrate-getspeed', 'migrate-postcopy', 'numatune', 'qemu-attach',
+                   'qemu-monitor-command', 'qemu-monitor-event', 'qemu-agent-command',
+                   'guest-agent-timeout', 'reboot', 'reset', 'restore', 'resume', 'save',
+                   'save-image-define', 'save-image-dumpxml', 'save-image-edit',
+                   'schedinfo', 'screenshot', 'set-lifecycle-action', 'set-user-sshkeys',
+                   'set-user-password', 'setmaxmem', 'setmem', 'setvcpus', 'shutdown',
+                   'start', 'suspend', 'ttyconsole', 'undefine', 'update-device',
+                   'update-memory-device', 'vcpucount', 'vcpuinfo', 'vcpupin',
+                   'emulatorpin', 'vncdisplay', 'guestvcpus', 'setvcpu', 'domblkthreshold',
+                   'guestinfo', 'domdirtyrate-calc']
 
 list_domain_monitoring = ['domblkerror', 'domblkinfo', 'domblklist', 'domblkstat',
                           'domcontrol', 'domif-getlink', 'domifaddr', 'domiflist',
@@ -376,7 +401,7 @@ Type:  'help' for help with commands
         if not text:
             completions = list_domain_all_cmd[:]
         else:
-            completions = [f for f in list_domain_all_cmd if f.startswith(text) ]
+            completions = [f for f in list_domain_all_cmd if f.startswith(text)]
         return completions
 
     def help_cmd(self):
@@ -387,7 +412,7 @@ Type:  'help' for help with commands
         if not text:
             completions = list_domain_all_cmd[:]
         else:
-            completions = [f for f in list_domain_all_cmd if f.startswith(text) ]
+            completions = [f for f in list_domain_all_cmd if f.startswith(text)]
         return completions
 
     def do_hcmd(self, cmd):
