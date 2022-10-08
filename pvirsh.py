@@ -59,7 +59,7 @@ def check_group(groupfile,group):
         if found:
             pass
         else:
-            print(group+ 'Not found!')
+            print(esc('31;1;1') +group +' Group Not found!' +esc(0))
             exit(1)
 
 def show_group(groupfile):
@@ -125,7 +125,7 @@ def do_virsh_cmd(vm,cmd,cmdoptions):
     out = out.strip("\n")
     if errs:
         print('Command was:' +str(cmdtolaunch))
-        print(esc('31;1;4') + 'ERROR: ' +str(vm)+ ': ' +str(errs)+ esc(0) + '\n')
+        print(esc('31;1;1') + 'ERROR: ' +str(vm)+ ': ' +str(errs)+ esc(0) + '\n')
     else:
         print(cmdtolaunch, end= " ")
         print(out + " " + esc('32;1;4') + 'Done' + esc(0))
@@ -224,7 +224,7 @@ def main():
     (options, args) = parser.parse_args()
 
     if options.file is None:
-        parser.error('Yaml File of group of VM not given')
+        parser.error(esc('31;1;1') + 'Yaml File of group of VM not given' +esc(0))
     if options.show is None:
         pass
     else:
@@ -250,11 +250,12 @@ def main():
         return 0
 
     if options.group is None:
-        parser.error('Group of VM to use not given')
+        parser.error(esc('31;1;1') + 'Group of VM to use not given' +esc(0))
         print(usage)
 
     if options.cmd is None:
-        print('Nothing todo, no command to execute... Available are:')
+        print(esc('31;1;1') + 'Nothing todo, no COMMAND to execute...' +esc(0))
+        print(esc('32;1;4') + 'Available are:' +esc(0))
         print(listdomaincmd)
     else:
         check_group(options.file,options.group)
