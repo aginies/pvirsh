@@ -205,7 +205,7 @@ def main():
     parser = optparse.OptionParser(usage=usage)
 
     parser.add_option('-n', '--noninteractive', dest='noninteractive', action='store_false',
-                      help='Launch this tool in non interactive mode)')
+                      help='Launch this tool in non interactive mode')
     parser.add_option('-g', '--group', dest='group', action='store',
                       help='Group of VM to use (could be a list separated by ,)')
     parser.add_option('-f', '--file', dest='file', action='store', default='groups.yaml',

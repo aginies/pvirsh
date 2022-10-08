@@ -11,6 +11,11 @@ What about adding/removing the same device to 10 VM?
 * reports error/success per VM
 * help available (list of command and help)
 * directly launch the **virsh** on the group
+* Interactive mode with completion by default!
+
+# Demo
+
+[image](https://github.com/aginies/pvirsh/blob/ca235fec869022f7dbbaca46208df54d88e66606/demo_pvirsh.gif)
 
 # TODO
 
@@ -45,20 +50,26 @@ windows:
 # Usage
 
 ```bash
-Usage:
-        pvirsh.py -f GROUP.yaml -g VM_GROUP -c 'command command_option'
+Usage: usage:
+
+        Interactive or Non Interactive command tool to manage multiple VM at the same Time
+
+        Non interactive:
+        pvirsh.py -n  -f GROUP.yaml -g VM_GROUP,VM_GROUP2 -c 'CMD CMD_OPTION'
 
         example:
-        pvirsh.py -g suse -c 'domstate --reason'
+        pvirsh.py -n -g suse -c 'domstate --reason'
+        
 
 Options:
   -h, --help            show this help message and exit
+  -n, --noninteractive  Launch this tool in non interactive mode)
   -g GROUP, --group=GROUP
                         Group of VM to use (could be a list separated by ,)
   -f FILE, --file=FILE  Group file to use as yaml file (default will be
                         groups.yaml)
   -c CMD, --cmd=CMD     Command to execute on a group of VM
-  -s, --showgroup       Show group of VM file content
+  -s, --showgroup       Show group from VM file content
   -v, --virsh           Show all virsh domain commands available
   -d CMDDOC, --cmddoc=CMDDOC
                         Show the virsh CMD documentation
