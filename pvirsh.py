@@ -80,6 +80,16 @@ def show_group(groupfile):
             print('Group ' +str(item) + ': '  +str(value))
         print('\n')
 
+def system_command(cmd):
+    """ Launch a system command  """
+
+    #print(cmd)
+    proc = subprocess.Popen(cmd, shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+    rc = proc.wait()
+    out, errs = proc.communicate(timeout=2)
+    out = str(out, 'utf-8')
+    return out, errs
+
 def find_matching_vm(groupfile,group):
     """return the list of VM matching the group"""
 
@@ -96,11 +106,7 @@ def find_matching_vm(groupfile,group):
                     # matching vm in virsh list, must start exactly with the name
                     # if no $ at the end it will wilcard anything
                     cmd = 'virsh list --all --name| grep "^' +str(vm) +'"'
-                    #print(cmd)
-                    proc = subprocess.Popen(cmd, shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-                    rc = proc.wait()
-                    out, errs = proc.communicate(timeout=2)
-                    out = str(out, 'utf-8')
+                    out, errs = system_command(cmd)
                     if errs:
                         print(errs)
                     vms = out + vms
@@ -117,10 +123,7 @@ def do_virsh_cmd(vm,cmd,cmdoptions):
     # 'attach-device' requires <domain> option
     # 'domstate' requires <domain> option
     cmdtolaunch = cmd + ' ' + vm + ' ' + cmdoptions
-    proc = subprocess.Popen(cmdtolaunch,shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-    rc = proc.wait()
-    out, errs = proc.communicate(timeout=2)
-    out = str(out, 'utf-8')
+    out, errs = system_command(cmdtolaunch)
     out = out.strip("\n")
     if errs:
         print('Command was:' +str(cmdtolaunch))
@@ -229,9 +232,7 @@ def main():
         pass
     else:
         cmd = "virsh help domain"
-        proc = subprocess.Popen(cmd, shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-        rc = proc.wait()
-        out, errs = proc.communicate(timeout=2)
+        out, errs = system_command(cmd)
         out = str(out, 'utf-8')
         print(out)
         if errs:
@@ -241,10 +242,7 @@ def main():
         pass
     else:
         cmd = "virsh help " +options.cmddoc
-        print(cmd)
-        proc = subprocess.Popen(cmd, shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-        rc = proc.wait()
-        out, errs = proc.communicate(timeout=2)
+        out, errs = system_command(cmd)
         out = str(out, 'utf-8')
         print(out)
         if errs:
