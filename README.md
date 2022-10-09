@@ -10,7 +10,7 @@ command.
 This tool provides:
 * Selection of group of VM, possibility to use multi-group (yaml file)
 * Possibility to select a different group yaml file (default is groups.yaml)
-* Show the list of VM per group
+* Show the regexp per group
 * Launch parralel command on mulitiple VM selected by group
 * auto-completion of the **virsh** domain command
 * Help on **virsh** command (display options)
