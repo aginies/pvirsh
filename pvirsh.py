@@ -15,9 +15,42 @@ import subprocess
 from pathlib import Path
 import optparse
 from cmd import Cmd
+import libvirt
 import yaml
 
 VERSION = "0.2"
+
+class LibVirtConnect:
+        """Connection method to libvirt"""
+
+        def __init__(self,connector,dst):
+            self.connector = connector
+            self.dst = dst
+            print(connector +" "+ dst)
+            conn = None
+
+        def local():
+            conn = None
+            try:
+                conn = libvirt.open("qemu:///system")
+                ver = conn.getVersion()
+                #print('Connected \nVersion: '+str(ver))
+                return conn
+            except libvirt.libvirtError as e:
+                print(repr(e), file=sys.stderr)
+                exit(1)
+
+        def remote(connector, dst):
+            dst_conn = None
+            print(connector+'://'+dst+'/system')
+            try:
+                dst_conn = libvirt.open(connector+'://'+dst+'/system')
+                ver = dst_conn.getVersion()
+                #print('Connected \nVersion: '+str(ver))
+                return dst_conn
+            except libvirt.libvirtError as e:
+                print(repr(e), file=sys.stderr)
+                exit(1)
 
 # TODO: validate the yaml file
 def validate_file():
@@ -115,29 +148,62 @@ def find_matching_vm(groupfile, group):
 
     with open(groupfile) as file:
         groups = yaml.full_load(file)
-        # all group store in keys
         vms = ""
+        conn = LibVirtConnect.local()
         for item, value in groups.items():
             # only match vm of the correct group
             if item == group:
                 print('Selected group is ' +item + ': ' + str(value))
-                for virtum in value:
+                # get the list of domain from the host
+                domains = conn.listAllDomains(0)
+                # check if there is a domain
+                if len(domains) != 0:
+                    # parse VM list on the host
+                    for domain in domains:
+                        # parse all VM which should be matched in the group.yaml file (virtum)
+                        for virtum in value:
+                            vmdomain = domain.name()
+                            # check the regex contains $ at the end
+                            if virtum.endswith('$'):
+                                # spliting the check
+                                check = virtum.split('$')
+                                # if same start and ending with $ this is an exact match
+                                if vmdomain.startswith(check[0]):
+                                    #print('exact matching ' +vmdomain +' ' +virtum)
+                                    vms = vmdomain + ' ' +vms
+                                else:
+                                    #print('not exact matching ' +vmdomain +' ' +virtum)
+                                    pass
+                            # case of regex does not finish with $
+                            else:
+                                # we can compare directly the vmdomain with the virtum start string
+                                if vmdomain.startswith(virtum):
+                                    #print('matching ' +vmdomain +' ' +virtum)
+                                    vms = vmdomain + ' ' +vms
+                                else:
+                                    #print('doesnt match anything....')
+                                    pass
+                else:
+                    print('No domain to manage on this host!')
+        conn.close()
+# OLD CODE BASE on virsh list
+# more simple for matching...
+#                for virtum in value:
                     # matching vm in virsh list, must start exactly with the name
                     # if no $ at the end it will wilcard anything
-                    cmd = 'virsh list --all --name| grep "^' +str(virtum) +'"'
-                    out, errs = system_command(cmd)
-                    if errs:
-                        print(errs)
-                    if not out:
-                        print(esc('31;1;1') +virtum +' Virtual Machine Not found' +esc(0))
-                    else:
-                        vms = out + vms
-            else:
-                # not correct group
-                pass
-
+#                    cmd = 'virsh list --all --name| grep "^' +str(virtum) +'"'
+#                    out, errs = system_command(cmd)
+#                    if errs:
+#                        print(errs)
+#                    if not out:
+#                        print(esc('31;1;1') +virtum +' Virtual Machine Not found' +esc(0))
+#                    else:
+#                        vms = out + vms
+#            else:
+#                # not correct group
+#                pass
+#
         return vms
-
 
 def do_virsh_cmd(virtum, cmd, cmdoptions):
     """execute the command on all the VM defined"""
@@ -152,10 +218,7 @@ def do_virsh_cmd(virtum, cmd, cmdoptions):
         print(cmdtolaunch, end=" ")
         print(out + " " + esc('32;1;4') + 'Done' + esc(0))
 
-def para_cmd(file, group, cmd):
-    """Start pool of command"""
-
-    results = []
+def vm_selected(file, group):
     vms = ''
     if ',' in group:
         print('Multiple group selected')
@@ -165,10 +228,19 @@ def para_cmd(file, group, cmd):
             vms = vms +morevms
     else:
         vms = find_matching_vm(file, group)
+    return vms
+
+def para_cmd(file, group, cmd):
+    """Start pool of command"""
+
+    results = []
+    vms = vm_selected(file, group)
 
     cmdoptions = ''
-    # splitlines because of \n
-    vms = str(vms).splitlines()
+    # subsystem: splitlines because of \n
+    #vms = str(vms).splitlines()
+    # list separate by a space " "
+    vms = str(vms).split(" ")
     #print("Number of processors: ", mp.cpu_count())
     # check if there is an option
     if ' ' in cmd:
@@ -179,8 +251,10 @@ def para_cmd(file, group, cmd):
     #print('Will launch: ' +tolaunch +'\n')
     cmd = 'virsh ' +cmd
     pool = mp.Pool(mp.cpu_count())
-    for virtum in vms:
-        pool.apply_async(do_virsh_cmd, args=(virtum, cmd, cmdoptions))
+    for virtm in vms:
+        # check virtm is not empty...
+        if virtm:
+            pool.apply_async(do_virsh_cmd, args=(virtm, cmd, cmdoptions))
     pool.close()
     pool.join()
     print(results) #[:10])
@@ -395,6 +469,18 @@ Type:  'help' for help with commands
 
     def help_exec(self):
         print("Execute a system command")
+
+    def do_show_vm(self, cmd):
+        group = Cmd.vm_group
+        if group is None:
+            print('Please seclect a group of VM: select_group GROUP_VM')
+        else:
+            vms = vm_selected(self.file, group)
+            print('Vm selected by ' +group +' are:')
+            print(vms)
+
+    def help_show_vm(self):
+        print('Show all VM matching the selected group(s)')
 
     def do_cmd(self, cmd):
         group = Cmd.vm_group

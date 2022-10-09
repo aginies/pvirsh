@@ -16,12 +16,19 @@ This tool provides:
 * Help on **virsh** command (display options)
 * Reports error/success per VM
 * Interactive terminal or one shot command
+* use libvirt api to connect to host (local by default)
 * In Interactive mode: the prompt display which group you are currently managing
-* Can execute a system command withou leaving the interactive mode (exec)
+* Can execute a system command without leaving the interactive mode (exec)
+* Can display the list of VM selected
 
 # Demo
 
 ![image](https://github.com/aginies/pvirsh/blob/d1c9d87d61b749a060ea7ea77ea7780c7bc88785/demo_pvirsh.gif)
+
+# Python requires
+
+* libvirt
+* yaml
 
 # TODO
 
@@ -29,7 +36,7 @@ Probably a lot as this is for testing purpose...
 * detect VM state before (useful for some command which requires VM running)
 * validate the yaml file before using it
 * connect to multiple host?
-* use libvirt api directly instead of virsh?
+* use libvirt api directly for the command? -> need some rewrite...
 * ....
 
 # Define Virtual Machine groups
