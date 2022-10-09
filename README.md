@@ -3,15 +3,20 @@
 EXPERIMENTATION FOR [ALP OS](https://documentation.suse.com/alp/all/)
 
 Being able to execute the same **command** on an **group of Virtual Machine**.
-If you want to destroy more than 5 VM this is really annoying with current tool.
-What about adding/removing the same device to 10 VM?
+If you want to manage more than 1 VM you need to script you actioni and this will
+be done in a sequential way (most of the time). This wrapper is a **parralel virsh**
+command.
 
-* A yaml file define the group of your VM (list)
-* select the group and launch a domain command on it (async)
-* reports error/success per VM
-* help available (list of command and help)
-* directly launch the **virsh** on the group
-* Interactive mode with completion by default!
+This tool provides:
+* Selection of group of VM, possibility to use multi-group (yaml file)
+* Possibility to select a different group yaml file (default is groups.yaml)
+* Show the list of VM per group
+* Launch parralel command on mulitiple VM selected by group
+* auto-completion of the **virsh** domain command
+* Help on **virsh** command (display options)
+* Reports error/success per VM
+* Interactive terminal or one shot command
+* In Interactive mode: the prompt display which group you are currently managing
 
 # Demo
 
@@ -51,7 +56,7 @@ windows:
 # Usage
 
 ```bash
-Usage: usage:
+Usage:
 
         Interactive or Non Interactive command tool to manage multiple VM at the same Time
 

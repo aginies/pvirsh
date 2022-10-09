@@ -17,7 +17,7 @@ import optparse
 from cmd import Cmd
 import yaml
 
-VERSION = "0.1"
+VERSION = "0.2"
 
 # TODO: validate the yaml file
 def validate_file():
@@ -224,8 +224,7 @@ list_domain_all_cmd = list_domain_cmd + list_domain_monitoring
 def main():
     """ main function"""
 
-    usage = """usage:
-
+    usage = """
         Interactive or Non Interactive command tool to manage multiple VM at the same Time
 
         Non interactive:
