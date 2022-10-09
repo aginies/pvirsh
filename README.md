@@ -20,10 +20,11 @@ What about adding/removing the same device to 10 VM?
 # TODO
 
 Probably a lot as this is for testing purpose...
-* detect VM state before doing anything for some command
+* detect VM state before (useful for some command which requires VM running)
 * validate the yaml file before using it
+* connect to multiple host?
 * use libvirt api directly instead of virsh?
-* etc....
+* ....
 
 # Define Virtual Machine groups
 
