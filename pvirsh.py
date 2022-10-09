@@ -385,6 +385,17 @@ Type:  'help' for help with commands
     def help_show_file(self):
         print("Show the Group yaml file used")
 
+    def do_exec(self, args):
+        out, errs = system_command(args)
+        if errs:
+            print(errs)
+        if not out:
+            print(esc('31;1;1') +' No output... seems weird...' +esc(0))
+        print(out)
+
+    def help_exec(self):
+        print("Execute a system command")
+
     def do_cmd(self, cmd):
         group = Cmd.vm_group
         if group is None:
@@ -404,7 +415,7 @@ Type:  'help' for help with commands
         return completions
 
     def help_cmd(self):
-        print("Command to execute on a group of VM")
+        print("Command to execute on a group of VM (virsh)")
 
     # same as complete_hcmd but sadly cant not copy it as it will not work...
     def complete_hcmd(self, text, line, begidx, endidx):

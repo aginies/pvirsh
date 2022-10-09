@@ -17,6 +17,7 @@ This tool provides:
 * Reports error/success per VM
 * Interactive terminal or one shot command
 * In Interactive mode: the prompt display which group you are currently managing
+* Can execute a system command withou leaving the interactive mode (exec)
 
 # Demo
 
