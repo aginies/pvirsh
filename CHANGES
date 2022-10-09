@@ -1,4 +1,7 @@
-V0.4 DEVEL
+V0.5
+- Final version 0.5
+
+V0.4
 - add class LibVirtConnect
 - using libvirt api to connect to hypervisor
 - vm_selected: show all VM selected by the group
