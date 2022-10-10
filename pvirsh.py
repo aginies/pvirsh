@@ -308,6 +308,7 @@ def main():
         pvirsh -n --conn local -g suse -c 'domstate --reason'
         """
 
+    show = 'off'
     parser = argparse.ArgumentParser(usage)
 
     group_help = parser.add_argument_group('help')
@@ -389,7 +390,7 @@ def main():
                 code = check_group(args.file, args.group)
             # for now launch a virsh commande line
             if code != 666:
-                para_cmd(args.file, args.group, args.cmd, conn)
+                para_cmd(args.file, args.group, args.cmd, conn, show)
             else:
                 print(esc('31;1;1') +'Unknow group!' +esc(0))
             return 0
