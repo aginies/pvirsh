@@ -40,7 +40,7 @@ class LibVirtConnect:
             print(repr(verror), file=sys.stderr)
             return 666
 
-    def remote(self, connector, dst):
+    def remote(connector, dst):
         dst_conn = None
         print(connector+'://'+dst+'/system')
         try:
@@ -128,7 +128,7 @@ def list_group(groupfile):
     with open(groupfile) as file:
         groups = yaml.full_load(file)
         l_group = []
-        for item in groups.items():
+        for item, value in groups.items():
             #print(item)
             l_group.append(item)
         return l_group
@@ -416,6 +416,7 @@ Type:  'help' for help with commands
     Cmd.file = 'groups.yaml'
     Cmd.conn = ''
     Cmd.promptcon = ''
+    promptline = '###########################\n'
 
     def do_quit(self, args):
         """Exit the application"""
@@ -440,14 +441,14 @@ Type:  'help' for help with commands
             Cmd.conn = conn
             if conn != 666:
                 Cmd.promptcon = esc('32;1;1') +'Connector: qemu:///system\n' +esc(0)
-                self.prompt = Cmd.promptcon +self.vm_group + '> '
+                self.prompt = self.promptline + Cmd.promptcon +self.vm_group + '> '
         elif conn == 'qemu+ssh':
             remoteip = str(input("Remote IP address? "))
             conn = LibVirtConnect.remote('qemu+ssh', remoteip)
             Cmd.conn = conn
             if conn != 666:
                 Cmd.promptcon = esc('32;1;1') +'Connector: qemu+ssh://' +remoteip + '/system' +'\n' +esc(0)
-                self.prompt = Cmd.promptcon +self.vm_group + '> '
+                self.prompt = self.promptline + Cmd.promptcon +self.vm_group + '> '
         else:
             print(esc('31;1;1') +'Unknow Connector...'+esc(0))
 
@@ -474,7 +475,7 @@ Type:  'help' for help with commands
 
         if code != 666:
             print("Selected group is '{}'".format(args))
-            self.prompt = Cmd.promptcon +vm_group + ' > '
+            self.prompt = self.promptline + Cmd.promptcon +vm_group + ' > '
             Cmd.vm_group = vm_group
         else:
             print(esc('31;1;1') +'Unknow group!' +esc(0))
