@@ -118,7 +118,7 @@ def show_group(groupfile):
         groups = yaml.full_load(file)
         print('Available groups are:')
         for item, value in groups.items():
-            print('Group ' +str(item) + ': '  +str(value))
+            print('Group '+esc('36;1;1')+str(item)+esc(0)+': '+str(value))
         print('\n')
 
 def list_group(groupfile):
@@ -428,15 +428,16 @@ Type:  'help' for help with commands
     else:
         Cmd.promptfile = esc('31;1;1')+'No Group file selected'+esc(0)
     # by default there is no connection to any hypervisor
-    Cmd.promptcon = esc('31;1;1')+'Not Connected'+esc(0)
+    Cmd.promptcon = esc('31;1;1')+'Not Connected'+esc(0)+'\n'
     promptline = '###########################\n'
     # show the command on all VM or not
     Cmd.show = False
-    prompt = promptline +Cmd.promptfile+' | '+Cmd.promptcon+'\n'+Cmd.vm_group +'> '
+    prompt = promptline +Cmd.promptfile+' | '+Cmd.promptcon+Cmd.vm_group +'> '
 
     def do_quit(self, args):
         """Exit the application"""
-        print("Bye Bye")
+        # French Flag color :)
+        print(esc('34;1;1')+'Bye'+esc(0)+'Bye'+esc('31;1;1')+'Bye')
         if Cmd.conn != '':
             Cmd.conn.close()
         return True
@@ -532,7 +533,7 @@ Type:  'help' for help with commands
 
     def do_show_file(self, args):
         """Show the Group yaml file used"""
-        print("Group yaml file used is: " +self.file)
+        print("Group yaml file used is: "+esc('36;1;1')+self.file+esc(0))
 
     def help_show_file(self):
         print("Show the Group yaml file used")
@@ -561,7 +562,8 @@ Type:  'help' for help with commands
             else:
                 vms = vm_selected(self.file, group, conn)
                 print('Vm selected by ' +group +' group(s) are:')
-                print(vms)
+                print(esc('36;1;1')+str(vms)+esc(0))
+                #print(vms)
 
     def help_show_vm(self):
         print('Show all VM matching the selected group(s)')
@@ -591,7 +593,7 @@ Type:  'help' for help with commands
         else:
             group = Cmd.vm_group
             if group == '':
-                print('Please seclect a group of VM: select_group GROUP_VM')
+                print('Please select a group of VM: select_group GROUP_VM')
             else:
                 testcmd = cmd.split(" ")
                 if testcmd[0] in list_domain_all_cmd:
