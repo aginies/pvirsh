@@ -363,11 +363,11 @@ def main():
             if errs:
                 print(errs)
             return 0
-                
+
         if options.group is None:
             parser.error(esc('31;1;1') +'Group of VM to use not given' +esc(0))
             print(usage)
-                    
+
         if options.cmd is None:
             print(esc('31;1;1') +'Nothing todo, no COMMAND to execute...' +esc(0))
             print('-c COMMAND')
@@ -388,7 +388,7 @@ def main():
             return 0
         return 0
 
-list_connectors = ['local', 'qemu+ssh']
+LIST_CONNECTORS = ['local', 'qemu+ssh']
 
 class MyPrompt(Cmd):
     prompt = '> '
@@ -413,6 +413,7 @@ Type:  'help' for help with commands
     Cmd.promptcon = ''
 
     def do_quit(self, args):
+        """Exit the application"""
         print("Bye Bye")
         if Cmd.conn != '':
             Cmd.conn.close()
@@ -426,6 +427,7 @@ Type:  'help' for help with commands
     # conn.close()
 
     def do_conn(self, args):
+        """Setting up the connector to the hypervisor"""
         # conn = LibVirtConnect.local()
         conn = args
         if conn == 'local':
@@ -445,16 +447,18 @@ Type:  'help' for help with commands
             print(esc('31;1;1') +'Unknow Connector...'+esc(0))
 
     def help_conn(self):
-        print('Setting up the connector to the hypervisor: ' +str(list_connectors))
+        print('Setting up the connector to the hypervisor: ' +str(LIST_CONNECTORS))
 
     def complete_conn(self, text, line, begidx, endidx):
+        """auto completion list of connectors"""
         if not text:
-            completions = list_connectors[:]
+            completions = LIST_CONNECTORS[:]
         else:
-            completions = [f for f in list_connectors if f.startswith(text)]
+            completions = [f for f in LIST_CONNECTORS if f.startswith(text)]
         return completions
 
     def do_select_group(self, args):
+        """Select the group of VM to Manage"""
         vm_group = args
         if ',' in vm_group:
             mgroup = vm_group.split(",")
@@ -471,6 +475,7 @@ Type:  'help' for help with commands
             print(esc('31;1;1') +'Unknow group!' +esc(0))
 
     def complete_select_group(self, text, line, begidx, endidx):
+        """ auto completion selection of the VM group"""
         l_group = list_group(self.file)
         if not text:
             completions = l_group[:]
@@ -483,12 +488,14 @@ Type:  'help' for help with commands
         print("Select the group of VM to Manage")
 
     def do_show_group(self, args):
+        """Show group from VM file content"""
         show_group(self.file)
 
     def help_show_group(self):
         print('Show group from VM file content')
 
     def do_file(self, args):
+        """select the group yaml file"""
         file = args
         my_file = Path(file)
         if my_file.is_file():
@@ -498,15 +505,17 @@ Type:  'help' for help with commands
             print(esc('31;1;1') +file +" Doesnt exist!"+esc(0))
 
     def help_file(self):
-        print('Show slected group yaml file')
+        print('Select the group yaml file')
 
     def do_show_file(self, args):
+        """Show the Group yaml file used"""
         print("Group yaml file used is: " +self.file)
 
     def help_show_file(self):
         print("Show the Group yaml file used")
 
     def do_exec(self, args):
+        """Execute a system command"""
         out, errs = system_command(args)
         if errs:
             print(errs)
@@ -518,6 +527,7 @@ Type:  'help' for help with commands
         print("Execute a system command")
 
     def do_show_vm(self, cmd):
+        """ Show all VM matching the selected group(s)"""
         group = Cmd.vm_group
         conn = Cmd.conn
         if conn == '':
@@ -534,6 +544,7 @@ Type:  'help' for help with commands
         print('Show all VM matching the selected group(s)')
 
     def do_cmd(self, cmd):
+        """ Command to execute on a group of VM (virsh)"""
         if Cmd.conn == '':
             print('Connect to an hypervisor: help conn')
         else:
@@ -548,6 +559,7 @@ Type:  'help' for help with commands
                     print(list_domain_all_cmd)
 
     def complete_cmd(self, text, line, begidx, endidx):
+        """ auto completion cmd"""
         if not text:
             completions = list_domain_all_cmd[:]
         else:
@@ -559,6 +571,7 @@ Type:  'help' for help with commands
 
     # same as complete_hcmd but sadly cant not copy it as it will not work...
     def complete_hcmd(self, text, line, begidx, endidx):
+        """ auto completion help command"""
         if not text:
             completions = list_domain_all_cmd[:]
         else:
@@ -566,6 +579,7 @@ Type:  'help' for help with commands
         return completions
 
     def do_hcmd(self, cmd):
+        """Show the option of a virsh command """
         if cmd in list_domain_all_cmd:
             fcmd = 'virsh help ' +cmd
             out, errs = system_command(fcmd)
