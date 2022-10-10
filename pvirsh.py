@@ -15,6 +15,7 @@ import subprocess
 from pathlib import Path
 import argparse
 from cmd import Cmd
+import os
 import sys
 import libvirt
 import yaml
@@ -132,6 +133,14 @@ def list_group(groupfile):
             #print(item)
             l_group.append(item)
         return l_group
+
+def find_yaml_file():
+    """ Show all yaml file in current path"""
+    YAML_LIST = []
+    for files in os.listdir('.'):
+        if files.endswith(".yaml"):
+            YAML_LIST.append(files)
+    return YAML_LIST
 
 def system_command(cmd):
     """Launch a system command"""
@@ -515,6 +524,15 @@ Type:  'help' for help with commands
 
     def help_show_group(self):
         print('Show group from VM file content')
+
+    def complete_file(self, text, line, begidx, endidx):
+        """ auto completion to find yaml file in current path"""
+        all_files = find_yaml_file()
+        if not text:
+            completions = all_files[:]
+        else:
+            completions = [f for f in allfiles if f.startswith(text)]
+        return completions
 
     def do_file(self, args):
         """select the group yaml file"""
