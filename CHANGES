@@ -1,3 +1,9 @@
+V0.7
+- use argparse instead of optparse (deprecated)
+- various pylint fix
+- add a show command launche on VM option (default is off)
+- add more doc in the code
+
 V0.6
 - add an option to select the connector to the hypervisor: ssh or local
 - import sys (needed for LibVirtConnect)
