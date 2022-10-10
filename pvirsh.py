@@ -15,43 +15,42 @@ import subprocess
 from pathlib import Path
 import optparse
 from cmd import Cmd
-import libvirt
 import sys
+import libvirt
 import yaml
 
 VERSION = "0.6"
 
 class LibVirtConnect:
-        """Connection method to libvirt"""
+    """Connection method to libvirt"""
 
-        def __init__(self,connector,dst):
-            self.connector = connector
-            self.dst = dst
-            print(connector +" "+ dst)
-            conn = None
+    def __init__(self, connector, dst):
+        self.connector = connector
+        self.dst = dst
+        print(connector +" "+ dst)
 
-        def local():
-            conn = None
-            try:
-                conn = libvirt.open("qemu:///system")
-                ver = conn.getVersion()
-                print('Connected; Version: '+str(ver))
-                return conn
-            except libvirt.libvirtError as e:
-                print(repr(e), file=sys.stderr)
-                return 666
+    def local():
+        conn = None
+        try:
+            conn = libvirt.open("qemu:///system")
+            ver = conn.getVersion()
+            print('Connected; Version: '+str(ver))
+            return conn
+        except libvirt.libvirtError as verror:
+            print(repr(verror), file=sys.stderr)
+            return 666
 
-        def remote(connector, dst):
-            dst_conn = None
-            print(connector+'://'+dst+'/system')
-            try:
-                dst_conn = libvirt.open(connector+'://'+dst+'/system')
-                ver = dst_conn.getVersion()
-                print('Connected; Version: '+str(ver))
-                return dst_conn
-            except libvirt.libvirtError as e:
-                print(repr(e), file=sys.stderr)
-                return 666
+    def remote(self, connector, dst):
+        dst_conn = None
+        print(connector+'://'+dst+'/system')
+        try:
+            dst_conn = libvirt.open(connector+'://'+dst+'/system')
+            ver = dst_conn.getVersion()
+            print('Connected; Version: '+str(ver))
+            return dst_conn
+        except libvirt.libvirtError as verror:
+            print(repr(verror), file=sys.stderr)
+            return 666
 
 # TODO: validate the yaml file
 def validate_file():
@@ -260,7 +259,7 @@ def para_cmd(file, group, cmd, conn):
 
 # list of domain command available with virsh
 # remove some: create console domrename define managedsave-define managedsave-edit domid
-list_domain_cmd = ['attach-device', 'attach-disk', 'attach-interface',
+LIST_DOMAIN_CMD = ['attach-device', 'attach-disk', 'attach-interface',
                    'autostart', 'blkdeviotune', 'blkiotune', 'blockcommit',
                    'blockcopy', 'blockjob', 'blockpull', 'blockresize',
                    'change-media', 'cpu-stats', 'desc', 'destroy', 'detach-device',
@@ -287,12 +286,12 @@ list_domain_cmd = ['attach-device', 'attach-disk', 'attach-interface',
                    'emulatorpin', 'vncdisplay', 'guestvcpus', 'setvcpu', 'domblkthreshold',
                    'guestinfo', 'domdirtyrate-calc']
 
-list_domain_monitoring = ['domblkerror', 'domblkinfo', 'domblklist', 'domblkstat',
+LIST_DOMAIN_MONITORING = ['domblkerror', 'domblkinfo', 'domblklist', 'domblkstat',
                           'domcontrol', 'domif-getlink', 'domifaddr', 'domiflist',
                           'domifstat', 'dominfo', 'dommemstat', 'domstate',
                           'domstats', 'domtimedomain', 'list']
 
-list_domain_all_cmd = list_domain_cmd + list_domain_monitoring
+list_domain_all_cmd = LIST_DOMAIN_CMD + LIST_DOMAIN_MONITORING
 
 def main():
     """ main function"""
