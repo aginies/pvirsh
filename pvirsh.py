@@ -228,7 +228,7 @@ def vm_selected(file, group, conn):
         vms = find_matching_vm(file, group, conn)
     return vms
 
-def para_cmd(file, group, cmd, conn):
+def para_cmd(file, group, cmd, conn, show):
     """Start pool of command"""
 
     results = []
@@ -252,6 +252,8 @@ def para_cmd(file, group, cmd, conn):
     for virtm in vms:
         # check virtm is not empty...
         if virtm:
+            if show == 'on':
+                print('virsh ' +str(cmd) +' ' +virtm +' ' +str(cmdoptions))
             pool.apply_async(do_virsh_cmd, args=(virtm, cmd, cmdoptions))
     pool.close()
     pool.join()
@@ -394,6 +396,7 @@ def main():
         return 0
 
 LIST_CONNECTORS = ['local', 'qemu+ssh']
+LIST_SHOW = ['on', 'off']
 
 class MyPrompt(Cmd):
     prompt = '> '
@@ -414,9 +417,13 @@ Type:  'help' for help with commands
     Cmd.vm_group = ''
     # define a default file
     Cmd.file = 'groups.yaml'
+    # libvirt connection
     Cmd.conn = ''
+    # prompt
     Cmd.promptcon = ''
     promptline = '###########################\n'
+    # show the command on all VM or not
+    Cmd.show = False
 
     def do_quit(self, args):
         """Exit the application"""
@@ -549,6 +556,25 @@ Type:  'help' for help with commands
     def help_show_vm(self):
         print('Show all VM matching the selected group(s)')
 
+    def do_show(self, args):
+        show = args
+        if show == 'on':
+            Cmd.show = 'on'
+        else:
+            Cmd.show = 'off'
+
+    def help_show(self):
+        print('Show command executed on VM (True|False)')
+
+    def complete_show(self, text, line, begidx, endidx):
+        """ auto completion show option"""
+        if not text:
+            completions = LIST_SHOW[:]
+        else:
+            completions = [f for f in LIST_SHOW if f.startswith(text)
+                          ]
+        return completions
+
     def do_cmd(self, cmd):
         """ Command to execute on a group of VM (virsh)"""
         if Cmd.conn == '':
@@ -560,7 +586,7 @@ Type:  'help' for help with commands
             else:
                 testcmd = cmd.split(" ")
                 if testcmd[0] in list_domain_all_cmd:
-                    para_cmd(self.file, group, cmd, self.conn)
+                    para_cmd(self.file, group, cmd, self.conn, Cmd.show)
                 else:
                     print(list_domain_all_cmd)
 
