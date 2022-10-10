@@ -2,23 +2,23 @@
 
 EXPERIMENTATION FOR [ALP OS](https://documentation.suse.com/alp/all/)
 
-Being able to execute the same **command** on an **group of Virtual Machine**.
+This wrapper is a **parralel virsh** command to manage selected group of Virtual Machine.
+This provide an easy way to execute the same **command** on a **selected group of Virtual Machine**.
 If you want to manage more than 1 VM you need to script you action and this will
 be done in a sequential way (most of the time). 
-This wrapper is a **parralel virsh** command.
 
 This tool provides:
-* Launch parralel command on mulitiple VM selected by group
-* Auto-completion of the **virsh** domain command
+* Launch **parralel command** on mulitiple **VM** selected by group
+* **auto-completion** of the **virsh** domain command
 * Help on **virsh** command (display options)
-* Reports of error/success per VM
-* An interactive terminal or a one shot command
+* **Reports** of **error/success** per VM
+* An **interactive terminal** or a one shot command
 * Interactive mode: the prompt display which group you are currently managing and the connector
-* Execution of a system command in interactive mode (exec)
-* group of VM: selection, show selected group(s), possibility to use multi-group
-* yaml file group: default is groups.yaml, option to change to any other file
-* Displaying the list of VM selected according to the current group(s)
-* Displaying the "regexp" per group to select VM
+* Execution of a **system command** in interactive mode (exec)
+* **group of VM**: selection, show selected group(s), possibility to use multi-group
+* yaml file group: default is **groups.yaml**, possible to change to any other file
+* Displaying the **list of VM** selected according to the current group(s)
+* Displaying the **"regexp" per group** to select VM
 
 # Demo
 
@@ -35,7 +35,6 @@ Probably a lot as this is for testing purpose...
 * detect VM state before (useful for some command which requires VM running)
 * validate the yaml file before using it
 * connect to multiple host?
-* use libvirt api directly for the command? -> need some rewrite...
 * ....
 
 # Define Virtual Machine groups
