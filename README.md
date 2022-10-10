@@ -16,7 +16,7 @@ This tool provides:
 * Help on **virsh** command (display options)
 * Reports error/success per VM
 * Interactive terminal or one shot command
-* use libvirt api to connect to host (local by default)
+* use libvirt api to connect to host (local | ssh)
 * In Interactive mode: the prompt display which group you are currently managing
 * Can execute a system command without leaving the interactive mode (exec)
 * Can display the list of VM selected
@@ -64,8 +64,7 @@ windows:
 # Usage
 
 ```bash
-Usage:
-
+Usage: 
         Interactive or Non Interactive command tool to manage multiple VM at the same Time
 
         Non interactive:
@@ -77,7 +76,8 @@ Usage:
 
 Options:
   -h, --help            show this help message and exit
-  -n, --noninteractive  Launch this tool in non interactive mode)
+  -n, --noninteractive  Launch this tool in non interactive mode
+  --conn=CONN           Connect to the hypervisor (local | ssh)
   -g GROUP, --group=GROUP
                         Group of VM to use (could be a list separated by ,)
   -f FILE, --file=FILE  Group file to use as yaml file (default will be
@@ -94,36 +94,36 @@ Options:
 Get the state of all virtual Machine in **suse** group:
 
 ```bash
-./pvirsh.py -n -g suse,rhel -c domstate
+/pvirsh.py -n --conn local -c domstate -g suse,rhel
 
+
+Connected; Version: 6002000
 Multiple group selected
-Selected group is suse: ['sle15sp31$', 'sle15sp4']
+Selected group is suse: ['sle15sp3', 'sle15sp41$', 'sle15sp4-2$']
 Selected group is rhel: ['rhe', 'fedora', 'plop']
-fedora Virtual Machine Not found
-plop Virtual Machine Not found
-virsh domstate sle15sp42  shut off Done
-virsh domstate sle15sp4  shut off Done
 virsh domstate sle15sp31  shut off Done
 virsh domstate sle15sp41  shut off Done
 virsh domstate sle15sp4-2  shut off Done
+virsh domstate sle15sp32  shut off Done
+virsh domstate sle15sp33  shut off Done
+virsh domstate sle15sp34  shut off Done
 virsh domstate rhel8  shut off Done
-virsh domstate sle15sp44  shut off Done
-virsh domstate sle15sp43  shut off Done
 ```
 
 Setting hard-limit memory to 1.024GB for all VM in **suse** group:
 
 ```bash
-./pvirsh.py -n -g suse -c "memtune --hard-limit 1000000"
+./pvirsh.py -n --conn local -c "memtune --hard-limit 1000000" -g suse
 
-Selected group is suse: ['sle15sp31$', 'sle15sp4']
-virsh memtune sle15sp31 --hard-limit 1000000  Done
+
+Connected; Version: 6002000
+Selected group is suse: ['sle15sp3', 'sle15sp41$', 'sle15sp4-2$']
+virsh memtune sle15sp34 --hard-limit 1000000  Done
 virsh memtune sle15sp41 --hard-limit 1000000  Done
-virsh memtune sle15sp44 --hard-limit 1000000  Done
+virsh memtune sle15sp31 --hard-limit 1000000  Done
+virsh memtune sle15sp33 --hard-limit 1000000  Done
+virsh memtune sle15sp32 --hard-limit 1000000  Done
 virsh memtune sle15sp4-2 --hard-limit 1000000  Done
-virsh memtune sle15sp42 --hard-limit 1000000  Done
-virsh memtune sle15sp4 --hard-limit 1000000  Done
-virsh memtune sle15sp43 --hard-limit 1000000  Done
 ```
 
 Adding an RNG device to all VM in **suse** group:
@@ -134,16 +134,18 @@ cat rng.xml
   <address type="pci" domain="0x0000" bus="0x0a" slot="0x00" function="0x0"/>
 </rng>
 
-./pvirsh.py -n -g suse -c "attach-device --current --file rng.xml"
+./pvirsh.py -n --conn local -g suse,rhel -c "attach-device --current --file rng.xml"
 
-Selected group is suse: ['sle15sp31$', 'sle15sp4']
-virsh attach-device sle15sp4-2 --current --file rng.xml Device attached successfully Done
-virsh attach-device sle15sp31 --current --file rng.xml Device attached successfully Done
-virsh attach-device sle15sp4 --current --file rng.xml Device attached successfully Done
+Connected; Version: 6002000
+Multiple group selected
+Selected group is suse: ['sle15sp3', 'sle15sp41$', 'sle15sp4-2$']
+Selected group is rhel: ['rhe', 'fedora', 'plop']
 virsh attach-device sle15sp41 --current --file rng.xml Device attached successfully Done
-Command was:virsh attach-device sle15sp44 --current --file rng.xml
-ERROR: sle15sp44: b'error: Failed to attach device from rng.xml\nerror: unsupported configuration: a device with the same address already exists \n'
-
-virsh attach-device sle15sp42 --current --file rng.xml Device attached successfully Done
-virsh attach-device sle15sp43 --current --file rng.xml Device attached successfully Done
+virsh attach-device sle15sp31 --current --file rng.xml Device attached successfully Done
+virsh attach-device sle15sp4-2 --current --file rng.xml Device attached successfully Done
+virsh attach-device sle15sp33 --current --file rng.xml Device attached successfully Done
+virsh attach-device rhel8 --current --file rng.xml Device attached successfully Done
+virsh attach-device sle15sp32 --current --file rng.xml Device attached successfully Done
+Command was:virsh attach-device sle15sp34 --current --file rng.xml
+ERROR: sle15sp34: b'error: Failed to attach device from rng.xml\nerror: unsupported configuration: a device with the same address already exists \n'
 ```

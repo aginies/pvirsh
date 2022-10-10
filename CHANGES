@@ -1,5 +1,12 @@
+V0.6
+- add an option to select the connector to the hypervisor: ssh or local
+- import sys (needed for LibVirtConnect)
+- prompt now show the connector
+- update README.md
+
 V0.5
 - Final version 0.5
+- various fixes after some QA...
 
 V0.4
 - add class LibVirtConnect

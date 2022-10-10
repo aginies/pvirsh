@@ -16,9 +16,10 @@ from pathlib import Path
 import optparse
 from cmd import Cmd
 import libvirt
+import sys
 import yaml
 
-VERSION = "0.5"
+VERSION = "0.6"
 
 class LibVirtConnect:
         """Connection method to libvirt"""
@@ -34,11 +35,11 @@ class LibVirtConnect:
             try:
                 conn = libvirt.open("qemu:///system")
                 ver = conn.getVersion()
-                #print('Connected \nVersion: '+str(ver))
+                print('Connected; Version: '+str(ver))
                 return conn
             except libvirt.libvirtError as e:
                 print(repr(e), file=sys.stderr)
-                exit(1)
+                return 666
 
         def remote(connector, dst):
             dst_conn = None
@@ -46,11 +47,11 @@ class LibVirtConnect:
             try:
                 dst_conn = libvirt.open(connector+'://'+dst+'/system')
                 ver = dst_conn.getVersion()
-                #print('Connected \nVersion: '+str(ver))
+                print('Connected; Version: '+str(ver))
                 return dst_conn
             except libvirt.libvirtError as e:
                 print(repr(e), file=sys.stderr)
-                exit(1)
+                return 666
 
 # TODO: validate the yaml file
 def validate_file():
@@ -143,13 +144,12 @@ def system_command(cmd):
     out = str(out, 'utf-8')
     return out, errs
 
-def find_matching_vm(groupfile, group):
+def find_matching_vm(groupfile, group, conn):
     """return the list of VM matching the group"""
 
     with open(groupfile) as file:
         groups = yaml.full_load(file)
         vms = ""
-        conn = LibVirtConnect.local()
         for item, value in groups.items():
             # only match vm of the correct group
             if item == group:
@@ -185,7 +185,6 @@ def find_matching_vm(groupfile, group):
                                     pass
                 else:
                     print('No domain to manage on this host!')
-        conn.close()
 # OLD CODE BASE on virsh list
 # more simple for matching...
 #                for virtum in value:
@@ -218,23 +217,23 @@ def do_virsh_cmd(virtum, cmd, cmdoptions):
         print(cmdtolaunch, end=" ")
         print(out + " " + esc('32;1;4') + 'Done' + esc(0))
 
-def vm_selected(file, group):
+def vm_selected(file, group, conn):
     vms = ''
     if ',' in group:
         print('Multiple group selected')
         mgroup = group.split(",")
         for allgroup in mgroup:
-            morevms = find_matching_vm(file, allgroup)
+            morevms = find_matching_vm(file, allgroup, conn)
             vms = vms +morevms
     else:
-        vms = find_matching_vm(file, group)
+        vms = find_matching_vm(file, group, conn)
     return vms
 
-def para_cmd(file, group, cmd):
+def para_cmd(file, group, cmd, conn):
     """Start pool of command"""
 
     results = []
-    vms = vm_selected(file, group)
+    vms = vm_selected(file, group, conn)
 
     cmdoptions = ''
     # subsystem: splitlines because of \n
@@ -302,15 +301,17 @@ def main():
         Interactive or Non Interactive command tool to manage multiple VM at the same Time
 
         Non interactive:
-        %prog -n  -f GROUP.yaml -g VM_GROUP,VM_GROUP2 -c 'CMD CMD_OPTION'
+        %prog -n  -f GROUP.yaml --conn CONNECTOR -g VM_GROUP,VM_GROUP2 -c 'CMD CMD_OPTION'
 
-        example:
-        %prog -n -g suse -c 'domstate --reason'
+        Example:
+        %prog -n --conn local -g suse -c 'domstate --reason'
         """
     parser = optparse.OptionParser(usage=usage)
 
     parser.add_option('-n', '--noninteractive', dest='noninteractive', action='store_false',
                       help='Launch this tool in non interactive mode')
+    parser.add_option('', '--conn', dest='conn', action='store',
+                      help='Connect to the hypervisor (local | ssh)')
     parser.add_option('-g', '--group', dest='group', action='store',
                       help='Group of VM to use (could be a list separated by ,)')
     parser.add_option('-f', '--file', dest='file', action='store', default='groups.yaml',
@@ -330,6 +331,14 @@ def main():
     if options.noninteractive is None:
         MyPrompt().cmdloop()
     else:
+        if options.conn is None:
+            parser.error(esc('31;1;1') + 'No connector selected!: local | ssh ' +esc(0))
+        elif options.conn == 'local':
+            conn = LibVirtConnect.local()
+        elif options.conn == 'ssh':
+            remoteip = str(input("Remote IP address? "))
+            conn = LibVirtConnect.remote('qemu+ssh', remoteip)
+
         if options.file is None:
             parser.error(esc('31;1;1') + 'Yaml File of group of VM not given' +esc(0))
         if options.show is None:
@@ -374,11 +383,13 @@ def main():
                 code = check_group(options.file, options.group)
             # for now launch a virsh commande line
             if code != 666:
-                para_cmd(options.file, options.group, options.cmd)
+                para_cmd(options.file, options.group, options.cmd, conn)
             else:
                 print('Unknow group!')
             return 0
         return 0
+
+list_connectors = ['local', 'qemu+ssh']
 
 class MyPrompt(Cmd):
     prompt = '> '
@@ -387,23 +398,62 @@ class MyPrompt(Cmd):
 Type:  'help' for help with commands
        'quit' to quit
 
-1) Select the group yasml file (default will be groups.yaml)
+1) Connect to an Hypervisor
+    conn [TAB]
+2) Select the group yasml file (default will be groups.yaml)
     file PATH_TO_FILE/FILE.YAML
-2) Select a group of VM:
+3) Select a group of VM:
     select group [TAB]
-3) Run a command:
+4) Run a command:
     cmd [TAB]
 """
-    Cmd.vm_group = None
+    Cmd.vm_group = ''
     # define a default file
     Cmd.file = 'groups.yaml'
+    Cmd.conn = ''
+    Cmd.promptcon = ''
 
     def do_quit(self, args):
         print("Bye Bye")
+        if Cmd.conn != '':
+            Cmd.conn.close()
         return True
 
     def help_quit(self):
         print('Exit the application. Shorthand: Ctrl-D.')
+
+    # conn = LibVirtConnect.local()
+    # conn = LibVirtConnect.remote('qemu+ssh', '10.0.1.73')
+    # conn.close()
+
+    def do_conn(self, args):
+        # conn = LibVirtConnect.local()
+        conn = args
+        if conn == 'local':
+            conn = LibVirtConnect.local()
+            Cmd.conn = conn
+            if conn != 666:
+                Cmd.promptcon = esc('32;1;1') +'Connector: qemu:///system\n' +esc(0)
+                self.prompt = Cmd.promptcon +self.vm_group + '> '
+        elif conn == 'qemu+ssh':
+            remoteip = str(input("Remote IP address? "))
+            conn = LibVirtConnect.remote('qemu+ssh', remoteip)
+            Cmd.conn = conn
+            if conn != 666:
+                Cmd.promptcon = esc('32;1;1') +'Connector: qemu+ssh://' +remoteip + '/system' +'\n' +esc(0)
+                self.prompt = Cmd.promptcon +self.vm_group + '> '
+        else:
+            print('Unknow Connector...')
+
+    def help_conn(self):
+        print('Define the connector to the hypervisor')
+
+    def complete_conn(self, text, line, begidx, endidx):
+        if not text:
+            completions = list_connectors[:]
+        else:
+            completions = [f for f in list_connectors if f.startswith(text)]
+        return completions
 
     def do_select_group(self, args):
         vm_group = args
@@ -416,7 +466,7 @@ Type:  'help' for help with commands
 
         if code != 666:
             print("Selected group is '{}'".format(args))
-            self.prompt = vm_group + ' > '
+            self.prompt = Cmd.promptcon +vm_group + ' > '
             Cmd.vm_group = vm_group
         else:
             print('Unknow group!')
@@ -426,9 +476,7 @@ Type:  'help' for help with commands
         if not text:
             completions = l_group[:]
         else:
-            completions = [f
-                           for f in l_group
-                           if f.startswith(text)
+            completions = [f for f in l_group if f.startswith(text)
                           ]
         return completions
 
@@ -472,10 +520,11 @@ Type:  'help' for help with commands
 
     def do_show_vm(self, cmd):
         group = Cmd.vm_group
-        if group is None:
+        conn = Cmd.conn
+        if group == '':
             print('Please seclect a group of VM: select_group GROUP_VM')
         else:
-            vms = vm_selected(self.file, group)
+            vms = vm_selected(self.file, group, conn)
             print('Vm selected by ' +group +' are:')
             print(vms)
 
@@ -483,15 +532,18 @@ Type:  'help' for help with commands
         print('Show all VM matching the selected group(s)')
 
     def do_cmd(self, cmd):
-        group = Cmd.vm_group
-        if group is None:
-            print('Please seclect a group of VM: select_group GROUP_VM')
+        if Cmd.conn == '':
+            print('Connect to an hypervisor: help conn')
         else:
-            testcmd = cmd.split(" ")
-            if testcmd[0] in list_domain_all_cmd:
-                para_cmd(self.file, group, cmd)
+            group = Cmd.vm_group
+            if group == '':
+                print('Please seclect a group of VM: select_group GROUP_VM')
             else:
-                print(list_domain_all_cmd)
+                testcmd = cmd.split(" ")
+                if testcmd[0] in list_domain_all_cmd:
+                    para_cmd(self.file, group, cmd, self.conn)
+                else:
+                    print(list_domain_all_cmd)
 
     def complete_cmd(self, text, line, begidx, endidx):
         if not text:
