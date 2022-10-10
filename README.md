@@ -8,22 +8,21 @@ be done in a sequential way (most of the time).
 This wrapper is a **parralel virsh** command.
 
 This tool provides:
-* Selection of group of VM, possibility to use multi-group (yaml file)
-* Possibility to select a different group yaml file (default is groups.yaml)
-* Show the regexp per group
 * Launch parralel command on mulitiple VM selected by group
-* auto-completion of the **virsh** domain command
+* Auto-completion of the **virsh** domain command
 * Help on **virsh** command (display options)
-* Reports error/success per VM
-* Interactive terminal or one shot command
-* use libvirt api to connect to host (local | ssh)
-* In Interactive mode: the prompt display which group you are currently managing
-* Can execute a system command without leaving the interactive mode (exec)
-* Can display the list of VM selected
+* Reports of error/success per VM
+* An interactive terminal or a one shot command
+* Interactive mode: the prompt display which group you are currently managing and the connector
+* Execution of a system command in interactive mode (exec)
+* group of VM: selection, show selected group(s), possibility to use multi-group
+* yaml file group: default is groups.yaml, option to change to any other file
+* Displaying the list of VM selected according to the current group(s)
+* Displaying the "regexp" per group to select VM
 
 # Demo
 
-![image](https://github.com/aginies/pvirsh/blob/badf17892e365e31c7ef34eb8f408c53597f593a/demo_pvirsh.gif)
+![image](https://github.com/aginies/pvirsh/blob/5873dbd6c597cd41552a8d79607d2f4aea0daed7/demo_pvirsh.gif)
 
 # Python requires
 
