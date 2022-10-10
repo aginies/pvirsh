@@ -14,6 +14,7 @@ This tool provides:
 * **Reports** of **error/success** per VM
 * An **interactive terminal** or a one shot command
 * Interactive mode: intelligent prompt (display group, yaml file and connector)
+* **colored prompt** to easily catch up trouble
 * Execution of a **system command** in interactive mode (exec)
 * **group of VM**: selection, show selected group(s), possibility to use multi-group
 * yaml file group: default is **groups.yaml**, possible to change to any other file

@@ -1,3 +1,8 @@
+V0.8
+- improve layout with some color
+- prompt now display: selected group, yaml file, connector
+- prompt uses color to help determine whats wrong
+
 V0.7
 - use argparse instead of optparse (deprecated)
 - various pylint fix
