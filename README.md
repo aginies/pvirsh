@@ -2,18 +2,18 @@
 
 EXPERIMENTATION FOR [ALP OS](https://documentation.suse.com/alp/all/)
 
-This wrapper is a **parralel virsh** command to manage selected group of Virtual Machine.
+This wrapper is a **paralel virsh** command to manage selected group of Virtual Machine.
 This provide an easy way to execute the same **command** on a **selected group of Virtual Machine**.
 If you want to manage more than 1 VM you need to script you action and this will
 be done in a sequential way (most of the time). 
 
 This tool provides:
-* Launch **parralel command** on mulitiple **VM** selected by group
+* Launch **paralel command** on mulitiple **VM** selected by group
 * **auto-completion** of the **virsh** domain command
 * Help on **virsh** command (display options)
 * **Reports** of **error/success** per VM
 * An **interactive terminal** or a one shot command
-* Interactive mode: the prompt display which group you are currently managing and the connector
+* Interactive mode: intelligent prompt (display group, yaml file and connector)
 * Execution of a **system command** in interactive mode (exec)
 * **group of VM**: selection, show selected group(s), possibility to use multi-group
 * yaml file group: default is **groups.yaml**, possible to change to any other file
