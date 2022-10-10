@@ -135,7 +135,7 @@ def list_group(groupfile):
         return l_group
 
 def system_command(cmd):
-    """ Launch a system command  """
+    """Launch a system command"""
 
     #print(cmd)
     proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -145,7 +145,7 @@ def system_command(cmd):
     return out, errs
 
 def find_matching_vm(groupfile, group, conn):
-    """return the list of VM matching the group"""
+    """Return the list of VM matching the group"""
 
     with open(groupfile) as file:
         groups = yaml.full_load(file)
@@ -184,7 +184,7 @@ def find_matching_vm(groupfile, group, conn):
                                     #print('doesnt match anything....')
                                     pass
                 else:
-                    print('No domain to manage on this host!')
+                    print(esc('31;1;4')+'No domain to manage on this host!'+esc(0))
 # OLD CODE BASE on virsh list
 # more simple for matching...
 #                for virtum in value:
@@ -205,7 +205,7 @@ def find_matching_vm(groupfile, group, conn):
         return vms
 
 def do_virsh_cmd(virtum, cmd, cmdoptions):
-    """execute the command on all the VM defined"""
+    """Execute the command on all the VM defined"""
 
     cmdtolaunch = cmd + ' ' + virtum + ' ' + cmdoptions
     out, errs = system_command(cmdtolaunch)
@@ -301,7 +301,7 @@ def main():
         Interactive or Non Interactive command tool to manage multiple VM at the same Time
 
         Non interactive:
-        %prog -n  -f GROUP.yaml --conn CONNECTOR -g VM_GROUP,VM_GROUP2 -c 'CMD CMD_OPTION'
+        %prog -n -f GROUP.yaml --conn CONNECTOR -g VM_GROUP,VM_GROUP2 -c 'CMD CMD_OPTION'
 
         Example:
         %prog -n --conn local -g suse -c 'domstate --reason'
@@ -332,7 +332,7 @@ def main():
         MyPrompt().cmdloop()
     else:
         if options.conn is None:
-            parser.error(esc('31;1;1') + 'No connector selected!: local | ssh ' +esc(0))
+            parser.error(esc('31;1;1') +'No connector selected!: local | ssh ' +esc(0))
         elif options.conn == 'local':
             conn = LibVirtConnect.local()
         elif options.conn == 'ssh':
@@ -340,7 +340,7 @@ def main():
             conn = LibVirtConnect.remote('qemu+ssh', remoteip)
 
         if options.file is None:
-            parser.error(esc('31;1;1') + 'Yaml File of group of VM not given' +esc(0))
+            parser.error(esc('31;1;1') +'Yaml File of group of VM not given' +esc(0))
         if options.show is None:
             pass
         else:
@@ -366,13 +366,13 @@ def main():
             return 0
                 
         if options.group is None:
-            parser.error(esc('31;1;1') + 'Group of VM to use not given' +esc(0))
+            parser.error(esc('31;1;1') +'Group of VM to use not given' +esc(0))
             print(usage)
                     
         if options.cmd is None:
-            print(esc('31;1;1') + 'Nothing todo, no COMMAND to execute...' +esc(0))
+            print(esc('31;1;1') +'Nothing todo, no COMMAND to execute...' +esc(0))
             print('-c COMMAND')
-            print(esc('32;1;4') + 'Available are:' +esc(0))
+            print(esc('32;1;4') +'Available are:' +esc(0))
             print(list_domain_all_cmd)
         else:
             if ',' in options.group:
@@ -385,7 +385,7 @@ def main():
             if code != 666:
                 para_cmd(options.file, options.group, options.cmd, conn)
             else:
-                print('Unknow group!')
+                print(esc('31;1;1') +'Unknow group!' +esc(0))
             return 0
         return 0
 
@@ -443,10 +443,10 @@ Type:  'help' for help with commands
                 Cmd.promptcon = esc('32;1;1') +'Connector: qemu+ssh://' +remoteip + '/system' +'\n' +esc(0)
                 self.prompt = Cmd.promptcon +self.vm_group + '> '
         else:
-            print('Unknow Connector...')
+            print(esc('31;1;1') +'Unknow Connector...'+esc(0))
 
     def help_conn(self):
-        print('Define the connector to the hypervisor')
+        print('Setting up the connector to the hypervisor: ' +str(list_connectors))
 
     def complete_conn(self, text, line, begidx, endidx):
         if not text:
@@ -469,7 +469,7 @@ Type:  'help' for help with commands
             self.prompt = Cmd.promptcon +vm_group + ' > '
             Cmd.vm_group = vm_group
         else:
-            print('Unknow group!')
+            print(esc('31;1;1') +'Unknow group!' +esc(0))
 
     def complete_select_group(self, text, line, begidx, endidx):
         l_group = list_group(self.file)
@@ -496,7 +496,7 @@ Type:  'help' for help with commands
             print("Selected group yaml file is '{}'".format(file))
             Cmd.file = file
         else:
-            print(file +" Doesnt exist!")
+            print(esc('31;1;1') +file +" Doesnt exist!"+esc(0))
 
     def help_file(self):
         print('Show slected group yaml file')
