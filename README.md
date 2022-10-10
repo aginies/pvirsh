@@ -3,9 +3,9 @@
 EXPERIMENTATION FOR [ALP OS](https://documentation.suse.com/alp/all/)
 
 Being able to execute the same **command** on an **group of Virtual Machine**.
-If you want to manage more than 1 VM you need to script you actioni and this will
-be done in a sequential way (most of the time). This wrapper is a **parralel virsh**
-command.
+If you want to manage more than 1 VM you need to script you action and this will
+be done in a sequential way (most of the time). 
+This wrapper is a **parralel virsh** command.
 
 This tool provides:
 * Selection of group of VM, possibility to use multi-group (yaml file)
