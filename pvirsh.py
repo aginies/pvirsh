@@ -421,10 +421,18 @@ Type:  'help' for help with commands
     # libvirt connection
     Cmd.conn = ''
     # prompt
-    Cmd.promptcon = ''
+    my_file = Path(Cmd.file)
+    if my_file.is_file():
+        # Cmd.promptfile is used for the prompt file
+        Cmd.promptfile = 'Group File: '+esc('32;1;1')+str(Cmd.file)+esc(0)
+    else:
+        Cmd.promptfile = esc('31;1;1')+'No Group file selected'+esc(0)
+    # by default there is no connection to any hypervisor
+    Cmd.promptcon = esc('31;1;1')+'Not Connected'+esc(0)
     promptline = '###########################\n'
     # show the command on all VM or not
     Cmd.show = False
+    prompt = promptline +Cmd.promptfile+' | '+Cmd.promptcon+'\n'+Cmd.vm_group +'> '
 
     def do_quit(self, args):
         """Exit the application"""
@@ -448,15 +456,15 @@ Type:  'help' for help with commands
             conn = LibVirtConnect.local()
             Cmd.conn = conn
             if conn != 666:
-                Cmd.promptcon = esc('32;1;1') +'Connector: qemu:///system\n' +esc(0)
-                self.prompt = self.promptline + Cmd.promptcon +self.vm_group + '> '
+                Cmd.promptcon = 'Connector: ' +esc('32;1;1') +'qemu:///system'+esc(0)+'\n'
+                self.prompt = self.promptline+Cmd.promptfile+' | '+Cmd.promptcon+self.vm_group +'> '
         elif conn == 'qemu+ssh':
             remoteip = str(input("Remote IP address? "))
             conn = LibVirtConnect.remote('qemu+ssh', remoteip)
             Cmd.conn = conn
             if conn != 666:
-                Cmd.promptcon = esc('32;1;1') +'Connector: qemu+ssh://' +remoteip + '/system' +'\n' +esc(0)
-                self.prompt = self.promptline + Cmd.promptcon +self.vm_group + '> '
+                Cmd.promptcon = 'Connector: ' +esc('32;1;1') +'qemu+ssh://' +remoteip + '/system'+esc(0)+'\n'
+                self.prompt = self.promptline+Cmd.promptfile+' | '+Cmd.promptcon+self.vm_group +'> '
         else:
             print(esc('31;1;1') +'Unknow Connector...'+esc(0))
 
@@ -483,7 +491,7 @@ Type:  'help' for help with commands
 
         if code != 666:
             print("Selected group is '{}'".format(args))
-            self.prompt = self.promptline + Cmd.promptcon +vm_group + ' > '
+            self.prompt = self.promptline+Cmd.promptfile+' | '+Cmd.promptcon+vm_group + '> '
             Cmd.vm_group = vm_group
         else:
             print(esc('31;1;1') +'Unknow group!' +esc(0))
@@ -515,6 +523,8 @@ Type:  'help' for help with commands
         if my_file.is_file():
             print("Selected group yaml file is '{}'".format(file))
             Cmd.file = file
+            Cmd.promptfile = 'Group File: '+esc('32;1;1')+str(Cmd.file)+esc(0)
+            self.prompt = self.promptline+Cmd.promptfile+' | '+Cmd.promptcon+self.vm_group +'> '
         else:
             print(esc('31;1;1') +file +" Doesnt exist!"+esc(0))
 
@@ -548,10 +558,10 @@ Type:  'help' for help with commands
             print('Connect to an hypervisor: help conn')
         else:
             if group == '':
-                print('Please seclect a group of VM: select_group GROUP_VM')
+                print('Please select a group of VM: select_group GROUP_VM')
             else:
                 vms = vm_selected(self.file, group, conn)
-                print('Vm selected by ' +group +' are:')
+                print('Vm selected by ' +group +' group(s) are:')
                 print(vms)
 
     def help_show_vm(self):
