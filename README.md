@@ -2,27 +2,28 @@
 
 EXPERIMENTATION FOR [ALP OS](https://documentation.suse.com/alp/all/)
 
-Being able to execute the same **command** on an **group of Virtual Machine**.
+This wrapper is a **paralel virsh** command to manage selected group of Virtual Machine.
+This provide an easy way to execute the same **command** on a **selected group of Virtual Machine**.
 If you want to manage more than 1 VM you need to script you action and this will
 be done in a sequential way (most of the time). 
-This wrapper is a **parralel virsh** command.
 
 This tool provides:
-* Launch parralel command on mulitiple VM selected by group
-* Auto-completion of the **virsh** domain command
+* Launch **paralel command** on mulitiple **VM** selected by group
+* **auto-completion** of the **virsh** domain command
 * Help on **virsh** command (display options)
-* Reports of error/success per VM
-* An interactive terminal or a one shot command
-* Interactive mode: the prompt display which group you are currently managing and the connector
-* Execution of a system command in interactive mode (exec)
-* group of VM: selection, show selected group(s), possibility to use multi-group
-* yaml file group: default is groups.yaml, option to change to any other file
-* Displaying the list of VM selected according to the current group(s)
-* Displaying the "regexp" per group to select VM
+* **Reports** of **error/success** per VM
+* An **interactive terminal** or a one shot command
+* Interactive mode: intelligent prompt (display group, yaml file and connector)
+* **colored prompt** to easily catch up trouble
+* Execution of a **system command** in interactive mode (exec)
+* **group of VM**: selection, show selected group(s), possibility to use multi-group
+* yaml file group: default is **groups.yaml**, possible to change to any other file
+* Displaying the **list of VM** selected according to the current group(s)
+* Displaying the **"regexp" per group** to select VM
 
 # Demo
 
-![image](https://github.com/aginies/pvirsh/blob/5873dbd6c597cd41552a8d79607d2f4aea0daed7/demo_pvirsh.gif)
+![image](https://github.com/aginies/pvirsh/blob/f9920a543fb92ba44f43e213a676acc4f697b2fc/demo_pvirsh.gif)
 
 # Python requires
 
@@ -35,7 +36,6 @@ Probably a lot as this is for testing purpose...
 * detect VM state before (useful for some command which requires VM running)
 * validate the yaml file before using it
 * connect to multiple host?
-* use libvirt api directly for the command? -> need some rewrite...
 * ....
 
 # Define Virtual Machine groups
