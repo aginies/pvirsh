@@ -128,7 +128,7 @@ def list_group(groupfile):
     with open(groupfile) as file:
         groups = yaml.full_load(file)
         l_group = []
-        for item, value in groups.items():
+        for item in groups.items():
             #print(item)
             l_group.append(item)
         return l_group
@@ -309,30 +309,30 @@ def main():
     parser = argparse.ArgumentParser(usage)
 
     group_help = parser.add_argument_group('help')
-    group_help.add_argument('-v', '--virsh', dest='virsh', action='store_false',
+    group_help.add_argument('-v', '--virsh', dest='virsh', action='store_true',
                             help='Show all virsh domain commands available')
-    group_help.add_argument('-d', '--cmddoc', dest='cmddoc', action='store',
+    group_help.add_argument('-d', '--cmddoc', dest='cmddoc', action='store_true',
                             help='Show the virsh CMD documentation')
-    group_help.add_argument('-s', '--showgroup', dest='show', action='store_false',
+    group_help.add_argument('-s', '--showgroup', dest='show', action='store_true',
                             help='Show group from VM file content')
 
     group_config = parser.add_argument_group('config')
     group_config.add_argument('-p', '--conn', dest='conn', action='store',
                               help='Connect to the hypervisor (local | ssh)')
-    group_config.add_argument('-g', '--group', dest='group', action='store',
+    group_config.add_argument('-g', '--group', dest='group',
                               help='Group of VM to use (could be a list separated by ,)')
     group_config.add_argument('-f', '--file', dest='file', action='store', default='groups.yaml',
                               help='Group file to use as yaml file (default will be groups.yaml)')
 
     group_exec = parser.add_argument_group('exec')
-    group_exec.add_argument('-n', '--noninter', dest='noninter', action='store_false',
+    group_exec.add_argument('-n', '--noninter', dest='noninter', action='store_true',
                             help='Launch this tool in non interactive mode')
     group_exec.add_argument('-c', '--cmd', dest='cmd', help='Command to execute on a group of VM')
 
     print('\n')
     args = parser.parse_args()
 
-    if args.noninter is None:
+    if args.noninter is False:
         MyPrompt().cmdloop()
     else:
         if args.conn is None:
@@ -345,12 +345,12 @@ def main():
 
         if args.file is None:
             parser.error(esc('31;1;1') +'Yaml File of group of VM not given' +esc(0))
-        if args.show is None:
+        if args.show is False:
             pass
         else:
             show_group(args.file)
             return 0
-        if args.virsh is None:
+        if args.virsh is False:
             pass
         else:
             cmd = "virsh help domain"
@@ -359,7 +359,7 @@ def main():
             if errs:
                 print(errs)
             return 0
-        if args.cmddoc is None:
+        if args.cmddoc is False:
             pass
         else:
             cmd = "virsh help " +args.cmddoc
