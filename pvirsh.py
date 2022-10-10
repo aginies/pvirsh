@@ -310,23 +310,23 @@ def main():
 
     group_help = parser.add_argument_group('help')
     group_help.add_argument('-v', '--virsh', dest='virsh', action='store_false',
-                      help='Show all virsh domain commands available')
+                            help='Show all virsh domain commands available')
     group_help.add_argument('-d', '--cmddoc', dest='cmddoc', action='store',
-                      help='Show the virsh CMD documentation')
+                            help='Show the virsh CMD documentation')
     group_help.add_argument('-s', '--showgroup', dest='show', action='store_false',
-                      help='Show group from VM file content')
+                            help='Show group from VM file content')
 
     group_config = parser.add_argument_group('config')
     group_config.add_argument('-p', '--conn', dest='conn', action='store',
-                      help='Connect to the hypervisor (local | ssh)')
+                              help='Connect to the hypervisor (local | ssh)')
     group_config.add_argument('-g', '--group', dest='group', action='store',
-                      help='Group of VM to use (could be a list separated by ,)')
+                              help='Group of VM to use (could be a list separated by ,)')
     group_config.add_argument('-f', '--file', dest='file', action='store', default='groups.yaml',
-                      help='Group file to use as yaml file (default will be groups.yaml)')
+                              help='Group file to use as yaml file (default will be groups.yaml)')
 
     group_exec = parser.add_argument_group('exec')
     group_exec.add_argument('-n', '--noninter', dest='noninter', action='store_false',
-                      help='Launch this tool in non interactive mode')
+                            help='Launch this tool in non interactive mode')
     group_exec.add_argument('-c', '--cmd', dest='cmd', help='Command to execute on a group of VM')
 
     print('\n')
