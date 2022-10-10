@@ -521,12 +521,15 @@ Type:  'help' for help with commands
     def do_show_vm(self, cmd):
         group = Cmd.vm_group
         conn = Cmd.conn
-        if group == '':
-            print('Please seclect a group of VM: select_group GROUP_VM')
+        if conn == '':
+            print('Connect to an hypervisor: help conn')
         else:
-            vms = vm_selected(self.file, group, conn)
-            print('Vm selected by ' +group +' are:')
-            print(vms)
+            if group == '':
+                print('Please seclect a group of VM: select_group GROUP_VM')
+            else:
+                vms = vm_selected(self.file, group, conn)
+                print('Vm selected by ' +group +' are:')
+                print(vms)
 
     def help_show_vm(self):
         print('Show all VM matching the selected group(s)')
