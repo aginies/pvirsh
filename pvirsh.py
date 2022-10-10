@@ -502,8 +502,7 @@ Type:  'help' for help with commands
         if not text:
             completions = l_group[:]
         else:
-            completions = [f for f in l_group if f.startswith(text)
-                          ]
+            completions = [f for f in l_group if f.startswith(text)]
         return completions
 
     def help_select_group(self):
@@ -582,8 +581,7 @@ Type:  'help' for help with commands
         if not text:
             completions = LIST_SHOW[:]
         else:
-            completions = [f for f in LIST_SHOW if f.startswith(text)
-                          ]
+            completions = [f for f in LIST_SHOW if f.startswith(text)]
         return completions
 
     def do_cmd(self, cmd):
