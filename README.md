@@ -63,29 +63,36 @@ windows:
 # Usage
 
 ```bash
-Usage: 
+usage: 
         Interactive or Non Interactive command tool to manage multiple VM at the same Time
 
         Non interactive:
-        pvirsh.py -n  -f GROUP.yaml -g VM_GROUP,VM_GROUP2 -c 'CMD CMD_OPTION'
+        pvirsh -n -f GROUP.yaml --conn CONNECTOR -g VM_GROUP,VM_GROUP2 -c 'CMD CMD_OPTION'
 
-        example:
-        pvirsh.py -n -g suse -c 'domstate --reason'
+        Example:
+        pvirsh -n --conn local -g suse -c 'domstate --reason'
         
+       [-h] [-v] [-d CMDDOC] [-s] [-p CONN] [-g GROUP] [-f FILE] [-n] [-c CMD]
 
-Options:
+optional arguments:
   -h, --help            show this help message and exit
-  -n, --noninteractive  Launch this tool in non interactive mode
-  --conn=CONN           Connect to the hypervisor (local | ssh)
-  -g GROUP, --group=GROUP
-                        Group of VM to use (could be a list separated by ,)
-  -f FILE, --file=FILE  Group file to use as yaml file (default will be
-                        groups.yaml)
-  -c CMD, --cmd=CMD     Command to execute on a group of VM
-  -s, --showgroup       Show group from VM file content
+
+help:
   -v, --virsh           Show all virsh domain commands available
-  -d CMDDOC, --cmddoc=CMDDOC
+  -d CMDDOC, --cmddoc CMDDOC
                         Show the virsh CMD documentation
+  -s, --showgroup       Show group from VM file content
+
+config:
+  -p CONN, --conn CONN  Connect to the hypervisor (local | ssh)
+  -g GROUP, --group GROUP
+                        Group of VM to use (could be a list separated by ,)
+  -f FILE, --file FILE  Group file to use as yaml file (default will be
+                        groups.yaml)
+
+exec:
+  -n, --noninter        Launch this tool in non interactive mode
+  -c CMD, --cmd CMD     Command to execute on a group of VM
 ```
 
 # Examples

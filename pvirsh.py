@@ -13,7 +13,7 @@
 import multiprocessing as mp
 import subprocess
 from pathlib import Path
-import optparse
+import argparse
 from cmd import Cmd
 import sys
 import libvirt
@@ -300,52 +300,57 @@ def main():
         Interactive or Non Interactive command tool to manage multiple VM at the same Time
 
         Non interactive:
-        %prog -n -f GROUP.yaml --conn CONNECTOR -g VM_GROUP,VM_GROUP2 -c 'CMD CMD_OPTION'
+        pvirsh -n -f GROUP.yaml --conn CONNECTOR -g VM_GROUP,VM_GROUP2 -c 'CMD CMD_OPTION'
 
         Example:
-        %prog -n --conn local -g suse -c 'domstate --reason'
+        pvirsh -n --conn local -g suse -c 'domstate --reason'
         """
-    parser = optparse.OptionParser(usage=usage)
 
-    parser.add_option('-n', '--noninteractive', dest='noninteractive', action='store_false',
-                      help='Launch this tool in non interactive mode')
-    parser.add_option('', '--conn', dest='conn', action='store',
-                      help='Connect to the hypervisor (local | ssh)')
-    parser.add_option('-g', '--group', dest='group', action='store',
-                      help='Group of VM to use (could be a list separated by ,)')
-    parser.add_option('-f', '--file', dest='file', action='store', default='groups.yaml',
-                      help='Group file to use as yaml file (default will be groups.yaml)')
-    parser.add_option('-c', '--cmd', dest='cmd', help='Command to execute on a group of VM')
-    parser.add_option('-s', '--showgroup', dest='show', action='store_false',
-                      help='Show group from VM file content')
-    parser.add_option('-v', '--virsh', dest='virsh', action='store_false',
+    parser = argparse.ArgumentParser(usage)
+
+    group_help = parser.add_argument_group('help')
+    group_help.add_argument('-v', '--virsh', dest='virsh', action='store_false',
                       help='Show all virsh domain commands available')
-    parser.add_option('-d', '--cmddoc', dest='cmddoc', action='store',
-                      choices=list_domain_all_cmd,
+    group_help.add_argument('-d', '--cmddoc', dest='cmddoc', action='store',
                       help='Show the virsh CMD documentation')
+    group_help.add_argument('-s', '--showgroup', dest='show', action='store_false',
+                      help='Show group from VM file content')
+
+    group_config = parser.add_argument_group('config')
+    group_config.add_argument('-p', '--conn', dest='conn', action='store',
+                      help='Connect to the hypervisor (local | ssh)')
+    group_config.add_argument('-g', '--group', dest='group', action='store',
+                      help='Group of VM to use (could be a list separated by ,)')
+    group_config.add_argument('-f', '--file', dest='file', action='store', default='groups.yaml',
+                      help='Group file to use as yaml file (default will be groups.yaml)')
+
+    group_exec = parser.add_argument_group('exec')
+    group_exec.add_argument('-n', '--noninter', dest='noninter', action='store_false',
+                      help='Launch this tool in non interactive mode')
+    group_exec.add_argument('-c', '--cmd', dest='cmd', help='Command to execute on a group of VM')
 
     print('\n')
-    (options, args) = parser.parse_args()
+    args = parser.parse_args()
 
-    if options.noninteractive is None:
+    if args.noninter is None:
         MyPrompt().cmdloop()
     else:
-        if options.conn is None:
+        if args.conn is None:
             parser.error(esc('31;1;1') +'No connector selected!: local | ssh ' +esc(0))
-        elif options.conn == 'local':
+        elif args.conn == 'local':
             conn = LibVirtConnect.local()
-        elif options.conn == 'ssh':
+        elif args.conn == 'ssh':
             remoteip = str(input("Remote IP address? "))
             conn = LibVirtConnect.remote('qemu+ssh', remoteip)
 
-        if options.file is None:
+        if args.file is None:
             parser.error(esc('31;1;1') +'Yaml File of group of VM not given' +esc(0))
-        if options.show is None:
+        if args.show is None:
             pass
         else:
-            show_group(options.file)
+            show_group(args.file)
             return 0
-        if options.virsh is None:
+        if args.virsh is None:
             pass
         else:
             cmd = "virsh help domain"
@@ -354,35 +359,35 @@ def main():
             if errs:
                 print(errs)
             return 0
-        if options.cmddoc is None:
+        if args.cmddoc is None:
             pass
         else:
-            cmd = "virsh help " +options.cmddoc
+            cmd = "virsh help " +args.cmddoc
             out, errs = system_command(cmd)
             print(out)
             if errs:
                 print(errs)
             return 0
 
-        if options.group is None:
+        if args.group is None:
             parser.error(esc('31;1;1') +'Group of VM to use not given' +esc(0))
             print(usage)
 
-        if options.cmd is None:
+        if args.cmd is None:
             print(esc('31;1;1') +'Nothing todo, no COMMAND to execute...' +esc(0))
             print('-c COMMAND')
             print(esc('32;1;4') +'Available are:' +esc(0))
             print(list_domain_all_cmd)
         else:
-            if ',' in options.group:
-                mgroup = options.group.split(",")
+            if ',' in args.group:
+                mgroup = args.group.split(",")
                 for allgroup in mgroup:
-                    code = check_group(options.file, allgroup)
+                    code = check_group(args.file, allgroup)
             else:
-                code = check_group(options.file, options.group)
+                code = check_group(args.file, args.group)
             # for now launch a virsh commande line
             if code != 666:
-                para_cmd(options.file, options.group, options.cmd, conn)
+                para_cmd(args.file, args.group, args.cmd, conn)
             else:
                 print(esc('31;1;1') +'Unknow group!' +esc(0))
             return 0
