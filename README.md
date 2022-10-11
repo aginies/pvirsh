@@ -72,7 +72,7 @@ usage:
         Example:
         pvirsh -n --conn local -g suse -c 'domstate --reason'
         
-       [-h] [-v] [-d CMDDOC] [-s] [-p CONN] [-g GROUP] [-f FILE] [-n] [-c CMD]
+       [-h] [-v] [-d CMDDOC] [-s] [-conn CONN] [-g GROUP] [-f FILE] [-n] [-c CMD]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -84,7 +84,7 @@ help:
   -s, --showgroup       Show group from VM file content
 
 config:
-  -p CONN, --conn CONN  Connect to the hypervisor (local | ssh)
+  --conn CONN           Connect to the hypervisor (local | ssh)
   -g GROUP, --group GROUP
                         Group of VM to use (could be a list separated by ,)
   -f FILE, --file FILE  Group file to use as yaml file (default will be

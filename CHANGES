@@ -1,5 +1,7 @@
 V0.9
 - add some xml files
+- validate the yaml file
+- add xen+ssh in list of connector
 
 V0.8
 - improve layout with some color

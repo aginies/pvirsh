@@ -7,7 +7,7 @@
 #
 # Goal at the end is being able to on this group of VM
 # - execute command
-# - add / remov devices
+# - add / remove devices
 # - plenty of other stuff :)
 
 import multiprocessing as mp
@@ -43,9 +43,11 @@ class LibVirtConnect:
 
     def remote(connector, dst):
         dst_conn = None
-        print(connector+'://'+dst+'/system')
         try:
-            dst_conn = libvirt.open(connector+'://'+dst+'/system')
+            if connector.startswith('xen'):
+                dst_conn = libvirt.open(connector+'://'+dst)
+            else:
+                dst_conn = libvirt.open(connector+'://'+dst+'/system')
             ver = dst_conn.getVersion()
             print('Connected; Version: '+str(ver))
             return dst_conn
@@ -54,13 +56,24 @@ class LibVirtConnect:
             return 666
 
 # TODO: validate the yaml file
-def validate_file():
+def validate_file(file):
     """ validate the yaml file"""
-    print('todo')
+
+    with open(file, 'r') as stream:
+        try:
+            yaml.load(stream,Loader=yaml.FullLoader)
+        except yaml.YAMLError as exc:
+            print(exc)
+            print(esc('31;1;1')+' Please fix the Yaml file... exiting' +esc(0))
+            show_file_example()
+            exit(1)
 
 def esc(code):
     """ Better layout with some color"""
 
+    # foreground: 31:red 32:green 34:blue 36:cyan
+    # background: 41:red 44:blue 107:white
+    # 0:reset
     return f'\033[{code}m'
 
 def show_file_example():
@@ -329,7 +342,7 @@ def main():
                             help='Show group from VM file content')
 
     group_config = parser.add_argument_group('config')
-    group_config.add_argument('-p', '--conn', dest='conn', action='store',
+    group_config.add_argument('--conn', dest='conn', action='store',
                               help='Connect to the hypervisor (local | ssh)')
     group_config.add_argument('-g', '--group', dest='group',
                               help='Group of VM to use (could be a list separated by ,)')
@@ -405,7 +418,7 @@ def main():
             return 0
         return 0
 
-LIST_CONNECTORS = ['local', 'qemu+ssh']
+LIST_CONNECTORS = ['local', 'qemu+ssh', 'xen+ssh']
 LIST_SHOW = ['on', 'off']
 
 class MyPrompt(Cmd):
@@ -427,6 +440,7 @@ Type:  'help' for help with commands
     Cmd.vm_group = ''
     # define a default file
     Cmd.file = 'groups.yaml'
+    validate_file(Cmd.file)
     # libvirt connection
     Cmd.conn = ''
     # prompt
@@ -446,7 +460,7 @@ Type:  'help' for help with commands
     def do_quit(self, args):
         """Exit the application"""
         # French Flag color :)
-        print(esc('34;1;1')+'Bye'+esc(0)+'Bye'+esc('31;1;1')+'Bye')
+        print(esc('44')+'Bye'+esc('107')+'Bye'+esc('41')+'Bye'+esc(0))
         if Cmd.conn != '':
             Cmd.conn.close()
         return True
@@ -474,6 +488,13 @@ Type:  'help' for help with commands
             Cmd.conn = conn
             if conn != 666:
                 Cmd.promptcon = 'Connector: ' +esc('32;1;1') +'qemu+ssh://' +remoteip + '/system'+esc(0)+'\n'
+                self.prompt = self.promptline+Cmd.promptfile+' | '+Cmd.promptcon+self.vm_group +'> '
+        elif conn == 'xen+ssh':
+            remoteip = str(input("Remote IP address? "))
+            conn = LibVirtConnect.remote('xen+ssh', remoteip)
+            Cmd.conn = conn
+            if conn != 666:
+                Cmd.promptcon = 'Connector: ' +esc('32;1;1') +'xen+ssh://' +remoteip +esc(0)+'\n'
                 self.prompt = self.promptline+Cmd.promptfile+' | '+Cmd.promptcon+self.vm_group +'> '
         else:
             print(esc('31;1;1') +'Unknow Connector...'+esc(0))
@@ -541,6 +562,8 @@ Type:  'help' for help with commands
         if my_file.is_file():
             print("Selected group yaml file is '{}'".format(file))
             Cmd.file = file
+            validate_file(Cmd.file)
+            Cmd.vm_group = ''
             Cmd.promptfile = 'Group File: '+esc('32;1;1')+str(Cmd.file)+esc(0)
             self.prompt = self.promptline+Cmd.promptfile+' | '+Cmd.promptcon+self.vm_group +'> '
         else:
