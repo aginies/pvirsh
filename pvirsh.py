@@ -344,8 +344,8 @@ def main():
                               help='Connect to the hypervisor (local | ssh)')
     group_config.add_argument('-g', '--group', dest='group',
                               help='Group of VM to use (could be a list separated by ,)')
-    group_config.add_argument('-f', '--file', dest='file', action='store', default='groups.yaml',
-                              help='Group file to use as yaml file (default will be groups.yaml)')
+    group_config.add_argument('-f', '--file', dest='file', action='store',
+                              help='Group file to use as yaml file')
 
     group_exec = parser.add_argument_group('exec')
     group_exec.add_argument('-n', '--noninter', dest='noninter', action='store_true',
@@ -358,6 +358,7 @@ def main():
     if args.noninter is False:
         MyPrompt().cmdloop()
     else:
+        # connector
         if args.conn is None:
             parser.error(esc('31;1;1') +'No connector selected!: local | ssh ' +esc(0))
         elif args.conn == 'local':
@@ -365,14 +366,16 @@ def main():
         elif args.conn == 'ssh':
             remoteip = str(input("Remote IP address? "))
             conn = LibVirtConnect.remote('qemu+ssh', remoteip)
-
+        # yaml group file
         if args.file is None:
             parser.error(esc('31;1;1') +'Yaml File of group of VM not given' +esc(0))
+
         if args.show is False:
             pass
         else:
+            check_file_exist(args.file)
             show_group(args.file)
-            return 0
+
         if args.virsh is False:
             pass
         else:
@@ -382,6 +385,7 @@ def main():
             if errs:
                 print(errs)
             return 0
+
         if args.cmddoc is False:
             pass
         else:
