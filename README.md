@@ -34,7 +34,6 @@ This tool provides:
 
 Probably a lot as this is for testing purpose...
 * detect VM state before (useful for some command which requires VM running)
-* validate the yaml file before using it
 * connect to multiple host?
 * ....
 
