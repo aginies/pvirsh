@@ -61,7 +61,7 @@ def validate_file(file):
 
     with open(file, 'r') as stream:
         try:
-            yaml.load(stream,Loader=yaml.FullLoader)
+            yaml.load(stream, Loader=yaml.FullLoader)
         except yaml.YAMLError as exc:
             print(exc)
             print(esc('31;1;1')+' Please fix the Yaml file... exiting' +esc(0))
@@ -415,7 +415,6 @@ def main():
                 para_cmd(args.file, args.group, args.cmd, conn, show)
             else:
                 print(esc('31;1;1') +'Unknow group!' +esc(0))
-            return 0
         return 0
 
 LIST_CONNECTORS = ['local', 'qemu+ssh', 'xen+ssh']
@@ -552,7 +551,7 @@ Type:  'help' for help with commands
         if not text:
             completions = all_files[:]
         else:
-            completions = [f for f in allfiles if f.startswith(text)]
+            completions = [f for f in all_files if f.startswith(text)]
         return completions
 
     def do_file(self, args):
@@ -591,7 +590,7 @@ Type:  'help' for help with commands
     def help_exec(self):
         print("Execute a system command")
 
-    def do_show_vm(self, cmd):
+    def do_show_vm(self):
         """ Show all VM matching the selected group(s)"""
         group = Cmd.vm_group
         conn = Cmd.conn
