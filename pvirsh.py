@@ -20,7 +20,7 @@ import sys
 import libvirt
 import yaml
 
-VERSION = "0.8"
+VERSION = "0.9"
 
 class LibVirtConnect:
     """Connection method to libvirt"""
@@ -161,7 +161,7 @@ def find_matching_vm(groupfile, group, conn):
         for item, value in groups.items():
             # only match vm of the correct group
             if item == group:
-                print('Selected group is ' +item + ': ' + str(value))
+                print('Selected group is ' +esc('36;1;4')+item+esc(0)+ ': ' + str(value))
                 # get the list of domain from the host
                 domains = conn.listAllDomains(0)
                 # check if there is a domain
