@@ -1,3 +1,9 @@
+V1.0
+- improve checks (especially around yaml file)
+- default file groups.yaml will be used is available in present path
+- improve layout
+- some typo fixes
+
 V0.9
 - add some xml files
 - validate the yaml file
