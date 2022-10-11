@@ -1,0 +1,4 @@
+<channel type="spicevmc">
+  <target type="virtio" name="com.redhat.spice.0"/>
+  <address type="virtio-serial" controller="0" bus="0" port="2"/>
+</channel>

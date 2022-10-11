@@ -1,0 +1,4 @@
+<graphics type="spice" autoport="yes">
+  <listen type="address"/>
+  <image compression="off"/>
+</graphics>
