@@ -420,22 +420,26 @@ LIST_SHOW = ['on', 'off']
 
 class MyPrompt(Cmd):
     prompt = '> '
-    intro = " Welcome to pvirsh interactive terminal!\n Version: " +VERSION + """
+    intro1 = " Welcome to "+esc('32;1;1') +"pvirsh "+esc(0)+ "Interactive Terminal!\n"
+    intro2 = esc('32;1;1')+" Parallel virsh"+esc(0)+" command to manage selected group of Virtual Machine"
+    intro3 = "\n (Version: " +VERSION + ")"
+    intro4 = """
 
 Type:  'help' for help with commands
        'quit' to quit
 
 1) Connect to an Hypervisor
     conn [TAB]
-2) Select the group yasml file (default will be groups.yaml)
+2) Select the group yaml file (default will be groups.yaml)
     file PATH_TO_FILE/FILE.YAML
 3) Select a group of VM:
     select group [TAB]
-4) Run a command:
+4) Run a command on all selecte VM:
     cmd [TAB]
 """
+    intro = intro1 + intro2 + intro3 + intro4
     Cmd.vm_group = ''
-    # define a default file
+    # define a default file to load
     Cmd.file = 'groups.yaml'
     # libvirt connection
     Cmd.conn = ''
@@ -447,6 +451,7 @@ Type:  'help' for help with commands
         Cmd.promptfile = 'Group File: '+esc('32;1;1')+str(Cmd.file)+esc(0)
     else:
         Cmd.promptfile = esc('31;1;1')+'No Group file selected'+esc(0)
+        Cmd.file = ''
     # by default there is no connection to any hypervisor
     Cmd.promptcon = esc('31;1;1')+'Not Connected'+esc(0)+'\n'
     promptline = '###########################\n'
@@ -509,20 +514,23 @@ Type:  'help' for help with commands
 
     def do_select_group(self, args):
         """Select the group of VM to Manage"""
-        vm_group = args
-        if ',' in vm_group:
-            mgroup = vm_group.split(",")
-            for allgroup in mgroup:
-                code = check_group(self.file, allgroup)
+        if self.file == '':
+            print('Please select a group yaml file: help file')
         else:
-            code = check_group(self.file, vm_group)
+            vm_group = args
+            if ',' in vm_group:
+                mgroup = vm_group.split(",")
+                for allgroup in mgroup:
+                    code = check_group(self.file, allgroup)
+            else:
+                code = check_group(self.file, vm_group)
 
-        if code != 666:
-            print("Selected group is '{}'".format(args))
-            self.prompt = self.promptline+Cmd.promptfile+' | '+Cmd.promptcon+vm_group + '> '
-            Cmd.vm_group = vm_group
-        else:
-            print(esc('31;1;1') +'Unknow group!' +esc(0))
+            if code != 666:
+                print("Selected group is '{}'".format(args))
+                self.prompt = self.promptline+Cmd.promptfile+' | '+Cmd.promptcon+vm_group + '> '
+                Cmd.vm_group = vm_group
+            else:
+                print(esc('31;1;1') +'Unknow group!' +esc(0))
 
     def complete_select_group(self, text, line, begidx, endidx):
         """ auto completion selection of the VM group"""
@@ -538,7 +546,10 @@ Type:  'help' for help with commands
 
     def do_show_group(self, args):
         """Show group from VM file content"""
-        show_group(self.file)
+        if self.file == '':
+            print('Please select a group yaml file: help file')
+        else:
+            show_group(self.file)
 
     def help_show_group(self):
         print('Show group from VM file content')
@@ -565,6 +576,7 @@ Type:  'help' for help with commands
             self.prompt = self.promptline+Cmd.promptfile+' | '+Cmd.promptcon+self.vm_group +'> '
         else:
             print(esc('31;1;1') +file +" Doesnt exist!"+esc(0))
+            show_file_example()
 
     def help_file(self):
         print('Select the group yaml file')
@@ -588,12 +600,14 @@ Type:  'help' for help with commands
     def help_exec(self):
         print("Execute a system command")
 
-    def do_show_vm(self):
+    def do_show_vm(self, args):
         """ Show all VM matching the selected group(s)"""
         group = Cmd.vm_group
         conn = Cmd.conn
         if conn == '':
             print('Connect to an hypervisor: help conn')
+        elif self.file == '':
+            print('Please select a group yaml file: help file')
         else:
             if group == '':
                 print('Please select a group of VM: select_group GROUP_VM')
