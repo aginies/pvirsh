@@ -65,7 +65,6 @@ def validate_file(file):
         except yaml.YAMLError as exc:
             print(exc)
             print(esc('31;1;1')+' Please fix the Yaml file... exiting' +esc(0))
-            show_file_example()
             exit(1)
 
 def esc(code):
@@ -93,7 +92,7 @@ Information/tips:
 - use NAME$ to match exact NAME (add $ at the end)
 - NAME will match everything starting with NAME* 
   ie: NAMEguibo,NAME,NAME15SP4"""
-    print('Example of a group yaml file:')
+    print('Example of a groups.yaml file:')
     print(example)
 
 def check_group(groupfile, group):
@@ -118,11 +117,10 @@ def check_group(groupfile, group):
 def check_file_exist(groupfile):
     my_file = Path(groupfile)
     if my_file.is_file():
-        pass
+        validate_file(Cmd.file)
     else:
         print('File ' +groupfile + ' Doesnt exist!\n')
         show_file_example()
-        exit(1)
 
 def show_group(groupfile):
     """show all group and machines"""
@@ -439,12 +437,12 @@ Type:  'help' for help with commands
     Cmd.vm_group = ''
     # define a default file
     Cmd.file = 'groups.yaml'
-    validate_file(Cmd.file)
     # libvirt connection
     Cmd.conn = ''
     # prompt
     my_file = Path(Cmd.file)
     if my_file.is_file():
+        validate_file(Cmd.file)
         # Cmd.promptfile is used for the prompt file
         Cmd.promptfile = 'Group File: '+esc('32;1;1')+str(Cmd.file)+esc(0)
     else:
