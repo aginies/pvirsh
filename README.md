@@ -23,7 +23,7 @@ This tool provides:
 
 # Demo
 
-![image](https://github.com/aginies/pvirsh/blob/f9920a543fb92ba44f43e213a676acc4f697b2fc/demo_pvirsh.gif)
+![image](https://github.com/aginies/pvirsh/blob/91d246df11f16acf71166bdb4383e8e8642a3520/demo_pvirsh.gif)
 
 # Python requires
 
