@@ -635,7 +635,7 @@ Type:  'help' for help with commands
             Cmd.show = 'off'
 
     def help_show(self):
-        print('Show command executed on VM (True|False)')
+        print('Show command executed on VM (on|off)')
 
     def complete_show(self, text, line, begidx, endidx):
         """ auto completion show option"""
