@@ -20,7 +20,7 @@ import sys
 import libvirt
 import yaml
 
-VERSION = "1.0"
+VERSION = "1.1"
 
 class LibVirtConnect:
     """Connection method to libvirt"""
