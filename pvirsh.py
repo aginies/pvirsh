@@ -302,7 +302,7 @@ def para_cmd(file, group, cmd, conn, show):
     print(results) #[:10])
 
 # list of domain command available with virsh
-# remove some: create console domrename define managedsave-define managedsave-edit domid edit event
+# removed: create console domrename define managedsave-define managedsave-edit domid edit event
 LIST_DOMAIN_CMD = ['attach-device', 'attach-disk', 'attach-interface',
                    'autostart', 'blkdeviotune', 'blkiotune', 'blockcommit',
                    'blockcopy', 'blockjob', 'blockpull', 'blockresize',
@@ -311,7 +311,7 @@ LIST_DOMAIN_CMD = ['attach-device', 'attach-disk', 'attach-interface',
                    'domdisplay', 'domfsfreeze', 'domfsthaw', 'domfsinfo',
                    'domfstrim', 'domhostname', 'domid', 'domif-setlink',
                    'domiftune', 'domjobabort', 'domjobinfo', 'domlaunchsecinfo',
-                   'domsetlaunchsecstate', 'domname', 'dompmsuspend', 'domstate',
+                   'domsetlaunchsecstate', 'domname', 'dompmsuspend',
                    'dompmwakeup', 'domuuid', 'domxml-from-native', 'domxml-to-native',
                    'dump', 'dumpxml', 'get-user-sshkeys', 'inject-nmi',
                    'iothreadinfo', 'iothreadpin', 'iothreadadd', 'iothreadset',
@@ -379,7 +379,7 @@ def main():
     else:
         # yaml group file
         if args.file is None:
-            parser.error(esc('31;1;1') +'Yaml File of group of VM not given' +esc(0))
+            parser.error('Yaml File of group of VM not given')
 
         if args.show is False:
             pass
@@ -391,21 +391,21 @@ def main():
 
         # connector
         if args.conn is None:
-            parser.error(esc('31;1;1') +'No connector selected!: local | ssh ' +esc(0))
+            parser.error('No connector selected!: local | ssh ')
         elif args.conn == 'local':
             conn = LibVirtConnect.local()
         elif args.conn == 'ssh':
-            remoteip = str(input("Remote IP address? "))
+            remoteip = str(input("(qemu) Remote IP address? "))
             conn = LibVirtConnect.remote('qemu+ssh', remoteip)
 
         if args.group is None:
-            parser.error(esc('31;1;1') +'Group of VM to use not given' +esc(0))
+            parser.error('Group of VM to use not given')
             print(usage)
 
         if args.cmd is None:
-            print(esc('31;1;1') +'Nothing todo, no COMMAND to execute...' +esc(0))
+            print_error('Nothing todo, no COMMAND to execute...')
             print('-c COMMAND')
-            print(esc('32;1;4') +'Available are:' +esc(0))
+            print_ok('Available are:')
             print(list_domain_all_cmd)
         else:
             if ',' in args.group:
@@ -653,6 +653,8 @@ Type:  'help' for help with commands
         """ Command to execute on a group of VM (virsh)"""
         if Cmd.conn == '':
             print('Connect to an hypervisor: help conn')
+        elif self.file == '':
+            print('Please select a group yaml file: help file')
         else:
             group = Cmd.vm_group
             if group == '':
