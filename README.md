@@ -24,7 +24,7 @@ This tool provides:
 
 # Demo
 
-![image](https://github.com/aginies/pvirsh/blob/91d246df11f16acf71166bdb4383e8e8642a3520/demo_pvirsh.gif)
+![image](https://github.com/aginies/pvirsh/blob/ad5ba8226bddd7337710a19ed21c7612599361cb/demo_pvirsh.gif)
 
 # Python requires
 
