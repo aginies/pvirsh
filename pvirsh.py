@@ -153,6 +153,17 @@ def find_yaml_file():
             YAML_LIST.append(files)
     return YAML_LIST
 
+def find_xml_file(xmldir):
+    """ Show all xml files in xml dir"""
+    XML_LIST = []
+    if os.path.isdir(xmldir):
+        for files in os.listdir(xmldir):
+            if files.endswith(".xml"):
+                XML_LIST.append(files)
+        return XML_LIST
+    else:
+        print('No' +xmldir +' directory found...')
+
 def system_command(cmd):
     """Launch a system command"""
 
@@ -291,7 +302,7 @@ LIST_DOMAIN_CMD = ['attach-device', 'attach-disk', 'attach-interface',
                    'domiftune', 'domjobabort', 'domjobinfo', 'domlaunchsecinfo',
                    'domsetlaunchsecstate', 'domname', 'dompmsuspend', 'domstate',
                    'dompmwakeup', 'domuuid', 'domxml-from-native', 'domxml-to-native',
-                   'dump', 'dumpxml', 'edit', 'event', 'get-user-sshkeys', 'inject-nmi',
+                   'dump', 'dumpxml', 'event', 'get-user-sshkeys', 'inject-nmi',
                    'iothreadinfo', 'iothreadpin', 'iothreadadd', 'iothreadset',
                    'iothreaddel', 'send-key', 'send-process-signal', 'managedsave',
                    'managedsave-remove', 'managedsave-dumpxml', 'memtune', 'perf',
@@ -424,6 +435,7 @@ def main():
 
 LIST_CONNECTORS = ['local', 'qemu+ssh', 'xen+ssh']
 LIST_SHOW = ['on', 'off']
+DEV_OPTIONS_LIST = ['--config', '--persistent', '--live', '--current']
 
 class MyPrompt(Cmd):
     prompt = '> '
@@ -450,7 +462,7 @@ Type:  'help' for help with commands
     Cmd.file = 'groups.yaml'
     # libvirt connection
     Cmd.conn = ''
-    # prompt
+    # adjust prompt with yaml group file if present
     my_file = Path(Cmd.file)
     if my_file.is_file():
         validate_file(Cmd.file)
@@ -462,6 +474,8 @@ Type:  'help' for help with commands
     # by default there is no connection to any hypervisor
     Cmd.promptcon = esc('31;1;1')+'Not Connected'+esc(0)+'\n'
     promptline = '###########################\n'
+    # xml directory
+    Cmd.xmldir = './xml'
     # show the command on all VM or not
     Cmd.show = False
     prompt = promptline +Cmd.promptfile+' | '+Cmd.promptcon+Cmd.vm_group +'> '
@@ -691,6 +705,42 @@ Type:  'help' for help with commands
 
     def help_hcmd(self):
         print("Show the option of a virsh command")
+
+    def do_add_dev(self, args):
+        """Add a device using an xml file"""
+        option = str(input("Wich option?\n"+str(DEV_OPTIONS_LIST)+"\n"))
+        finalcmd = "attach-device --file " + Cmd.xmldir+'/'+args+' '+option
+        self.do_cmd(finalcmd)
+
+    def complete_add_dev(self, text, line, begidx, endidx):
+        """ auto completion add_dev help command"""
+        XML_LIST = find_xml_file(Cmd.xmldir)
+        if not text:
+            completions = XML_LIST[:]
+        else:
+            completions = [f for f in XML_LIST if f.startswith(text)]
+        return completions
+
+    def help_add_dev(self):
+        print('Add a device using an xml file')
+
+    def do_remove_dev(self, args):
+        """Remove a device using an xml file"""
+        option = str(input("Wich option?\n"+str(DEV_OPTIONS_LIST)+"\n"))
+        finalcmd = "detach-device --file " + Cmd.xmldir+'/'+args+' '+option
+        self.do_cmd(finalcmd)
+
+    def help_remove_dev(self):
+        print('Remove a device using an xml file')
+
+    def complete_remove_dev(self, text, line, begidx, endidx):
+        """ auto completion remove_dev help command"""
+        XML_LIST = find_xml_file(Cmd.xmldir)
+        if not text:
+            completions = XML_LIST[:]
+        else:
+            completions = [f for f in XML_LIST if f.startswith(text)]
+        return completions
 
     do_EOF = do_quit
     help_EOF = help_quit
