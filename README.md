@@ -20,6 +20,7 @@ This tool provides:
 * yaml file group: default is **groups.yaml**, possible to change to any other file
 * Displaying the **list of VM** selected according to the current group(s)
 * Displaying the **"regexp" per group** to select VM
+* **easy** way to **add/remove** a **device** to a group of VM
 
 # Demo
 
