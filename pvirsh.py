@@ -117,7 +117,7 @@ def check_group(groupfile, group):
 def check_file_exist(groupfile):
     my_file = Path(groupfile)
     if my_file.is_file():
-        validate_file(Cmd.file)
+        validate_file(my_file)
     else:
         print('File ' +groupfile + ' Doesnt exist!\n')
         show_file_example()
@@ -334,7 +334,7 @@ def main():
     group_help = parser.add_argument_group('help')
     group_help.add_argument('-v', '--virsh', dest='virsh', action='store_true',
                             help='Show all virsh domain commands available')
-    group_help.add_argument('-d', '--cmddoc', dest='cmddoc', action='store_true',
+    group_help.add_argument('-d', '--cmddoc', dest='cmddoc', action='store',
                             help='Show the virsh CMD documentation')
     group_help.add_argument('-s', '--showgroup', dest='show', action='store_true',
                             help='Show group from VM file content')
@@ -342,7 +342,7 @@ def main():
     group_config = parser.add_argument_group('config')
     group_config.add_argument('--conn', dest='conn', action='store',
                               help='Connect to the hypervisor (local | ssh)')
-    group_config.add_argument('-g', '--group', dest='group',
+    group_config.add_argument('-g', '--group', dest='group', action='store',
                               help='Group of VM to use (could be a list separated by ,)')
     group_config.add_argument('-f', '--file', dest='file', action='store',
                               help='Group file to use as yaml file')
@@ -358,14 +358,6 @@ def main():
     if args.noninter is False:
         MyPrompt().cmdloop()
     else:
-        # connector
-        if args.conn is None:
-            parser.error(esc('31;1;1') +'No connector selected!: local | ssh ' +esc(0))
-        elif args.conn == 'local':
-            conn = LibVirtConnect.local()
-        elif args.conn == 'ssh':
-            remoteip = str(input("Remote IP address? "))
-            conn = LibVirtConnect.remote('qemu+ssh', remoteip)
         # yaml group file
         if args.file is None:
             parser.error(esc('31;1;1') +'Yaml File of group of VM not given' +esc(0))
@@ -373,8 +365,10 @@ def main():
         if args.show is False:
             pass
         else:
+            print(args.file)
             check_file_exist(args.file)
             show_group(args.file)
+            return 0
 
         if args.virsh is False:
             pass
@@ -395,6 +389,15 @@ def main():
             if errs:
                 print(errs)
             return 0
+
+        # connector
+        if args.conn is None:
+            parser.error(esc('31;1;1') +'No connector selected!: local | ssh ' +esc(0))
+        elif args.conn == 'local':
+            conn = LibVirtConnect.local()
+        elif args.conn == 'ssh':
+            remoteip = str(input("Remote IP address? "))
+            conn = LibVirtConnect.remote('qemu+ssh', remoteip)
 
         if args.group is None:
             parser.error(esc('31;1;1') +'Group of VM to use not given' +esc(0))
