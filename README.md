@@ -10,17 +10,24 @@ be done in a sequential way (most of the time).
 This tool provides:
 * Launch **parallel command** on mulitiple **VM** selected by group
 * **auto-completion** of the **virsh** domain command
-* Help on **virsh** command (display options)
 * **Reports** of **error/success** per VM
-* **Interactive terminal** or a one shot command
 * Interactive mode with intelligent prompt (display group, yaml file and connector)
+* **Interactive terminal** or a one shot command
 * **colored prompt** to easily catch up trouble and syntax
-* Execution of a **system command** in interactive mode (shell)
-* **group of VM**: selection, show selected group(s), possibility to use multi-group
 * yaml file group: default is **groups.yaml**, possible to change to any other file
-* Displaying the **list of VM** selected according to the current group(s)
-* Displaying the **"regexp" per group** to select VM
-* **easy** way to **add/remove** a **device** to a group of VM
+
+Features:
+* conn: choose the connector to the Hypervisor
+* cmd: execute a **domain command**
+* hcmd: help on **virsh** command (display options)
+* file: **select** the **group yaml file**
+* show_file: show the **current yaml** file used 
+* show_group : **show all groups** available 
+* select_group: select the **group of VM** to work on
+* show_vm: display the **list of VM** selected according to the current group(s)
+* show_all_vm: display the **list of all VM** available in current Hypervisor
+* add_dev/remove_dev: **easy** way to **add/remove** a **device** to a group of VM
+* shell: execution of a **system command** in interactive mode (shell)
 
 # Demo
 
