@@ -20,7 +20,7 @@ import sys
 import libvirt
 import yaml
 
-VERSION = "1.2"
+VERSION = "1.3"
 
 class LibVirtConnect:
     """Connection method to libvirt"""
@@ -184,6 +184,17 @@ def system_command(cmd):
     out, errs = proc.communicate(timeout=2)
     out = str(out, 'utf-8')
     return out, errs
+
+def find_all_vm(conn):
+    """Find all VM from the current Hypervisor"""
+    allvm_list = []
+    # Store all VM from the hypervisor
+    domains = conn.listAllDomains(0)
+    for domain in domains:
+        if domain.name():
+            vmdomain = domain.name()
+            allvm_list = vmdomain+' '+str(allvm_list)
+    return allvm_list
 
 def find_matching_vm(groupfile, group, conn):
     """Return the list of VM matching the group"""
@@ -618,7 +629,7 @@ class MyPrompt(Cmd):
         group = Cmd.vm_group
         conn = Cmd.conn
         if conn == '':
-            print('Connect to an hypervisor to show selecte VM: help conn')
+            print('Connect to an hypervisor to show selected VM: help conn')
         elif self.file == '':
             print('Please select a group yaml file: help file')
         else:
@@ -629,6 +640,18 @@ class MyPrompt(Cmd):
                 print('Vm selected by ' +group +' group(s) on this Hypervisor are:')
                 print(esc('36;1;1')+str(vms)+esc(0))
                 #print(vms)
+
+    def do_show_all_vm(self,args):
+        """Show all VM from the current hypervisor"""
+        conn = Cmd.conn
+        if conn == '':
+            print('Connect to an hypervisor to show selected VM: help conn')
+        else:
+            allvms = find_all_vm(conn)
+            print(str(allvms))
+
+    def help_show_all_vm(self):
+        print("Show all VM from the current hypervisor")
 
     def help_show_vm(self):
         print('Show all VM matching the selected group(s)')
