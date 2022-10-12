@@ -356,7 +356,7 @@ def main():
 
     group_help = parser.add_argument_group('help')
     group_help.add_argument('-s', '--showgroup', dest='show', action='store_true',
-                            help='Show group from VM file content')
+                            help='Show group from the yaml group file')
 
     group_config = parser.add_argument_group('config')
     group_config.add_argument('--conn', dest='conn', action='store',
@@ -429,7 +429,7 @@ class MyPrompt(Cmd):
     prompt = '> '
     intro1 = " Welcome to "+esc('32;1;1') +"pvirsh "+esc(0)+ "Interactive Terminal!\n"
     intro2 = esc('32;1;1')+" Parallel virsh"+esc(0)
-    intro3 = " command to manage selected group of Virtual Machine"
+    intro3 = " command to manage selected group of Virtual Machine (async mode)"
     intro4 = "\n (Version: " +VERSION + ")"
     intro5 = """
 
@@ -438,11 +438,11 @@ Type:  'help' for help with commands
 
 1) Connect to an Hypervisor
     conn [TAB]
-2) Select the group yaml file (default will be groups.yaml)
-    file PATH_TO_FILE/FILE.YAML
-3) Select a group of VM:
-    select group [TAB]
-4) Run a command on all selecte VM:
+2) Select the group yaml file (default will be groups.yaml if in path)
+    file PATH_TO_FILE/FILE.YAML | file [TAB]
+3) Select a group of VM to manage:
+    select_group [TAB]
+4) Run command on selected VM:
     cmd [TAB]
 """
     intro = intro1 + intro2 + intro3 + intro4 + intro5
@@ -462,7 +462,7 @@ Type:  'help' for help with commands
         Cmd.file = ''
     # by default there is no connection to any hypervisor
     Cmd.promptcon = esc('31;1;1')+'Not Connected'+esc(0)+'\n'
-    promptline = '###########################\n'
+    promptline = '_________________________________________\n'
     # xml directory from current path
     cwdir = os.getcwd()
     Cmd.xmldir = cwdir+'/xml'
@@ -537,11 +537,13 @@ Type:  'help' for help with commands
                 code = check_group(self.file, vm_group)
 
             if code != 666:
-                print("Selected group is '{}'".format(args))
+                #print("Selected group is '{}'".format(args))
                 self.prompt = self.promptline+Cmd.promptfile+' | '+Cmd.promptcon+vm_group + '> '
                 Cmd.vm_group = vm_group
+                self.do_show_vm(args)
             else:
                 print_error('Unknow group!')
+                show_group(self.file)
 
     def complete_select_group(self, text, line, begidx, endidx):
         """ auto completion selection of the VM group"""
@@ -599,7 +601,7 @@ Type:  'help' for help with commands
     def help_show_file(self):
         print("Show the Group yaml file used")
 
-    def do_exec(self, args):
+    def do_shelll(self, args):
         """Execute a system command"""
         out, errs = system_command(args)
         if errs:
@@ -608,7 +610,7 @@ Type:  'help' for help with commands
             print_error(' No output... seems weird...')
         print(out)
 
-    def help_exec(self):
+    def help_shell(self):
         print("Execute a system command")
 
     def do_show_vm(self, args):
@@ -616,7 +618,7 @@ Type:  'help' for help with commands
         group = Cmd.vm_group
         conn = Cmd.conn
         if conn == '':
-            print('Connect to an hypervisor: help conn')
+            print('Connect to an hypervisor to show selecte VM: help conn')
         elif self.file == '':
             print('Please select a group yaml file: help file')
         else:
@@ -624,7 +626,7 @@ Type:  'help' for help with commands
                 print('Please select a group of VM: select_group GROUP_VM')
             else:
                 vms = vm_selected(self.file, group, conn)
-                print('Vm selected by ' +group +' group(s) are:')
+                print('Vm selected by ' +group +' group(s) on this Hypervisor are:')
                 print(esc('36;1;1')+str(vms)+esc(0))
                 #print(vms)
 
