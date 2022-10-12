@@ -12,10 +12,10 @@ This tool provides:
 * **auto-completion** of the **virsh** domain command
 * Help on **virsh** command (display options)
 * **Reports** of **error/success** per VM
-* An **interactive terminal** or a one shot command
-* Interactive mode: intelligent prompt (display group, yaml file and connector)
-* **colored prompt** to easily catch up trouble
-* Execution of a **system command** in interactive mode (exec)
+* **Interactive terminal** or a one shot command
+* Interactive mode with intelligent prompt (display group, yaml file and connector)
+* **colored prompt** to easily catch up trouble and syntax
+* Execution of a **system command** in interactive mode (shell)
 * **group of VM**: selection, show selected group(s), possibility to use multi-group
 * yaml file group: default is **groups.yaml**, possible to change to any other file
 * Displaying the **list of VM** selected according to the current group(s)
@@ -24,7 +24,8 @@ This tool provides:
 
 # Demo
 
-![image](https://github.com/aginies/pvirsh/blob/ad5ba8226bddd7337710a19ed21c7612599361cb/demo_pvirsh.gif)
+![image](
+)
 
 # Python requires
 
