@@ -709,9 +709,12 @@ Type:  'help' for help with commands
     def do_add_dev(self, args):
         """Add a device using an xml file"""
         if args != '':
-            option = str(input("Wich option?\n"+str(DEV_OPTIONS_LIST)+"\n"))
-            finalcmd = "attach-device --file " + Cmd.xmldir+'/'+args+' '+option
-            self.do_cmd(finalcmd)
+            if os.path.isfile(args):
+                option = str(input("Wich option?\n"+str(DEV_OPTIONS_LIST)+"\n"))
+                finalcmd = "attach-device --file " + Cmd.xmldir+'/'+args+' '+option
+                self.do_cmd(finalcmd)
+            else:
+                print('Please select an XML file')
         else:
             self.help_add_dev()
 
@@ -729,9 +732,15 @@ Type:  'help' for help with commands
 
     def do_remove_dev(self, args):
         """Remove a device using an xml file"""
-        option = str(input("Wich option?\n"+str(DEV_OPTIONS_LIST)+"\n"))
-        finalcmd = "detach-device --file " + Cmd.xmldir+'/'+args+' '+option
-        self.do_cmd(finalcmd)
+        if args != '':
+            if os.path.isfile(args):
+                option = str(input("Wich option?\n"+str(DEV_OPTIONS_LIST)+"\n"))
+                finalcmd = "detach-device --file " + Cmd.xmldir+'/'+args+' '+option
+                self.do_cmd(finalcmd)
+            else:
+                print('Please select an XML file')
+        else:
+            self.help_remove_dev()
 
     def help_remove_dev(self):
         print('Remove a device using an xml file')
