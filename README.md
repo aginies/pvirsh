@@ -24,8 +24,7 @@ This tool provides:
 
 # Demo
 
-![image](
-)
+![image](https://github.com/aginies/pvirsh/blob/1fe39679fbeac2e9f02a99bdfc50efa98a2ca6df/demo_pvirsh.gif)
 
 # Python requires
 
