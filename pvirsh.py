@@ -7,7 +7,7 @@
 #
 # Goal at the end is being able to on this group of VM
 # - execute command
-# - add / remove devices
+# - add / remove device
 # - plenty of other stuff :)
 
 import multiprocessing as mp
@@ -20,7 +20,7 @@ import sys
 import libvirt
 import yaml
 
-VERSION = "1.1"
+VERSION = "1.2"
 
 class LibVirtConnect:
     """Connection method to libvirt"""
@@ -708,9 +708,12 @@ Type:  'help' for help with commands
 
     def do_add_dev(self, args):
         """Add a device using an xml file"""
-        option = str(input("Wich option?\n"+str(DEV_OPTIONS_LIST)+"\n"))
-        finalcmd = "attach-device --file " + Cmd.xmldir+'/'+args+' '+option
-        self.do_cmd(finalcmd)
+        if args != '':
+            option = str(input("Wich option?\n"+str(DEV_OPTIONS_LIST)+"\n"))
+            finalcmd = "attach-device --file " + Cmd.xmldir+'/'+args+' '+option
+            self.do_cmd(finalcmd)
+        else:
+            self.help_add_dev()
 
     def complete_add_dev(self, text, line, begidx, endidx):
         """ auto completion add_dev help command"""
