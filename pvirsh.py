@@ -35,7 +35,7 @@ class LibVirtConnect:
         try:
             conn = libvirt.open("qemu:///system")
             ver = conn.getVersion()
-            print('Connected; Version: '+str(ver))
+            print_ok('Connected; Version: '+str(ver))
             return conn
         except libvirt.libvirtError as verror:
             print(repr(verror), file=sys.stderr)
@@ -49,7 +49,7 @@ class LibVirtConnect:
             else:
                 dst_conn = libvirt.open(connector+'://'+dst+'/system')
             ver = dst_conn.getVersion()
-            print('Connected; Version: '+str(ver))
+            print_ok('Connected; Version: '+str(ver))
             return dst_conn
         except libvirt.libvirtError as verror:
             print(repr(verror), file=sys.stderr)
@@ -64,7 +64,7 @@ def validate_file(file):
             yaml.load(stream, Loader=yaml.FullLoader)
         except yaml.YAMLError as exc:
             print(exc)
-            print(esc('31;1;1')+' Please fix the Yaml file... exiting' +esc(0))
+            print_error(' Please fix the Yaml file... exiting')
             exit(1)
 
 def esc(code):
@@ -74,6 +74,17 @@ def esc(code):
     # background: 41:red 44:blue 107:white
     # 0:reset
     return f'\033[{code}m'
+
+def print_error(text):
+    """ Print error in red"""
+    formated_text = esc('31;1;1') +text +esc(0)
+    print(formated_text)
+
+def print_ok(text):
+    """ Print ok in green"""
+    formated_text = esc('32;1;1') +text +esc(0)
+    print(formated_text)
+
 
 def show_file_example():
     """ Show an example of a groups.yaml file"""
@@ -110,7 +121,7 @@ def check_group(groupfile, group):
         if found:
             pass
         else:
-            print(esc('31;1;1') +group +' Group Not found!' +esc(0))
+            print_error(group +' Group Not found!')
             return 666
     return 0
 
@@ -119,7 +130,7 @@ def check_file_exist(groupfile):
     if my_file.is_file():
         validate_file(my_file)
     else:
-        print('File ' +groupfile + ' Doesnt exist!\n')
+        print_error('File '+groupfile +' Doesnt exist!\n')
         show_file_example()
 
 def show_group(groupfile):
@@ -147,22 +158,22 @@ def list_group(groupfile):
 
 def find_yaml_file():
     """ Show all yaml file in current path"""
-    YAML_LIST = []
+    yaml_list = []
     for files in os.listdir('.'):
         if files.endswith(".yaml"):
-            YAML_LIST.append(files)
-    return YAML_LIST
+            yaml_list.append(files)
+    return yaml_list
 
 def find_xml_file(xmldir):
     """ Show all xml files in xml dir"""
-    XML_LIST = []
+    xml_list = []
     if os.path.isdir(xmldir):
         for files in os.listdir(xmldir):
             if files.endswith(".xml"):
-                XML_LIST.append(files)
-        return XML_LIST
+                xml_list.append(files)
+        return xml_list
     else:
-        print('No' +xmldir +' directory found...')
+        print_error('No' +xmldir +' directory found...')
 
 def system_command(cmd):
     """Launch a system command"""
@@ -214,7 +225,7 @@ def find_matching_vm(groupfile, group, conn):
                                     #print('doesnt match anything....')
                                     pass
                 else:
-                    print(esc('31;1;4')+'No domain to manage on this host!'+esc(0))
+                    print_error('No domain to manage on this host!')
 # OLD CODE BASE on virsh list
 # more simple for matching...
 #                for virtum in value:
@@ -242,7 +253,7 @@ def do_virsh_cmd(virtum, cmd, cmdoptions):
     out = out.strip("\n")
     if errs:
         print('Command was:' +str(cmdtolaunch))
-        print(esc('31;1;1') + 'ERROR: ' +str(virtum)+ ': ' +str(errs)+ esc(0) + '\n')
+        print_error('ERROR: ' +str(virtum)+ ': ' +str(errs)+'\n')
     else:
         print(cmdtolaunch, end=" ")
         print(out + " " + esc('32;1;4') + 'Done' + esc(0))
@@ -291,7 +302,7 @@ def para_cmd(file, group, cmd, conn, show):
     print(results) #[:10])
 
 # list of domain command available with virsh
-# remove some: create console domrename define managedsave-define managedsave-edit domid
+# remove some: create console domrename define managedsave-define managedsave-edit domid edit event
 LIST_DOMAIN_CMD = ['attach-device', 'attach-disk', 'attach-interface',
                    'autostart', 'blkdeviotune', 'blkiotune', 'blockcommit',
                    'blockcopy', 'blockjob', 'blockpull', 'blockresize',
@@ -302,7 +313,7 @@ LIST_DOMAIN_CMD = ['attach-device', 'attach-disk', 'attach-interface',
                    'domiftune', 'domjobabort', 'domjobinfo', 'domlaunchsecinfo',
                    'domsetlaunchsecstate', 'domname', 'dompmsuspend', 'domstate',
                    'dompmwakeup', 'domuuid', 'domxml-from-native', 'domxml-to-native',
-                   'dump', 'dumpxml', 'event', 'get-user-sshkeys', 'inject-nmi',
+                   'dump', 'dumpxml', 'get-user-sshkeys', 'inject-nmi',
                    'iothreadinfo', 'iothreadpin', 'iothreadadd', 'iothreadset',
                    'iothreaddel', 'send-key', 'send-process-signal', 'managedsave',
                    'managedsave-remove', 'managedsave-dumpxml', 'memtune', 'perf',
@@ -329,8 +340,8 @@ list_domain_all_cmd = LIST_DOMAIN_CMD + LIST_DOMAIN_MONITORING
 def main():
     """ main function"""
 
-    usage = """
-        Interactive or Non Interactive command tool to manage multiple VM at the same Time
+    usage1 = "Interactive or Non Interactive command tool to manage multiple VM at the same Time\n"
+    usage2 = '       Version: ' + VERSION + """
 
         Non interactive:
         pvirsh -n -f GROUP.yaml --conn CONNECTOR -g VM_GROUP,VM_GROUP2 -c 'CMD CMD_OPTION'
@@ -338,15 +349,12 @@ def main():
         Example:
         pvirsh -n --conn local -g suse -c 'domstate --reason'
         """
+    usage = usage1 + usage2
 
     show = 'off'
     parser = argparse.ArgumentParser(usage)
 
     group_help = parser.add_argument_group('help')
-    group_help.add_argument('-v', '--virsh', dest='virsh', action='store_true',
-                            help='Show all virsh domain commands available')
-    group_help.add_argument('-d', '--cmddoc', dest='cmddoc', action='store',
-                            help='Show the virsh CMD documentation')
     group_help.add_argument('-s', '--showgroup', dest='show', action='store_true',
                             help='Show group from VM file content')
 
@@ -381,26 +389,6 @@ def main():
             show_group(args.file)
             return 0
 
-        if args.virsh is False:
-            pass
-        else:
-            cmd = "virsh help domain"
-            out, errs = system_command(cmd)
-            print(out)
-            if errs:
-                print(errs)
-            return 0
-
-        if args.cmddoc is False:
-            pass
-        else:
-            cmd = "virsh help " +args.cmddoc
-            out, errs = system_command(cmd)
-            print(out)
-            if errs:
-                print(errs)
-            return 0
-
         # connector
         if args.conn is None:
             parser.error(esc('31;1;1') +'No connector selected!: local | ssh ' +esc(0))
@@ -430,7 +418,7 @@ def main():
             if code != 666:
                 para_cmd(args.file, args.group, args.cmd, conn, show)
             else:
-                print(esc('31;1;1') +'Unknow group!' +esc(0))
+                print_error('Unknow group!')
         return 0
 
 LIST_CONNECTORS = ['local', 'qemu+ssh', 'xen+ssh']
@@ -440,9 +428,10 @@ DEV_OPTIONS_LIST = ['--config', '--persistent', '--live', '--current']
 class MyPrompt(Cmd):
     prompt = '> '
     intro1 = " Welcome to "+esc('32;1;1') +"pvirsh "+esc(0)+ "Interactive Terminal!\n"
-    intro2 = esc('32;1;1')+" Parallel virsh"+esc(0)+" command to manage selected group of Virtual Machine"
-    intro3 = "\n (Version: " +VERSION + ")"
-    intro4 = """
+    intro2 = esc('32;1;1')+" Parallel virsh"+esc(0)
+    intro3 = " command to manage selected group of Virtual Machine"
+    intro4 = "\n (Version: " +VERSION + ")"
+    intro5 = """
 
 Type:  'help' for help with commands
        'quit' to quit
@@ -456,7 +445,7 @@ Type:  'help' for help with commands
 4) Run a command on all selecte VM:
     cmd [TAB]
 """
-    intro = intro1 + intro2 + intro3 + intro4
+    intro = intro1 + intro2 + intro3 + intro4 + intro5
     Cmd.vm_group = ''
     # define a default file to load
     Cmd.file = 'groups.yaml'
@@ -521,7 +510,7 @@ Type:  'help' for help with commands
                 Cmd.promptcon = 'Connector: ' +esc('32;1;1') +'xen+ssh://' +remoteip +esc(0)+'\n'
                 self.prompt = self.promptline+Cmd.promptfile+' | '+Cmd.promptcon+self.vm_group +'> '
         else:
-            print(esc('31;1;1') +'Unknow Connector...'+esc(0))
+            print_error('Unknow Connector...')
 
     def help_conn(self):
         print('Setting up the connector to the hypervisor: ' +str(LIST_CONNECTORS))
@@ -552,7 +541,7 @@ Type:  'help' for help with commands
                 self.prompt = self.promptline+Cmd.promptfile+' | '+Cmd.promptcon+vm_group + '> '
                 Cmd.vm_group = vm_group
             else:
-                print(esc('31;1;1') +'Unknow group!' +esc(0))
+                print_error('Unknow group!')
 
     def complete_select_group(self, text, line, begidx, endidx):
         """ auto completion selection of the VM group"""
@@ -597,7 +586,7 @@ Type:  'help' for help with commands
             Cmd.promptfile = 'Group File: '+esc('32;1;1')+str(Cmd.file)+esc(0)
             self.prompt = self.promptline+Cmd.promptfile+' | '+Cmd.promptcon+self.vm_group +'> '
         else:
-            print(esc('31;1;1') +file +" Doesnt exist!"+esc(0))
+            print_error("File " +file +" Doesnt exist!")
             show_file_example()
 
     def help_file(self):
@@ -616,7 +605,7 @@ Type:  'help' for help with commands
         if errs:
             print(errs)
         if not out:
-            print(esc('31;1;1') +' No output... seems weird...' +esc(0))
+            print_error(' No output... seems weird...')
         print(out)
 
     def help_exec(self):
@@ -715,17 +704,17 @@ Type:  'help' for help with commands
                 finalcmd = "attach-device --file " + Cmd.xmldir+'/'+args+' '+option
                 self.do_cmd(finalcmd)
             else:
-                print('Please select an XML file')
+                print_error('Please select an XML file')
         else:
             self.help_add_dev()
 
     def complete_add_dev(self, text, line, begidx, endidx):
         """ auto completion add_dev help command"""
-        XML_LIST = find_xml_file(Cmd.xmldir)
+        xml_list = find_xml_file(Cmd.xmldir)
         if not text:
-            completions = XML_LIST[:]
+            completions = xml_list[:]
         else:
-            completions = [f for f in XML_LIST if f.startswith(text)]
+            completions = [f for f in xml_list if f.startswith(text)]
         return completions
 
     def help_add_dev(self):
@@ -739,7 +728,7 @@ Type:  'help' for help with commands
                 finalcmd = "detach-device --file " + Cmd.xmldir+'/'+args+' '+option
                 self.do_cmd(finalcmd)
             else:
-                print('Please select an XML file')
+                print_error('Please select an XML file')
         else:
             self.help_remove_dev()
 
@@ -748,11 +737,11 @@ Type:  'help' for help with commands
 
     def complete_remove_dev(self, text, line, begidx, endidx):
         """ auto completion remove_dev help command"""
-        XML_LIST = find_xml_file(Cmd.xmldir)
+        xml_list = find_xml_file(Cmd.xmldir)
         if not text:
-            completions = XML_LIST[:]
+            completions = xml_list[:]
         else:
-            completions = [f for f in XML_LIST if f.startswith(text)]
+            completions = [f for f in xml_list if f.startswith(text)]
         return completions
 
     do_EOF = do_quit

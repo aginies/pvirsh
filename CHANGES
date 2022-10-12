@@ -1,6 +1,8 @@
 V1.2
 - add a simple way to add (attach) or remove (detach) a device from an XML list
 - remove edit from command list (no way to edit a group of VM:) )
+- remove help on virsh command in non-interactive mode
+- use print_error and print_ok instead of doing esc(XXX)
 
 V1.1
 - various fix in non-interactive mode

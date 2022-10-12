@@ -63,8 +63,8 @@ windows:
 # Usage
 
 ```bash
-usage: 
-        Interactive or Non Interactive command tool to manage multiple VM at the same Time
+usage: Interactive or Non Interactive command tool to manage multiple VM at the same Time
+       Version: 1.2
 
         Non interactive:
         pvirsh -n -f GROUP.yaml --conn CONNECTOR -g VM_GROUP,VM_GROUP2 -c 'CMD CMD_OPTION'
@@ -72,23 +72,19 @@ usage:
         Example:
         pvirsh -n --conn local -g suse -c 'domstate --reason'
         
-       [-h] [-v] [-d CMDDOC] [-s] [-conn CONN] [-g GROUP] [-f FILE] [-n] [-c CMD]
+       [-h] [-s] [--conn CONN] [-g GROUP] [-f FILE] [-n] [-c CMD]
 
 optional arguments:
   -h, --help            show this help message and exit
 
 help:
-  -v, --virsh           Show all virsh domain commands available
-  -d CMDDOC, --cmddoc CMDDOC
-                        Show the virsh CMD documentation
   -s, --showgroup       Show group from VM file content
 
 config:
   --conn CONN           Connect to the hypervisor (local | ssh)
   -g GROUP, --group GROUP
                         Group of VM to use (could be a list separated by ,)
-  -f FILE, --file FILE  Group file to use as yaml file (default will be
-                        groups.yaml)
+  -f FILE, --file FILE  Group file to use as yaml file
 
 exec:
   -n, --noninter        Launch this tool in non interactive mode
