@@ -474,8 +474,9 @@ Type:  'help' for help with commands
     # by default there is no connection to any hypervisor
     Cmd.promptcon = esc('31;1;1')+'Not Connected'+esc(0)+'\n'
     promptline = '###########################\n'
-    # xml directory
-    Cmd.xmldir = './xml'
+    # xml directory from current path
+    cwdir = os.getcwd()
+    Cmd.xmldir = cwdir+'/xml'
     # show the command on all VM or not
     Cmd.show = False
     prompt = promptline +Cmd.promptfile+' | '+Cmd.promptcon+Cmd.vm_group +'> '
@@ -709,7 +710,7 @@ Type:  'help' for help with commands
     def do_add_dev(self, args):
         """Add a device using an xml file"""
         if args != '':
-            if os.path.isfile(args):
+            if os.path.isfile(Cmd.xmldir+'/'+args):
                 option = str(input("Wich option?\n"+str(DEV_OPTIONS_LIST)+"\n"))
                 finalcmd = "attach-device --file " + Cmd.xmldir+'/'+args+' '+option
                 self.do_cmd(finalcmd)
@@ -733,7 +734,7 @@ Type:  'help' for help with commands
     def do_remove_dev(self, args):
         """Remove a device using an xml file"""
         if args != '':
-            if os.path.isfile(args):
+            if os.path.isfile(Cmd.xmldir+'/'+args):
                 option = str(input("Wich option?\n"+str(DEV_OPTIONS_LIST)+"\n"))
                 finalcmd = "detach-device --file " + Cmd.xmldir+'/'+args+' '+option
                 self.do_cmd(finalcmd)
