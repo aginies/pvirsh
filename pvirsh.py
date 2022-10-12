@@ -427,25 +427,24 @@ DEV_OPTIONS_LIST = ['--config', '--persistent', '--live', '--current']
 
 class MyPrompt(Cmd):
     prompt = '> '
-    intro1 = " Welcome to "+esc('32;1;1') +"pvirsh "+esc(0)+ "Interactive Terminal!\n"
-    intro2 = esc('32;1;1')+" Parallel virsh"+esc(0)
-    intro3 = " command to manage selected group of Virtual Machine (async mode)"
-    intro4 = "\n (Version: " +VERSION + ")"
-    intro5 = """
-
-Type:  'help' for help with commands
-       'quit' to quit
-
-1) Connect to an Hypervisor
-    conn [TAB]
-2) Select the group yaml file (default will be groups.yaml if in path)
-    file PATH_TO_FILE/FILE.YAML | file [TAB]
-3) Select a group of VM to manage:
-    select_group [TAB]
-4) Run command on selected VM:
-    cmd [TAB]
-"""
-    intro = intro1 + intro2 + intro3 + intro4 + intro5
+    introl = {}
+    introl[0] = " Welcome to "+esc('32;1;1') +"pvirsh "+esc(0)+ "Interactive Terminal!\n"
+    introl[1] = esc('32;1;1')+" Parallel virsh"+esc(0)
+    introl[2] = " command to manage selected group of Virtual Machine (async mode)"
+    introl[3] = "\n (Version: " +VERSION + ")\n\n"
+    introl[4] = " Type: "+esc('36;1;1')+'help'+esc(0)+" for help with commands\n"
+    introl[5] = "       "+esc('36;1;1')+'quit'+esc(0)+" to quit\n\n"
+    introl[6] = "1) Connect to an Hypervisor\n"
+    introl[7] = esc('36;1;1')+"    conn [TAB]"+esc(0)+"\n"
+    introl[8] = "2) Select the group yaml file (default will be groups.yaml if in path)\n"
+    introl[9] = esc('36;1;1')+"    file PATH_TO_FILE/FILE.YAML"+esc(0)+" | "+esc('36;1;1')+"file [TAB]\n"+esc(0)
+    introl[10] = "3) Select a group of VM to manage\n"
+    introl[11] = esc('36;1;1')+"    select_group [TAB]\n"+esc(0)
+    introl[12] = "4) Run command on selected VM\n"
+    introl[13] = esc('36;1;1')+"    cmd [TAB]\n"+esc(0)
+    intro = ''
+    for line in range(14):
+        intro += introl[line]
     Cmd.vm_group = ''
     # define a default file to load
     Cmd.file = 'groups.yaml'
@@ -472,10 +471,11 @@ Type:  'help' for help with commands
 
     def do_quit(self, args):
         """Exit the application"""
-        # French Flag color :)
-        print(esc('44')+'Bye'+esc('107')+'Bye'+esc('41')+'Bye'+esc(0))
         if Cmd.conn != '':
+            print('Disconnecting ...')
             Cmd.conn.close()
+        # French Flag :)
+        print(esc('44')+'Bye'+esc('107')+'Bye'+esc('41')+'Bye'+esc(0))
         return True
 
     def help_quit(self):
