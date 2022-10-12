@@ -601,7 +601,7 @@ class MyPrompt(Cmd):
     def help_show_file(self):
         print("Show the Group yaml file used")
 
-    def do_shelll(self, args):
+    def do_shell(self, args):
         """Execute a system command"""
         out, errs = system_command(args)
         if errs:
