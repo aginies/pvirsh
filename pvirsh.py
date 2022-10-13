@@ -187,7 +187,7 @@ def system_command(cmd):
 
 def find_all_vm(conn):
     """Find all VM from the current Hypervisor"""
-    allvm_list = []
+    allvm_list = ''
     # Store all VM from the hypervisor
     domains = conn.listAllDomains(0)
     for domain in domains:
@@ -284,7 +284,7 @@ def vm_selected(file, group, conn):
 def para_cmd(file, group, cmd, conn, show):
     """Start pool of command"""
 
-    results = []
+    results = ''
     vms = vm_selected(file, group, conn)
 
     cmdoptions = ''
@@ -648,7 +648,7 @@ class MyPrompt(Cmd):
             print('Connect to an hypervisor to show selected VM: help conn')
         else:
             allvms = find_all_vm(conn)
-            print(str(allvms))
+            print(esc('36;1;1')+str(allvms)+esc(0))
 
     def help_show_all_vm(self):
         print("Show all VM from the current hypervisor")
