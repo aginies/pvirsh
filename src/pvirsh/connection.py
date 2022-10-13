@@ -16,8 +16,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import sys
-import pvirsh.util as util
 import libvirt
+import pvirsh.util as util
 
 class LibVirtConnect:
     """Connection method to libvirt"""

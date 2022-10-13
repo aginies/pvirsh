@@ -240,4 +240,3 @@ def find_matching_vm(groupfile, group, conn):
                 else:
                     print_error('No domain to manage on this host!')
         return vms
-

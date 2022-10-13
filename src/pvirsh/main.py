@@ -369,7 +369,7 @@ class MyPrompt(Cmd):
                 print(util.esc('36;1;1')+str(vms)+util.esc(0))
                 #print(vms)
 
-    def do_show_all_vm(self,args):
+    def do_show_all_vm(self, args):
         """Show all VM from the current hypervisor"""
         conn = Cmd.conn
         if conn == '':
