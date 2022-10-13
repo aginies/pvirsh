@@ -26,8 +26,8 @@ import re
 import sys
 import subprocess
 import time
-import setuptools
 from glob import glob
+import setuptools
 from setuptools.command.install import install
 from setuptools.command.sdist import sdist
 
@@ -218,8 +218,7 @@ setuptools.setup(
     },
     data_files=[("share/man/man1", ["man/pvirsh.1"]),
                 ("/var/lib/pvirsh/xml", glob("src/xml/*.xml")),
-                ("/etc/pvirsh", ["groups.yaml"]),
-                ],
+                ("/etc/pvirsh", ["groups.yaml"]),],
     tests_require=["mock>=2.0"],
     extras_require={"dev": ["pylint", "black"]},
 )
