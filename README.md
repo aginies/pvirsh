@@ -7,7 +7,7 @@ This provide an easy way to execute the same **command** on a **selected group o
 If you want to manage more than 1 VM you need to script you action and this will
 be done in a sequential way (most of the time). 
 
-This tool provides:
+Features:
 * Launch **parallel command** on mulitiple **VM** selected by group
 * **auto-completion** of the **virsh** domain command
 * **Reports** of **error/success** per VM
@@ -16,7 +16,7 @@ This tool provides:
 * **colored prompt** to easily catch up trouble and syntax
 * yaml file group: default is **groups.yaml**, possible to change to any other file
 
-Features:
+Interactive command:
 * conn: choose the connector to the Hypervisor
 * cmd: execute a **domain command**
 * hcmd: help on **virsh** command (display options)
@@ -35,8 +35,8 @@ Features:
 
 # Python requires
 
-* libvirt
-* yaml
+* python3-libvirt
+* python3-PyYAML
 
 # Install
 

@@ -10,10 +10,13 @@ B<pvirsh> [OPTIONS]
 
 =head1 DESCRIPTION
 
-B<pvirsh> is a parallel virsh command to manage selected group of Virtual Machine.
+B<pvirsh> is a B<parallel virsh> command to B<manage> selected B<<group of Virtual Machine>.
 This provide an easy way to execute the same command on a selected group of Virtual Machine.
-If you want to manage more than one VM you need to script you action and this will
-be done in a sequential way (most of the time).
+
+Today if you want to manage more than one VM you need to script you action and this will 
+be done in a sequential way (most of the time). B<pvirsh> is a wrapper to launch async
+management command on a group of VM.
+
 B<pvirsh> is launched in interactive mode by default.
 
 =head1 CONFIGURATION
@@ -25,6 +28,25 @@ Default group configuration yaml file is in B</etc/pvirsh> directory.
 Default xml device definition are in B</var/lib/pvirsh/xml> directory.
 
 =head1 FEATURES
+
+=over 3
+
+=item Launch parallel command on mulitiple VM selected by group
+
+=item auto-completion of the virsh domain command
+
+=item Reports of error/success per VM
+
+=item Interactive mode with intelligent prompt (display group, yaml file and connector)
+
+=item Interactive terminal or a one shot command
+
+=item colored prompt to easily catch up trouble and syntax
+
+=item yaml file group: default is groups.yaml, possible to change to any other file
+
+
+=head1 Interactive command
 
 =over 3
 
@@ -85,12 +107,11 @@ Launch this tool in non interactive mode (default)
 
 Command to execute on a group of VM
 
-=item B<--version>
 
 =back
 
 =head1 AUTHORS
 
-Written Antoine Ginies
+Written by Antoine Ginies
 
 =cut
