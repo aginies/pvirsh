@@ -38,12 +38,11 @@ Features:
 * libvirt
 * yaml
 
-# TODO
+# Install
 
-Probably a lot as this is for testing purpose...
-* detect VM state before (useful for some command which requires VM running)
-* connect to multiple host?
-* ....
+```bash
+./setup.py install
+```
 
 # Define Virtual Machine groups
 
@@ -66,6 +65,13 @@ windows:
 
 * sle15sp31$ : will match exactly this machine name
 * sle15sp4 : will match all VM, including sle15sp4*
+
+# TODO
+
+Probably a lot as this is for testing purpose...
+* detect VM state before (useful for some command which requires VM running)
+* connect to multiple host?
+* ....
 
 # Usage
 
@@ -103,7 +109,7 @@ exec:
 Get the state of all virtual Machine in **suse** group:
 
 ```bash
-/pvirsh.py -n --conn local -c domstate -g suse,rhel
+pvirsh.py -n --conn local -c domstate -g suse,rhel
 
 
 Connected; Version: 6002000
@@ -122,7 +128,7 @@ virsh domstate rhel8  shut off Done
 Setting hard-limit memory to 1.024GB for all VM in **suse** group:
 
 ```bash
-./pvirsh.py -n --conn local -c "memtune --hard-limit 1000000" -g suse
+pvirsh.py -n --conn local -c "memtune --hard-limit 1000000" -g suse
 
 
 Connected; Version: 6002000
@@ -143,7 +149,7 @@ cat rng.xml
   <address type="pci" domain="0x0000" bus="0x0a" slot="0x00" function="0x0"/>
 </rng>
 
-./pvirsh.py -n --conn local -g suse,rhel -c "attach-device --current --file rng.xml"
+pvirsh.py -n --conn local -g suse,rhel -c "attach-device --current --file rng.xml"
 
 Connected; Version: 6002000
 Multiple group selected
