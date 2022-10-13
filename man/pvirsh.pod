@@ -101,7 +101,7 @@ Group file to use as yaml file
 
 =item B<-n>, B<--noninter>
 
-Launch this tool in non interactive mode (default)
+Launch this tool in non interactive mode
 
 =item B<--c>, B<--cmd> CMD
 
