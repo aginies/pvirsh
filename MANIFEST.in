@@ -1,0 +1,3 @@
+recursive-include src *.py
+recursive-include src/xml *.xml
+recursive-include man *
