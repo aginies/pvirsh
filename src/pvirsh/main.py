@@ -501,11 +501,3 @@ class MyPrompt(Cmd):
 
     do_EOF = do_quit
     help_EOF = help_quit
-
-
-if __name__ == "__main__":
-    try:
-        main()
-    except KeyboardInterrupt:
-        print('Cancelled by user.')
-        exit(1)
