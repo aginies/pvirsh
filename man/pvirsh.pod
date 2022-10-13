@@ -1,0 +1,88 @@
+=encoding utf8
+
+=head1 NAME
+
+pvirsh - Parallel virsh command
+
+=head1 SYNOPSIS
+
+B<pvirsh> [OPTIONS]
+
+=head1 DESCRIPTION
+
+B<pvirsh> is a parallel virsh command to manage selected group of Virtual Machine.
+This provide an easy way to execute the same command on a selected group of Virtual Machine.
+If you want to manage more than one VM you need to script you action and this will
+be done in a sequential way (most of the time).
+B<pvirsh> is launched in interactive mode by default.
+
+=head1 FEATURES
+
+=over 3
+
+=item B<conn>: choose the connector to the Hypervisor
+
+=item B<cmd>: execute a domain command
+
+=item B<hcmd>: help on virsh command (display options)
+
+=item B<file>: select the group yaml file
+
+=item B<show_file>: show the current yaml file used 
+
+=item B<show_group>: show all groups available 
+
+=item B<select_group>: select the group of VM to work on
+
+=item B<show_vm>: display the list of VM selected according to the current group(s)
+
+=item B<show_all_vm>: display the list of all VM available in current Hypervisor
+
+=item B<add_dev/remove_dev>: easy way to add/remove a device to a group of VM
+
+=item B<shell>: execution of a system command in interactive mode (shell)
+
+=back
+
+
+=head1 OPTIONS
+
+=over 4
+
+=item B<-h>, B<--help>
+
+show this help message and exit.
+
+=item B<-s>, B<--showgroup>
+
+Show group from the yaml group file
+
+=item B<--conn> CONN
+
+Connect to the hypervisor (local | ssh)
+
+=item B<-g>, B<--group> GROUP
+
+Group of VM to use (could be a list separated by ,)
+
+=item B<-f>, B<--file> FILE
+
+Group file to use as yaml file
+
+=item B<-n>, B<--noninter>
+
+Launch this tool in non interactive mode (default)
+
+=item B<--c>, B<--cmd> CMD
+
+Command to execute on a group of VM
+
+=item B<--version>
+
+=back
+
+=head1 AUTHORS
+
+Written Antoine Ginies
+
+=cut
