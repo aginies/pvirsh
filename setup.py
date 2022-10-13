@@ -218,6 +218,7 @@ setuptools.setup(
     },
     data_files=[("share/man/man1", ["man/pvirsh.1"]),
                 ("/var/lib/pvirsh/xml", glob("src/xml/*.xml")),
+                ("/etc/pvirsh", ["groups.yaml"]),
                 ],
     tests_require=["mock>=2.0"],
     extras_require={"dev": ["pylint", "black"]},

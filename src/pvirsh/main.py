@@ -186,7 +186,7 @@ class MyPrompt(Cmd):
         intro += introl[line]
     Cmd.vm_group = ''
     # define a default file to load
-    Cmd.file = 'groups.yaml'
+    Cmd.file = '/etc/pvirsh/groups.yaml'
     # libvirt connection
     Cmd.conn = ''
     # adjust prompt with yaml group file if present

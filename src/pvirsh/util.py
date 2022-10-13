@@ -37,7 +37,6 @@ def print_ok(text):
     formated_text = esc('32;1;1') +text +esc(0)
     print(formated_text)
 
-# TODO: validate the yaml file
 def validate_file(file):
     """ validate the yaml file"""
 

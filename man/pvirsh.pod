@@ -16,6 +16,14 @@ If you want to manage more than one VM you need to script you action and this wi
 be done in a sequential way (most of the time).
 B<pvirsh> is launched in interactive mode by default.
 
+=head1 CONFIGURATION
+
+Default group configuration yaml file is in B</etc/pvirsh> directory.
+
+=head1 XML DEVICES DEFINITION
+
+Default xml device definition are in B</var/lib/pvirsh/xml> directory.
+
 =head1 FEATURES
 
 =over 3
