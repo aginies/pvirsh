@@ -65,6 +65,28 @@ class PostInstallCommand(install):
             raise RuntimeError("Building man pages has failed")
         install.run(self)
 
+class CleanCommand(setuptools.Command):
+    """
+    Our custom command to clean out junk files.
+    """
+    description = "Cleans out junk files we don't want in the repo"
+    user_options = []
+
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        cmd_list = dict(
+            rm_build_stuff="rm -vrf build dist",
+            rm_man="rm -vf man/pvirsh.1",
+            rm_src_egg="rm -vrf src/pvirsh.egg-info/",
+            rm_pycache="rm -vrf src/pvirsh/__pycache__/",
+        )
+        for key, cmd in cmd_list.items():
+            os.system(cmd)
 
 class CheckLint(setuptools.Command):
     """
@@ -209,6 +231,7 @@ setuptools.setup(
         "install": PostInstallCommand,
         "lint": CheckLint,
         "sdist": SdistCommand,
+        "clean": CleanCommand,
     },
     data_files=[("share/man/man1", ["man/pvirsh.1"]),
                 ("share/pvirsh/xml", glob("src/xml/*.xml")),
