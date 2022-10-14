@@ -72,7 +72,7 @@ class CheckLint(setuptools.Command):
     """
 
     user_options = [("errors-only", "e", "only report errors")]
-    description = "Check code using pylint and black"
+    description = "Check code using pylint"
 
     def initialize_options(self):
         """
@@ -92,16 +92,12 @@ class CheckLint(setuptools.Command):
         """
         files = ["src"]
 
-        print(">>> Running black ...")
-        processes = []
-        processes.append(subprocess.run(["black", "--check"] + files))
-
-        output_format = "colorized" if sys.stdout.isatty() else "text"
-
-        pylint_opts = ["--output-format=%s" % output_format]
-
         if self.errors_only:
             pylint_opts.append("-E")
+
+        processes = []
+        output_format = "colorized" if sys.stdout.isatty() else "text"
+        pylint_opts = ["--output-format=%s" % output_format]
 
         print(">>> Running pylint ...")
         processes.append(subprocess.run(["pylint", "src"] + pylint_opts))
@@ -126,9 +122,12 @@ class SdistCommand(sdist):
         fdlog = os.popen("git log --pretty=format:'%aN <%aE>'")
         authors = []
         for line in fdlog:
-            line = "   " + line.strip()
+            print(line)
+            #line = "   " + line.strip()
             if line not in authors:
                 authors.append(line)
+            else:
+                print('no author')
 
         authors.sort(key=str.lower)
 
@@ -171,6 +170,7 @@ class SdistCommand(sdist):
 
         if os.path.exists(".git"):
             try:
+                print('Bhere?')
                 self.gen_authors()
                 self.gen_changelog()
 
@@ -182,6 +182,7 @@ class SdistCommand(sdist):
                     if os.path.exists(item):
                         os.unlink(item)
         else:
+            print('here?')
             sdist.run(self)
 
 
@@ -218,7 +219,6 @@ setuptools.setup(
     },
     data_files=[("share/man/man1", ["man/pvirsh.1"]),
                 ("/var/lib/pvirsh/xml", glob("src/xml/*.xml")),
-                ("/etc/pvirsh", ["groups.yaml"]),],
-    tests_require=["mock>=2.0"],
-    extras_require={"dev": ["pylint", "black"]},
+                ("/etc/pvirsh", ["src/groups.yaml"]),],
+    extras_require={"dev": ["pylint"]},
 )

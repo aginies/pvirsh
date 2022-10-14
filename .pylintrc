@@ -1,0 +1,6 @@
+[FORMAT]
+max-line-length=100
+
+[VARIABLES]
+additional-builtins=_
+
