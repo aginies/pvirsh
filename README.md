@@ -26,14 +26,19 @@ See the **pvirsh.pod** file in **man/** directory
 
 # Python requires
 
-* python3-libvirt
+* python3-libvirt-python
 * python3-PyYAML
 
 # Install
 
+* From source code:
 ```bash
+git clone https://github.com/aginies/pvirsh
+cd pvirsh
 ./setup.py install
 ```
+
+* Package from [OBS](https://build.opensuse.org/package/show/home:aginies/pvirsh)
 
 # Define Virtual Machine groups
 
