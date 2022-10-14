@@ -468,6 +468,14 @@ class MyPrompt(Cmd):
     def help_show_xml_path(self):
         print('show the current XML path to device definition')
 
+    def do_start(self, args):
+        """start VM"""
+        self.do_cmd('start')
+
+    def do_shutdown(self, args):
+        """shutdown VM"""
+        self.do_cmd('shutdown')
+
     def do_add_dev(self, args):
         """Add a device using an xml file"""
         if args != '':
