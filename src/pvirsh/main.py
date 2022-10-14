@@ -2,7 +2,6 @@
 # Authors: Antoine Ginies <aginies@suse.com>
 #
 
-from pathlib import Path
 import argparse
 from cmd import Cmd
 import os
@@ -186,13 +185,17 @@ class MyPrompt(Cmd):
     for line in range(14):
         intro += introl[line]
     Cmd.vm_group = ''
-    # define a default file to load
+    # define a default file to load (package)
     Cmd.file = '/etc/pvirsh/groups.yaml'
+    if os.path.isfile(Cmd.file):
+        pass
+    # seem to be a setup.py install not a package
+    else:
+        Cmd.file = '/usr/share/pvirsh/groups.yaml'
     # libvirt connection
     Cmd.conn = ''
     # adjust prompt with yaml group file if present
-    my_file = Path(Cmd.file)
-    if my_file.is_file():
+    if os.path.isfile(Cmd.file):
         util.validate_file(Cmd.file)
         # Cmd.promptfile is used for the prompt file
         Cmd.promptfile = 'Group File: '+util.esc('32;1;1')+str(Cmd.file)+util.esc(0)
@@ -329,8 +332,7 @@ class MyPrompt(Cmd):
     def do_file(self, args):
         """select the group yaml file"""
         file = args
-        my_file = Path(file)
-        if my_file.is_file():
+        if os.path.isfile(file):
             print("Selected group yaml file is '{}'".format(file))
             Cmd.file = file
             util.validate_file(Cmd.file)
