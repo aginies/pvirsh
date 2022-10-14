@@ -6,6 +6,7 @@ from pathlib import Path
 import argparse
 from cmd import Cmd
 import os
+from glob import glob
 import sys
 import yaml
 import pvirsh.connection as connection
@@ -202,7 +203,6 @@ class MyPrompt(Cmd):
     Cmd.promptcon = util.esc('31;1;1')+'Not Connected'+util.esc(0)+'\n'
     promptline = '_________________________________________\n'
     # xml directory from system
-    #cwdir = os.getcwd()
     Cmd.xmldir = '/usr/share/pvirsh/xml'
     # show the command on all VM or not
     Cmd.show = False
@@ -448,15 +448,25 @@ class MyPrompt(Cmd):
 
     def do_xml_path(self, args):
         """Define the path to xml devices definition"""
-        xmlpath = args
         if os.path.isdir(args):
-            util.print_ok('XML path for device definition is: ' +args)
-            Cmd.xmldir = args
+            list_xml = glob(args+'/*.xml')
+            if not list_xml:
+                print('This directory {} doesnt contain any xml files...'.format(args))
+            else:
+                util.print_ok('XML path for device definition is: ' +args)
+                Cmd.xmldir = args
         else:
             util.print_error('Please select an XML path dir')
 
     def help_xml_path(self):
         print('Define the path to xml devices definition')
+
+    def do_show_xml_path(self, args):
+        if Cmd.xmldir != '':
+            print("Current XML path is: "+Cmd.xmldir)
+
+    def help_show_xml_path(self):
+        print('show the current XML path to device definition')
 
     def do_add_dev(self, args):
         """Add a device using an xml file"""
