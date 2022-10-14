@@ -45,6 +45,7 @@ Default xml device definition are in B</var/lib/pvirsh/xml> directory.
 
 =item yaml file group: default is groups.yaml, possible to change to any other file
 
+=back
 
 =head1 Interactive command
 
@@ -68,7 +69,9 @@ Default xml device definition are in B</var/lib/pvirsh/xml> directory.
 
 =item B<show_all_vm>: display the list of all VM available in current Hypervisor
 
-=item B<add_dev/remove_dev>: easy way to add/remove a device to a group of VM
+=item B<add_dev>: easy way to add a device to a group of VM
+
+=item B<remove_dev>: easy way to remove a device to a group of VM
 
 =item B<shell>: execution of a system command in interactive mode (shell)
 
