@@ -1,4 +1,5 @@
+include README.md LICENSE ChangeLog AUTHORS
+include src/*.yaml
+include src/xml/*.xml
 recursive-include src *.py
-recursive-include src *.yaml
-recursive-include src/xml *.xml
 recursive-include man *

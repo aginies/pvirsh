@@ -203,10 +203,28 @@ class MyPrompt(Cmd):
     promptline = '_________________________________________\n'
     # xml directory from system
     #cwdir = os.getcwd()
-    Cmd.xmldir = '/var/lib/pvirsh/xml'
+    Cmd.xmldir = '/usr/share/pvirsh/xml'
     # show the command on all VM or not
     Cmd.show = False
     prompt = promptline +Cmd.promptfile+' | '+Cmd.promptcon+Cmd.vm_group +'> '
+
+    def check_conn(self, conn):
+        """Check the connector has been choosen"""
+        if conn == '':
+            print('Connect to an hypervisor to show selected VM: help conn')
+            return 1
+
+    def check_file(self, file):
+        """Check a group yaml file has been selected"""
+        if file == '':
+            print('Please select a group yaml file: help file')
+            return 1
+
+    def check_selected_group(self, group):
+        """Check as group has been selected"""
+        if group == '':
+            print('Please select a group of VM: select_group GROUP_VM')
+            return 1
 
     def do_quit(self, args):
         """Exit the application"""
@@ -218,15 +236,11 @@ class MyPrompt(Cmd):
         return True
 
     def help_quit(self):
+        """Quit pvirsh"""
         print('Exit the application. Shorthand: Ctrl-D.')
-
-    # conn = LibVirtConnect.local()
-    # conn = LibVirtConnect.remote('qemu+ssh', '10.0.1.73')
-    # conn.close()
 
     def do_conn(self, args):
         """Setting up the connector to the hypervisor"""
-        # conn = LibVirtConnect.local()
         conn = args
         if conn == 'local':
             conn = connection.LibVirtConnect.local()
@@ -252,6 +266,7 @@ class MyPrompt(Cmd):
             util.print_error('Unknow Connector...')
 
     def help_conn(self):
+        """Help on conn"""
         print('Setting up the connector to the hypervisor: ' +str(LIST_CONNECTORS))
 
     def complete_conn(self, text, line, begidx, endidx):
@@ -264,9 +279,7 @@ class MyPrompt(Cmd):
 
     def do_select_group(self, args):
         """Select the group of VM to Manage"""
-        if self.file == '':
-            print('Please select a group yaml file: help file')
-        else:
+        if self.check_file(self.file) !=1:
             vm_group = args
             if ',' in vm_group:
                 mgroup = vm_group.split(",")
@@ -298,9 +311,7 @@ class MyPrompt(Cmd):
 
     def do_show_group(self, args):
         """Show group from VM file content"""
-        if self.file == '':
-            print('Please select a group yaml file: help file')
-        else:
+        if self.check_file(self.file) !=1:
             util.show_group(self.file)
 
     def help_show_group(self):
@@ -355,27 +366,17 @@ class MyPrompt(Cmd):
     def do_show_vm(self, args):
         """ Show all VM matching the selected group(s)"""
         group = Cmd.vm_group
-        conn = Cmd.conn
-        if conn == '':
-            print('Connect to an hypervisor to show selected VM: help conn')
-        elif self.file == '':
-            print('Please select a group yaml file: help file')
-        else:
-            if group == '':
-                print('Please select a group of VM: select_group GROUP_VM')
-            else:
-                vms = util.vm_selected(self.file, group, conn)
+        if self.check_conn(Cmd.conn) != 1 and self.check_file(self.file) !=1:
+            if self.check_selected_group(group) !=1:
+                vms = util.vm_selected(self.file, group, Cmd.conn)
                 print('Vm selected by ' +group +' group(s) on this Hypervisor are:')
                 print(util.esc('36;1;1')+str(vms)+util.esc(0))
                 #print(vms)
 
     def do_show_all_vm(self, args):
         """Show all VM from the current hypervisor"""
-        conn = Cmd.conn
-        if conn == '':
-            print('Connect to an hypervisor to show selected VM: help conn')
-        else:
-            allvms = util.find_all_vm(conn)
+        if self.check_conn(Cmd.conn) != 1:
+            allvms = util.find_all_vm(Cmd.conn)
             print(util.esc('36;1;1')+str(allvms)+util.esc(0))
 
     def help_show_all_vm(self):
@@ -404,15 +405,9 @@ class MyPrompt(Cmd):
 
     def do_cmd(self, cmd):
         """ Command to execute on a group of VM (virsh)"""
-        if Cmd.conn == '':
-            print('Connect to an hypervisor: help conn')
-        elif self.file == '':
-            print('Please select a group yaml file: help file')
-        else:
+        if self.check_conn(Cmd.conn) != 1 and self.check_file(self.file) !=1:
             group = Cmd.vm_group
-            if group == '':
-                print('Please select a group of VM: select_group GROUP_VM')
-            else:
+            if self.check_selected_group(group) !=1:
                 testcmd = cmd.split(" ")
                 if testcmd[0] in list_domain_all_cmd:
                     util.para_cmd(self.file, group, cmd, self.conn, Cmd.show)
@@ -450,6 +445,18 @@ class MyPrompt(Cmd):
 
     def help_hcmd(self):
         print("Show the option of a virsh command")
+
+    def do_xml_path(self, args):
+        """Define the path to xml devices definition"""
+        xmlpath = args
+        if os.path.isdir(args):
+            util.print_ok('XML path for device definition is: ' +args)
+            Cmd.xmldir = args
+        else:
+            util.print_error('Please select an XML path dir')
+
+    def help_xml_path(self):
+        print('Define the path to xml devices definition')
 
     def do_add_dev(self, args):
         """Add a device using an xml file"""

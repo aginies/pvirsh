@@ -122,12 +122,9 @@ class SdistCommand(sdist):
         fdlog = os.popen("git log --pretty=format:'%aN <%aE>'")
         authors = []
         for line in fdlog:
-            print(line)
-            #line = "   " + line.strip()
+            line.strip()
             if line not in authors:
                 authors.append(line)
-            else:
-                print('no author')
 
         authors.sort(key=str.lower)
 
@@ -170,7 +167,6 @@ class SdistCommand(sdist):
 
         if os.path.exists(".git"):
             try:
-                print('Bhere?')
                 self.gen_authors()
                 self.gen_changelog()
 
@@ -182,7 +178,6 @@ class SdistCommand(sdist):
                     if os.path.exists(item):
                         os.unlink(item)
         else:
-            print('here?')
             sdist.run(self)
 
 
@@ -197,8 +192,6 @@ setuptools.setup(
     url="https://github.com/aginies/pvirsh",
     keywords="virtualization",
     package_dir={"": "src"},
-    package_data={"xml": ["*.xml"],},
-    include_package_data=True,
     packages=setuptools.find_packages(where="src"),
     entry_points={
         "console_scripts": [
@@ -218,7 +211,8 @@ setuptools.setup(
         "sdist": SdistCommand,
     },
     data_files=[("share/man/man1", ["man/pvirsh.1"]),
-                ("/var/lib/pvirsh/xml", glob("src/xml/*.xml")),
-                ("/etc/pvirsh", ["src/groups.yaml"]),],
+                ("share/pvirsh/xml", glob("src/xml/*.xml")),
+                ],
     extras_require={"dev": ["pylint"]},
+    install_requires=['PyYAML', 'libvirt-python'],
 )
