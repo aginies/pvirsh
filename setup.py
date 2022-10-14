@@ -212,6 +212,7 @@ setuptools.setup(
     },
     data_files=[("share/man/man1", ["man/pvirsh.1"]),
                 ("share/pvirsh/xml", glob("src/xml/*.xml")),
+                ("share/pvirsh", ["src/groups.yaml"]),
                 ],
     extras_require={"dev": ["pylint"]},
     install_requires=['PyYAML', 'libvirt-python'],
