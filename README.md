@@ -17,17 +17,8 @@ Features:
 * yaml file group: default is **groups.yaml**, possible to change to any other file
 
 Interactive command:
-* conn: choose the connector to the Hypervisor
-* cmd: execute a **domain command**
-* hcmd: help on **virsh** command (display options)
-* file: **select** the **group yaml file**
-* show_file: show the **current yaml** file used 
-* show_group : **show all groups** available 
-* select_group: select the **group of VM** to work on
-* show_vm: display the **list of VM** selected according to the current group(s)
-* show_all_vm: display the **list of all VM** available in current Hypervisor
-* add_dev/remove_dev: **easy** way to **add/remove** a **device** to a group of VM
-* shell: execution of a **system command** in interactive mode (shell)
+
+See the **pvirsh.pod** file in **man/** directory
 
 # Demo
 

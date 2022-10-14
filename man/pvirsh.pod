@@ -75,6 +75,10 @@ Default xml device definition are in B</var/lib/pvirsh/xml> directory.
 
 =item B<shell>: execution of a system command in interactive mode (shell)
 
+=item B<xml_path>: choose path to the XML device definition
+
+=item B<show_xml_path>: choose current path to the XML device definition
+
 =back
 
 
