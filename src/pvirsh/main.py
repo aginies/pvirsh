@@ -19,7 +19,6 @@ import argparse
 from cmd import Cmd
 import os
 from glob import glob
-import sys
 import yaml
 import pvirsh.connection as connection
 import pvirsh.util as util
