@@ -119,7 +119,7 @@ def show_group(groupfile):
             print('Group '+esc('36;1;1')+str(item)+esc(0)+': '+str(value))
         print('\n')
 
-def m_selected(file, group, conn):
+def vm_selected(file, group, conn):
     vms = ''
     if ',' in group:
         print('Multiple group selected')
