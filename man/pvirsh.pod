@@ -10,7 +10,7 @@ B<pvirsh> [OPTIONS]
 
 =head1 DESCRIPTION
 
-B<pvirsh> is a B<parallel virsh> command to B<manage> selected B<<group of Virtual Machine>.
+B<pvirsh> is a B<parallel virsh> command to B<manage> selected B<group of Virtual Machine>.
 This provide an easy way to execute the same command on a selected group of Virtual Machine.
 
 Today if you want to manage more than one VM you need to script you action and this will 
@@ -81,7 +81,7 @@ Default xml device definition are in B</var/lib/pvirsh/xml> directory.
 
 =item B<shutdown>: shutdown a group of VM
 
-=item B<shell>: execution of a system command in interactive mode (shell)
+=item B<shell>: execution of a system command
 
 
 =back
