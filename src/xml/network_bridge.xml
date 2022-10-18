@@ -1,0 +1,5 @@
+<interface type="bridge">
+  <source bridge="br0"/>
+  <mac address="52:54:00:79:a3:83"/>
+  <model type="virtio"/>
+</interface>

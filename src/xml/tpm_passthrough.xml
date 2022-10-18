@@ -1,0 +1,5 @@
+<tpm model="tpm-crb">
+  <backend type="passthrough">
+    <device path="/dev/tpm0"/>
+  </backend>
+</tpm>

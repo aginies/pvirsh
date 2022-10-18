@@ -1,0 +1,5 @@
+<interface type="network">
+  <source network="default"/>
+  <mac address="52:54:00:79:a3:83"/>
+  <model type="virtio"/>
+</interface>

@@ -1,0 +1,3 @@
+<console type="pty">
+  <target type="virtio"/>
+</console>

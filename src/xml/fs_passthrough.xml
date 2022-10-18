@@ -1,0 +1,5 @@
+<filesystem type="mount">
+  <source dir="/tmp"/>
+  <target dir="/tmp"/>
+  <driver type="virtiofs"/>
+</filesystem>
