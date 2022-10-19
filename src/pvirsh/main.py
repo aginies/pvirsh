@@ -292,6 +292,28 @@ class MyPrompt(Cmd):
             completions = [f for f in LIST_CONNECTORS if f.startswith(text)]
         return completions
 
+    def do_select_vm(self, args):
+        """Select one/some VM from the list"""
+        vms_selected = args
+        if self.check_conn(Cmd.conn) != 1:
+            print(util.esc('36;1;1')+str(vms_selected)+util.esc(0))
+            self.prompt = self.promptline+Cmd.promptfile+' | '+Cmd.promptcon+'VMs:'+vms_selected+'> '
+            Cmd.vm_group = "SELECTED_VMS"
+            Cmd.vms_selected = vms_selected
+
+    def help_select_vm(self, args):
+        print('Select one/some VM from the list (separate by comma)')
+
+    def complete_select_vm(self, text, line, begidx, endidx):
+        """ auto completion of VM list"""
+        list_allvms = util.find_all_vm(Cmd.conn)
+        if not text:
+            completions = list_allvms[:]
+        else:
+            completions = [f for f in list_allvms if f.startswith(text)]
+        return completions
+
+
     def do_select_group(self, args):
         """Select the group of VM to Manage"""
         if self.check_file(self.file) !=1:
@@ -424,7 +446,7 @@ class MyPrompt(Cmd):
             if self.check_selected_group(group) !=1:
                 testcmd = cmd.split(" ")
                 if testcmd[0] in list_domain_all_cmd:
-                    util.para_cmd(self.file, group, cmd, self.conn, Cmd.show)
+                    util.para_cmd(self.file, group, cmd, self.conn, Cmd.show, Cmd.vms_selected)
                 else:
                     print(list_domain_all_cmd)
 

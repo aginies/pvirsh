@@ -71,13 +71,13 @@ Information/tips:
 
 def find_all_vm(conn):
     """Find all VM from the current Hypervisor"""
-    allvm_list = ''
+    allvm_list = []
     # Store all VM from the hypervisor
     domains = conn.listAllDomains(0)
     for domain in domains:
         if domain.name():
             vmdomain = domain.name()
-            allvm_list = vmdomain+' '+str(allvm_list)
+            allvm_list.append(vmdomain)
     return allvm_list
 
 def check_file_exist(groupfile):
@@ -119,18 +119,6 @@ def show_group(groupfile):
             print('Group '+esc('36;1;1')+str(item)+esc(0)+': '+str(value))
         print('\n')
 
-def vm_selected(file, group, conn):
-    vms = ''
-    if ',' in group:
-        print('Multiple group selected')
-        mgroup = group.split(",")
-        for allgroup in mgroup:
-            morevms = find_matching_vm(file, allgroup, conn)
-            vms = vms +morevms
-    else:
-        vms = find_matching_vm(file, group, conn)
-    return vms
-
 def system_command(cmd):
     """Launch a system command"""
 
@@ -154,11 +142,11 @@ def do_virsh_cmd(virtum, cmd, cmdoptions):
         print(cmdtolaunch, end=" ")
         print(out + " " + esc('32;1;4') + 'Done' + esc(0))
 
-def para_cmd(file, group, cmd, conn, show):
+def para_cmd(file, group, cmd, conn, show, VMS):
     """Start pool of command"""
 
     results = ''
-    vms = vm_selected(file, group, conn)
+    vms = vm_selected(file, group, conn, VMS)
 
     cmdoptions = ''
     # subsystem: splitlines because of \n
@@ -185,9 +173,20 @@ def para_cmd(file, group, cmd, conn, show):
     pool.join()
     print(results) #[:10])
 
-def vm_selected(file, group, conn):
+def vm_selected(file, group, conn, VMS=''):
     vms = ''
-    if ',' in group:
+    # manual selection of VM
+    if group == "SELECTED_VMS":
+        if ',' in VMS:
+            print('Multiple VM selected')
+            VMS = VMS.split(",")
+            for allvms in VMS:
+                vms = vms +' '+allvms
+        else:
+            vms = VMS
+
+    # selection by group
+    elif ',' in group:
         print('Multiple group selected')
         mgroup = group.split(",")
         for allgroup in mgroup:
