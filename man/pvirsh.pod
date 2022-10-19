@@ -13,17 +13,17 @@ B<pvirsh> [OPTIONS]
 B<pvirsh> is a B<parallel virsh> command to B<manage> selected B<group of Virtual Machine>.
 This provide an easy way to execute the same command on a selected group of Virtual Machine.
 
-Today if you want to manage more than one VM you need to script you action and this will 
+Today if you want to manage more than one Virtual Machine you need to script your action and this will 
 be done in a sequential way (most of the time). B<pvirsh> is a wrapper to launch async
-management command on a group of VM.
+management command on a group of Virtual Machine.
 
 B<pvirsh> is launched in interactive mode by default.
 
 =head1 CONFIGURATION
 
 If you are using an RPM package, the default group configuration yaml file will be
-in B</etc/pvirsh> directory. If you are using the setup.py it will be in B</usr/share/pvirsh/> directory.
-Its possible to not use a group yaml by selecting vm from a list.
+in B</etc/pvirsh> directory. If you are using the B<setup.py> it will be in B</usr/share/pvirsh/> directory.
+Its possible to not use a group yaml by selecting vm from a list (select_vm).
 
 =head1 XML DEVICES DEFINITION
 
@@ -33,17 +33,17 @@ All xml default device definition are in B</usr/share/pvirsh/xml> directory.
 
 =over 3
 
-=item Launch parallel command on mulitiple VM selected by group (or in a list)
+=item Launch parallel command on mulitiple Virtual Machine selected by group (or in a list)
 
-=item auto-completion of the virsh domain command
+=item Auto-completion of the virsh domain command
 
-=item Reports of error/success per VM
+=item Reports of error/success per Virtual Machine
 
 =item Interactive mode with intelligent prompt (display group, yaml file and connector)
 
 =item Interactive terminal or a one shot command
 
-=item colored prompt to easily catch up trouble and syntax
+=item Colored prompt to easily catch up trouble and syntax
 
 =item yaml file group: default is groups.yaml, possible to change to any other file
 
@@ -53,9 +53,9 @@ All xml default device definition are in B</usr/share/pvirsh/xml> directory.
 
 =over 3
 
-=item B<conn>: choose the connector to the Hypervisor
+=item B<conn>: connect to an Hypervisor
 
-=item B<show_xml_path>: choose current path to the XML device definition
+=item B<show_xml_path>: show the current path to the XML device definition
 
 =item B<xml_path>: choose path to the XML device definition
 
@@ -65,28 +65,27 @@ All xml default device definition are in B</usr/share/pvirsh/xml> directory.
 
 =item B<show_group>: show all groups available 
 
-=item B<select_group>: select the group of VM to work on
+=item B<select_group>: select the group of Virtual Machine to work on
 
 =item B<show_vm>: display the list of VM selected according to the current group(s)
 
-=item B<show_all_vm>: display the list of all VM available in current Hypervisor
+=item B<show_all_vm>: display the list of all Virtual Machine available in current Hypervisor
 
-=item B<select_vm>: select vm(s) to work on (multiple selection possible separate by ,)
+=item B<select_vm>: select Virtual Machine(s) to work on (multiple selection possible separate by ,)
 
 =item B<cmd>: execute a domain command
 
 =item B<hcmd>: help on virsh command (display options)
 
-=item B<add_dev>: easy way to add a device to a group of VM
+=item B<add_dev>: easy way to add a device to a group of Virtual Machine
 
-=item B<remove_dev>: easy way to remove a device to a group of VM
+=item B<remove_dev>: easy way to remove a device to a group of Virtual Machine
 
-=item B<start>: start a group of VM
+=item B<start>: start a group of Virtual Machine
 
-=item B<shutdown>: shutdown a group of VM
+=item B<shutdown>: shutdown a group of Virtual Machine
 
 =item B<shell>: execution of a system command
-
 
 =back
 
