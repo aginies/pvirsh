@@ -297,11 +297,15 @@ class MyPrompt(Cmd):
         vms_selected = args
         if self.check_conn(Cmd.conn) != 1:
             if args != '':
-                print(util.esc('36;1;1')+str(vms_selected)+util.esc(0))
-                Cmd.promptfile = 'Mode: '+util.esc('32;1;1')+'Selected VM(s)'+util.esc(0)
-                self.prompt = self.promptline+Cmd.promptfile+' | '+Cmd.promptcon+'VM(s):'+vms_selected+'> '
-                Cmd.vm_group = "SELECTED_VMS"
-                Cmd.vms_selected = vms_selected
+                list_allvms = util.find_all_vm(Cmd.conn)
+                if args not in list_allvms:
+                    print("VM selected not available on the hypervisor")
+                else:
+                    print(util.esc('36;1;1')+str(vms_selected)+util.esc(0))
+                    Cmd.promptfile = 'Mode: '+util.esc('32;1;1')+'Selected VM(s)'+util.esc(0)
+                    self.prompt = self.promptline+Cmd.promptfile+' | '+Cmd.promptcon+'VM(s):'+vms_selected+'> '
+                    Cmd.vm_group = "SELECTED_VMS"
+                    Cmd.vms_selected = vms_selected
             else:
                 util.print_error("You need to select at least on VM")
 
