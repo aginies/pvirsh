@@ -298,7 +298,7 @@ class MyPrompt(Cmd):
         if self.check_conn(Cmd.conn) != 1:
             if args != '':
                 print(util.esc('36;1;1')+str(vms_selected)+util.esc(0))
-                self.prompt = self.promptline+Cmd.promptfile+' | '+Cmd.promptcon+'VMs:'+vms_selected+'> '
+                self.prompt = self.promptline+Cmd.promptfile+' | '+Cmd.promptcon+'VM(s):'+vms_selected+'> '
                 Cmd.vm_group = "SELECTED_VMS"
                 Cmd.vms_selected = vms_selected
             else:
