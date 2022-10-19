@@ -238,7 +238,7 @@ class MyPrompt(Cmd):
     def check_selected_group(self, group):
         """Check as group has been selected"""
         if group == '':
-            print('Please select a group of VM: select_group GROUP_VM')
+            print('Please select a group of VM: select_group GROUP_VM\nOr select a vm(s): select_vm VM1,VM2')
             return 1
 
     def do_quit(self, args):
@@ -441,14 +441,25 @@ class MyPrompt(Cmd):
 
     def do_cmd(self, cmd):
         """ Command to execute on a group of VM (virsh)"""
-        if self.check_conn(Cmd.conn) != 1 and self.check_file(self.file) !=1:
+        def do_it(cmd):
+            """Internal command to launch"""
+            testcmd = cmd.split(" ")
+            if testcmd[0] in list_domain_all_cmd:
+                util.para_cmd(self.file, group, cmd, self.conn, Cmd.show, Cmd.vms_selected)
+            else:
+                print(list_domain_all_cmd)
+
+        # check conn is ok
+        if self.check_conn(Cmd.conn) != 1:
             group = Cmd.vm_group
-            if self.check_selected_group(group) !=1:
-                testcmd = cmd.split(" ")
-                if testcmd[0] in list_domain_all_cmd:
-                    util.para_cmd(self.file, group, cmd, self.conn, Cmd.show, Cmd.vms_selected)
-                else:
-                    print(list_domain_all_cmd)
+            # if selected vm no need to check the group exist
+            if group != "SELECTED_VMS":
+                # no vm selected, so checking group yaml file and a selected group
+                if self.check_file(self.file) != 1 and self.check_selected_group(group) != 1:
+                    Cmd.vms_selected = ''
+                    do_it(cmd)
+            else:
+                do_it(cmd)
 
     def complete_cmd(self, text, line, begidx, endidx):
         """ auto completion cmd"""
