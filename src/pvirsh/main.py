@@ -210,7 +210,7 @@ class MyPrompt(Cmd):
     if os.path.isfile(Cmd.file):
         util.validate_file(Cmd.file)
         # Cmd.promptfile is used for the prompt file
-        Cmd.promptfile = 'Group File: '+util.esc('32;1;1')+str(Cmd.file)+util.esc(0)
+        Cmd.promptfile = 'Mode: File '+util.esc('32;1;1')+str(Cmd.file)+util.esc(0)
     else:
         Cmd.promptfile = util.esc('31;1;1')+'No Group file selected'+util.esc(0)
         Cmd.file = ''
@@ -298,6 +298,7 @@ class MyPrompt(Cmd):
         if self.check_conn(Cmd.conn) != 1:
             if args != '':
                 print(util.esc('36;1;1')+str(vms_selected)+util.esc(0))
+                Cmd.promptfile = 'Mode: '+util.esc('32;1;1')+'Selected VM(s)'+util.esc(0)
                 self.prompt = self.promptline+Cmd.promptfile+' | '+Cmd.promptcon+'VM(s):'+vms_selected+'> '
                 Cmd.vm_group = "SELECTED_VMS"
                 Cmd.vms_selected = vms_selected
@@ -330,6 +331,7 @@ class MyPrompt(Cmd):
 
             if code != 666:
                 #print("Selected group is '{}'".format(args))
+                Cmd.promptfile = 'Mode: File '+util.esc('32;1;1')+str(Cmd.file)+util.esc(0)
                 self.prompt = self.promptline+Cmd.promptfile+' | '+Cmd.promptcon+vm_group + '> '
                 Cmd.vm_group = vm_group
                 self.do_show_vm(args)
@@ -374,7 +376,7 @@ class MyPrompt(Cmd):
             Cmd.file = file
             util.validate_file(Cmd.file)
             Cmd.vm_group = ''
-            Cmd.promptfile = 'Group File: '+util.esc('32;1;1')+str(Cmd.file)+util.esc(0)
+            Cmd.promptfile = 'Mode: File '+util.esc('32;1;1')+str(Cmd.file)+util.esc(0)
             self.prompt = self.promptline+Cmd.promptfile+' | '+Cmd.promptcon+self.vm_group +'> '
         else:
             util.print_error("File " +file +" Doesnt exist!")
