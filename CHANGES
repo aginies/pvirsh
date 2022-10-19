@@ -1,3 +1,8 @@
+V2.1
+- sync doc with code
+- select_vm: instead of using group vm can be selected in the list of available VM
+  in current hypervisor
+
 V2.0
 - this is now a python module
 - fix requirements
