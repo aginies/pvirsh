@@ -296,10 +296,13 @@ class MyPrompt(Cmd):
         """Select one/some VM from the list"""
         vms_selected = args
         if self.check_conn(Cmd.conn) != 1:
-            print(util.esc('36;1;1')+str(vms_selected)+util.esc(0))
-            self.prompt = self.promptline+Cmd.promptfile+' | '+Cmd.promptcon+'VMs:'+vms_selected+'> '
-            Cmd.vm_group = "SELECTED_VMS"
-            Cmd.vms_selected = vms_selected
+            if args != '':
+                print(util.esc('36;1;1')+str(vms_selected)+util.esc(0))
+                self.prompt = self.promptline+Cmd.promptfile+' | '+Cmd.promptcon+'VMs:'+vms_selected+'> '
+                Cmd.vm_group = "SELECTED_VMS"
+                Cmd.vms_selected = vms_selected
+            else:
+                util.print_error("You need to select at least on VM")
 
     def help_select_vm(self, args):
         print('Select one/some VM from the list (separate by comma)')
