@@ -185,16 +185,20 @@ class MyPrompt(Cmd):
     introl[3] = " Version: \n\n" #+pvirsh.__version__+",\n\n"
     introl[4] = " Type: "+util.esc('36;1;1')+'help'+util.esc(0)+" for help with commands\n"
     introl[5] = "       "+util.esc('36;1;1')+'quit'+util.esc(0)+" to quit\n\n"
-    introl[6] = "1) Connect to an Hypervisor\n"
+    introl[6] = util.esc('37;1;1')+"1) Connect to an Hypervisor\n"+util.esc(0)
     introl[7] = util.esc('36;1;1')+"    conn [TAB]"+util.esc(0)+"\n"
-    introl[8] = "2) Select the group yaml file (default will be groups.yaml if in path)\n"
-    introl[9] = util.esc('36;1;1')+"    file PATH_TO_FILE/FILE.YAML"+util.esc(0)+" | "+util.esc('36;1;1')+"file [TAB]\n"+util.esc(0)
-    introl[10] = "3) Select a group of VM to manage\n"
-    introl[11] = util.esc('36;1;1')+"    select_group [TAB]\n"+util.esc(0)
-    introl[12] = "4) Run command on selected VM\n"
-    introl[13] = util.esc('36;1;1')+"    cmd [TAB]\n"+util.esc(0)
+    introl[8] = "2) Option A:\n"
+    introl[9] = util.esc('37;1;1')+"  A1) Select the group yaml file\n"+util.esc(0)
+    introl[10] = util.esc('36;1;1')+"      file PATH_TO_FILE/FILE.YAML"+util.esc(0)+" | "+util.esc('36;1;1')+"file [TAB]\n"+util.esc(0)
+    introl[11] = util.esc('37;1;1')+"  A2) Select a group of VM to manage\n"+util.esc(0)
+    introl[12] = util.esc('36;1;1')+"      select_group [TAB]\n"+util.esc(0)
+    introl[13] = "2) Option B:\n"
+    introl[14] = util.esc('37;1;1')+"  B1) Select the VM to manage\n"+util.esc(0)
+    introl[15] = util.esc('36;1;1')+"      select_vm VM_NAME1,VM_NAME2,[TAB]\n" +util.esc(0)
+    introl[16] = util.esc('37;1;1')+"3) Run command on selected VM\n"+util.esc(0)
+    introl[17] = util.esc('36;1;1')+"    cmd [TAB]\n"+util.esc(0)
     intro = ''
-    for line in range(14):
+    for line in range(18):
         intro += introl[line]
     Cmd.vm_group = ''
     # define a default file to load (package)
