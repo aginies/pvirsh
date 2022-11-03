@@ -295,22 +295,49 @@ class MyPrompt(Cmd):
     def do_select_vm(self, args):
         """Select one/some VM from the list"""
         vms_selected = args
+        def update_prompt(final_list):
+            print(util.esc('36;1;1')+str(final_list)+util.esc(0))
+            Cmd.promptfile = 'Mode: '+util.esc('32;1;1')+'Selected VM(s)'+util.esc(0)
+            self.prompt = self.promptline+Cmd.promptfile+' | '+Cmd.promptcon+'VM(s):'+final_list+'> '
+            Cmd.vm_group = "SELECTED_VMS"
+            Cmd.vms_selected = final_list
+
         if self.check_conn(Cmd.conn) != 1:
+            # VM selection is not empty
+            final_list = ""
             if args != '':
                 list_allvms = util.find_all_vm(Cmd.conn)
-                if args not in list_allvms:
-                    print("VM selected not available on the hypervisor")
+                # multiple VM selection
+                if ',' in args:
+                    print('Multiple VM selected')
+                    args = args.split(",")
+                    for selvm in args:
+                        if selvm not in list_allvms:
+                            print("VM selected not available on the hypervisor: " +selvm)
+                        else:
+                            if selvm in final_list:
+                                print('VM already in the list: ' +selvm)
+                            else:
+                                if final_list == "":
+                                    final_list = selvm
+                                else:
+                                    final_list = final_list+","+selvm
+                    # remove duplicate in the list
+                    sel_list_vm = final_list.split(",")
+                    svm = set(sel_list_vm)
+                    final_list = ','.join(svm)
+                    update_prompt(final_list)
+                # only one VM selected
+                elif args not in list_allvms:
+                    print("VM selected not available on the hypervisor: " +args)
                 else:
-                    print(util.esc('36;1;1')+str(vms_selected)+util.esc(0))
-                    Cmd.promptfile = 'Mode: '+util.esc('32;1;1')+'Selected VM(s)'+util.esc(0)
-                    self.prompt = self.promptline+Cmd.promptfile+' | '+Cmd.promptcon+'VM(s):'+vms_selected+'> '
-                    Cmd.vm_group = "SELECTED_VMS"
-                    Cmd.vms_selected = vms_selected
+                    final_list = args
+                    update_prompt(final_list)
             else:
                 util.print_error("You need to select at least on VM")
 
-    def help_select_vm(self, args):
-        print('Select one/some VM from the list (separate by comma)')
+    def help_select_vm(self):
+        print('Select one/some VM from the list (separated by comma)')
 
     def complete_select_vm(self, text, line, begidx, endidx):
         """ auto completion of VM list"""
