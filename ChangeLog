@@ -1,0 +1,824 @@
+2022-11-03 aginies  <aginies@suse.com>
+    
+    few lint fix
+    
+    
+2022-11-03 aginies  <aginies@suse.com>
+    
+    improve usage help
+    
+    
+2022-11-03 aginies  <aginies@suse.com>
+    
+    - fix help_select_vm - fix multiple VM selection (select_vm)
+    
+    
+2022-10-19 aginies  <aginies@suse.com>
+    
+    be sure the VM selected is available on the hypervisor
+    
+    
+2022-10-19 aginies  <aginies@suse.com>
+    
+    improve man page
+    
+    
+2022-10-19 aginies  <aginies@suse.com>
+    
+    improve prompt
+    
+    
+2022-10-19 aginies  <aginies@suse.com>
+    
+    put "s" inside parenthesis
+    
+    
+2022-10-19 aginies  <aginies@suse.com>
+    
+    - be sure that a VM has been selected - update man page
+    
+    
+2022-10-19 aginies  <aginies@suse.com>
+    
+    prepare 2.1
+    
+    
+2022-10-19 aginies  <aginies@suse.com>
+    
+    fix lauching command on selected vm or group
+    
+    
+2022-10-19 aginies  <aginies@suse.com>
+    
+    sync doc with code
+    
+    
+2022-10-19 aginies  <aginies@suse.com>
+    
+    can select on or more vm (select_vm) remove duplicate vm_selected
+    
+    
+2022-10-18 aginies  <aginies@suse.com>
+    
+    add some xml files
+    
+    
+2022-10-17 aginies  <aginies@suse.com>
+    
+    remove import sys (not needed)
+    
+    
+2022-10-17 Antoine Giniès  <aginies@gmail.com>
+    
+    Merge pull request #20 from aginies/v2.0
+    Merge pull request #19 from aginies/main
+    
+2022-10-17 Antoine Giniès  <aginies@gmail.com>
+    
+    Merge pull request #19 from aginies/main
+    fix typo in vm_selected function
+    
+2022-10-17 aginies  <aginies@suse.com>
+    
+    fix typo in util.py
+    
+    
+2022-10-17 Antoine Giniès  <aginies@gmail.com>
+    
+    Merge pull request #18 from aginies/v2.0
+    Merge pull request #17 from aginies/main
+    
+2022-10-17 Antoine Giniès  <aginies@gmail.com>
+    
+    Merge pull request #17 from aginies/main
+    some typo fix
+    
+2022-10-17 aginies  <aginies@suse.com>
+    
+    typo fix
+    
+    
+2022-10-14 Antoine Giniès  <aginies@gmail.com>
+    
+    Merge pull request #16 from aginies/v2.0
+    Merge pull request #15 from aginies/main
+    
+2022-10-14 Antoine Giniès  <aginies@gmail.com>
+    
+    Merge pull request #15 from aginies/main
+    v2.0
+    
+2022-10-14 aginies  <aginies@suse.com>
+    
+    v2.0
+    
+    
+2022-10-14 aginies  <aginies@suse.com>
+    
+    add GPL
+    
+    
+2022-10-14 aginies  <aginies@suse.com>
+    
+    add more info about install
+    
+    
+2022-10-14 aginies  <aginies@suse.com>
+    
+    add a clean command
+    
+    
+2022-10-14 aginies  <aginies@suse.com>
+    
+    try to support setup.py and package installation
+    
+    
+2022-10-14 aginies  <aginies@suse.com>
+    
+    add start and shutdown
+    
+    
+2022-10-14 aginies  <aginies@suse.com>
+    
+    add groups.yaml file
+    
+    
+2022-10-14 aginies  <aginies@suse.com>
+    
+    improve stuff around xml_path features
+    
+    
+2022-10-14 aginies  <aginies@suse.com>
+    
+    update the doc
+    
+    
+2022-10-14 aginies  <aginies@suse.com>
+    
+    - fix list in MANIFEST.in - create more functions to detect missing conn, group, file - add a wayt to choose path to xml device definition
+    
+    
+2022-10-14 aginies  <aginies@suse.com>
+    
+    add yaml file
+    
+    
+2022-10-14 aginies  <aginies@suse.com>
+    
+    try to fix some setup issue
+    
+    
+2022-10-14 aginies  <aginies@suse.com>
+    
+    fix pod syntax
+    
+    
+2022-10-13 aginies  <aginies@suse.com>
+    
+    fix some pylint
+    
+    
+2022-10-13 aginies  <aginies@suse.com>
+    
+    fix some pylint
+    
+    
+2022-10-13 aginies  <aginies@suse.com>
+    
+    non-interactive mode is not the default...
+    
+    
+2022-10-13 aginies  <aginies@suse.com>
+    
+    improve doc
+    
+    
+2022-10-13 aginies  <aginies@suse.com>
+    
+    fix requirements
+    
+    
+2022-10-13 aginies  <aginies@suse.com>
+    
+    add an install section
+    
+    
+2022-10-13 aginies  <aginies@suse.com>
+    
+    WIP
+    
+    
+2022-10-13 aginies  <aginies@suse.com>
+    
+    continue to prepare module....
+    
+    
+2022-10-13 aginies  <aginies@suse.com>
+    
+    move it to a pyton module (installable)
+    
+    
+2022-10-13 aginies  <aginies@suse.com>
+    
+    move this to a python module (installable)
+    
+    
+2022-10-13 aginies  <aginies@suse.com>
+    
+    remove spurious []
+    
+    
+2022-10-12 aginies  <aginies@suse.com>
+    
+    sync
+    
+    
+2022-10-12 aginies  <aginies@suse.com>
+    
+    improve README
+    
+    
+2022-10-12 aginies  <aginies@suse.com>
+    
+    add show_all_vm
+    
+    
+2022-10-12 Antoine Giniès  <aginies@gmail.com>
+    
+    update path to demo gif
+    
+    
+2022-10-12 Antoine Giniès  <aginies@gmail.com>
+    
+    Merge pull request #13 from aginies/v1.2
+    Merge pull request #12 from aginies/main
+    
+2022-10-12 Antoine Giniès  <aginies@gmail.com>
+    
+    Merge pull request #12 from aginies/main
+    merge to 1.2 version
+    
+2022-10-12 aginies  <aginies@suse.com>
+    
+    remove files...
+    
+    
+2022-10-12 aginies  <aginies@suse.com>
+    
+    try to get online demo gif file possible
+    
+    
+2022-10-12 aginies  <aginies@suse.com>
+    
+    sync to 1.2
+    
+    
+2022-10-12 aginies  <aginies@suse.com>
+    
+    fix do_shell typo
+    
+    
+2022-10-12 aginies  <aginies@suse.com>
+    
+    update to latest version
+    
+    
+2022-10-12 aginies  <aginies@suse.com>
+    
+    typo fix
+    
+    
+2022-10-12 aginies  <aginies@suse.com>
+    
+    fix intro
+    
+    
+2022-10-12 aginies  <aginies@suse.com>
+    
+    be more user friendly
+    
+    
+2022-10-12 aginies  <aginies@suse.com>
+    
+    - continue to use dedicated print_* functions - add a check of group yaml file used in do_cmd
+    
+    
+2022-10-12 aginies  <aginies@suse.com>
+    
+    - remove help on virsh command in non-interactive mode - use print_error and print_ok instead of doing esc(XXX)
+    
+    
+2022-10-12 aginies  <aginies@suse.com>
+    
+    update link to demo
+    
+    
+2022-10-12 aginies  <aginies@suse.com>
+    
+    update
+    
+    
+2022-10-12 aginies  <aginies@suse.com>
+    
+    fix path to xml file
+    
+    
+2022-10-12 aginies  <aginies@suse.com>
+    
+    sync with main
+    
+    
+2022-10-12 aginies  <aginies@suse.com>
+    
+    add more info
+    
+    
+2022-10-12 aginies  <aginies@suse.com>
+    
+    prepare 1.2
+    
+    
+2022-10-12 aginies  <aginies@suse.com>
+    
+    more check on remove and add device
+    
+    
+2022-10-12 aginies  <aginies@suse.com>
+    
+    check that a xml file has been choosen beofre asking for option
+    
+    
+2022-10-12 aginies  <aginies@suse.com>
+    
+    add a simple way to add (attach) or remove (detach) a device from an XML list
+    
+    
+2022-10-12 aginies  <aginies@suse.com>
+    
+    fix show option help
+    
+    
+2022-10-12 aginies  <aginies@suse.com>
+    
+    show option is on / off
+    
+    
+2022-10-12 aginies  <aginies@suse.com>
+    
+    v1.1
+    
+    
+2022-10-12 aginies  <aginies@suse.com>
+    
+    fix non-interactive mode
+    
+    
+2022-10-11 aginies  <aginies@suse.com>
+    
+    validate yaml file is now done
+    
+    
+2022-10-11 aginies  <aginies@suse.com>
+    
+    update
+    
+    
+2022-10-11 aginies  <aginies@suse.com>
+    
+    update to latest version
+    
+    
+2022-10-11 aginies  <aginies@suse.com>
+    
+    fix some issue in command line mode (still some bugs...)
+    
+    
+2022-10-11 aginies  <aginies@suse.com>
+    
+    version 1.0
+    
+    
+2022-10-11 aginies  <aginies@suse.com>
+    
+    various fix around yaml file detection to avoid error
+    
+    
+2022-10-11 aginies  <aginies@suse.com>
+    
+    fix validation of yaml file
+    
+    
+2022-10-11 aginies  <aginies@suse.com>
+    
+    some pylint fix
+    
+    
+2022-10-11 aginies  <aginies@suse.com>
+    
+    - validate the yaml file - add xen+ssh in list of connector - some smalll typo fixes
+    
+    
+2022-10-11 aginies  <aginies@suse.com>
+    
+    some typo fix
+    
+    
+2022-10-11 aginies  <aginies@suse.com>
+    
+    add some xml file
+    
+    
+2022-10-10 Antoine Giniès  <aginies@gmail.com>
+    
+    Merge pull request #11 from aginies/add-license-1
+    Create LICENSE
+    
+2022-10-10 Antoine Giniès  <aginies@gmail.com>
+    
+    Create LICENSE
+    
+    
+2022-10-10 Antoine Giniès  <aginies@gmail.com>
+    
+    Merge pull request #10 from aginies/devel
+    Merge pull request #9 from aginies/main
+    
+2022-10-10 Antoine Giniès  <aginies@gmail.com>
+    
+    Merge pull request #9 from aginies/main
+    merge main to devel
+    
+2022-10-10 aginies  <aginies@suse.com>
+    
+    try to remove gif from release
+    
+    
+2022-10-10 aginies  <aginies@suse.com>
+    
+    add a .gitattributes file
+    
+    
+2022-10-10 aginies  <aginies@suse.com>
+    
+    sync to latest video
+    
+    
+2022-10-10 aginies  <aginies@suse.com>
+    
+    update to latest version
+    
+    
+2022-10-10 aginies  <aginies@suse.com>
+    
+    update it
+    
+    
+2022-10-10 aginies  <aginies@suse.com>
+    
+    completion: show list of yaml file in current path
+    
+    
+2022-10-10 aginies  <aginies@suse.com>
+    
+    v0.8
+    
+    
+2022-10-10 aginies  <aginies@suse.com>
+    
+    improve layout with some color (easy to read)
+    
+    
+2022-10-10 aginies  <aginies@suse.com>
+    
+    pylint fix
+    
+    
+2022-10-10 aginies  <aginies@suse.com>
+    
+    fix typo
+    
+    
+2022-10-10 aginies  <aginies@suse.com>
+    
+    show more information on the prompt
+    
+    
+2022-10-10 Antoine Giniès  <aginies@gmail.com>
+    
+    Merge pull request #8 from aginies/v0.7
+    Merge pull request #7 from aginies/main
+    
+2022-10-10 Antoine Giniès  <aginies@gmail.com>
+    
+    Merge pull request #7 from aginies/main
+    fix missing show parameter
+    
+2022-10-10 aginies  <aginies@suse.com>
+    
+    fix error in command line (show missing)
+    
+    
+2022-10-10 aginies  <aginies@suse.com>
+    
+    update link to video
+    
+    
+2022-10-10 aginies  <aginies@suse.com>
+    
+    update video
+    
+    
+2022-10-10 Antoine Giniès  <aginies@gmail.com>
+    
+    Merge pull request #6 from aginies/v0.7
+    Merge pull request #5 from aginies/main
+    
+2022-10-10 Antoine Giniès  <aginies@gmail.com>
+    
+    Merge pull request #5 from aginies/main
+    update the doc
+    
+2022-10-10 aginies  <aginies@suse.com>
+    
+    update the doc
+    
+    
+2022-10-10 aginies  <aginies@suse.com>
+    
+    version 0.7
+    
+    
+2022-10-10 aginies  <aginies@suse.com>
+    
+    add a show command option
+    
+    
+2022-10-10 aginies  <aginies@suse.com>
+    
+    fix in libvirt remote, fix in completion of group selection
+    
+    
+2022-10-10 aginies  <aginies@suse.com>
+    
+    fix argparse error...
+    
+    
+2022-10-10 aginies  <aginies@suse.com>
+    
+    pylint fix
+    
+    
+2022-10-10 aginies  <aginies@suse.com>
+    
+    use argparse intead of deprecated optparse
+    
+    
+2022-10-10 aginies  <aginies@suse.com>
+    
+    continue to apply pylint recommendations
+    
+    
+2022-10-10 aginies  <aginies@suse.com>
+    
+    some pylint fix
+    
+    
+2022-10-10 Antoine Giniès  <aginies@gmail.com>
+    
+    Merge pull request #4 from aginies/v0.6
+    Merge pull request #3 from aginies/main
+    
+2022-10-10 Antoine Giniès  <aginies@gmail.com>
+    
+    Merge pull request #3 from aginies/main
+    merge fixe
+    
+2022-10-10 aginies  <aginies@suse.com>
+    
+    fix show_vm
+    
+    
+2022-10-10 aginies  <aginies@suse.com>
+    
+    get the help more understandable
+    
+    
+2022-10-10 aginies  <aginies@suse.com>
+    
+    improve layout
+    
+    
+2022-10-10 aginies  <aginies@suse.com>
+    
+    update
+    
+    
+2022-10-10 Antoine Giniès  <aginies@gmail.com>
+    
+    Merge pull request #2 from aginies/v0.6
+    Merge pull request #1 from aginies/main
+    
+2022-10-10 aginies  <aginies@suse.com>
+    
+    update
+    
+    
+2022-10-10 Antoine Giniès  <aginies@gmail.com>
+    
+    Merge pull request #1 from aginies/main
+    typo fix
+    
+2022-10-10 aginies  <aginies@suse.com>
+    
+    typo fix
+    
+    
+2022-10-10 aginies  <aginies@suse.com>
+    
+    use latest video
+    
+    
+2022-10-10 aginies  <aginies@suse.com>
+    
+    update to sync to devel
+    
+    
+2022-10-10 aginies  <aginies@suse.com>
+    
+    major change to 0.6 (see CHANGES)
+    
+    
+2022-10-09 aginies  <aginies@suse.com>
+    
+    update info
+    
+    
+2022-10-09 aginies  <aginies@suse.com>
+    
+    0.5
+    
+    
+2022-10-09 aginies  <aginies@suse.com>
+    
+    update info
+    
+    
+2022-10-09 aginies  <aginies@suse.com>
+    
+    move to 0.4
+    
+    
+2022-10-09 aginies  <aginies@suse.com>
+    
+    major change to 0.4 , see CHANGES
+    
+    
+2022-10-09 aginies  <aginies@suse.com>
+    
+    add exec (system command)
+    
+    
+2022-10-09 aginies  <aginies@suse.com>
+    
+    add an rng.xml file
+    
+    
+2022-10-09 aginies  <aginies@suse.com>
+    
+    update information
+    
+    
+2022-10-09 aginies  <aginies@suse.com>
+    
+    update
+    
+    
+2022-10-08 aginies  <aginies@suse.com>
+    
+    split long list of command
+    
+    
+2022-10-08 aginies  <aginies@suse.com>
+    
+    update link to latest demo
+    
+    
+2022-10-08 aginies  <aginies@suse.com>
+    
+    add a new demo
+    
+    
+2022-10-08 aginies  <aginies@suse.com>
+    
+    add help on domain command, add some monitoring command
+    
+    
+2022-10-08 aginies  <aginies@suse.com>
+    
+    add ! before the image tag
+    
+    
+2022-10-08 aginies  <aginies@suse.com>
+    
+    update info
+    
+    
+2022-10-08 aginies  <aginies@suse.com>
+    
+    add a demo gif
+    
+    
+2022-10-08 aginies  <aginies@suse.com>
+    
+    major update adding an interactive mode !
+    
+    
+2022-10-08 aginies  <aginies@suse.com>
+    
+    improve doc info
+    
+    
+2022-10-08 aginies  <aginies@suse.com>
+    
+    pylint fixes
+    
+    
+2022-10-08 aginies  <aginies@suse.com>
+    
+    improve doc
+    
+    
+2022-10-08 aginies  <aginies@suse.com>
+    
+    improve doc
+    
+    
+2022-10-08 aginies  <aginies@suse.com>
+    
+    add support of multiple group
+    
+    
+2022-10-08 aginies  <aginies@suse.com>
+    
+    display VM not found in the system (but present in the list)
+    
+    
+2022-10-08 aginies  <aginies@suse.com>
+    
+    improve layout
+    
+    
+2022-10-08 aginies  <aginies@suse.com>
+    
+    fix display virsh list
+    
+    
+2022-10-08 aginies  <aginies@suse.com>
+    
+    remove the -o option (too complex to use)
+    
+    
+2022-10-08 aginies  <aginies@suse.com>
+    
+    add a system_command function
+    
+    
+2022-10-07 aginies  <aginies@suse.com>
+    
+    use pool async which is better :)
+    
+    
+2022-10-07 aginies  <aginies@suse.com>
+    
+    restore domstate in the list....
+    
+    
+2022-10-07 aginies  <aginies@suse.com>
+    
+    add a list of domain command
+    
+    
+2022-10-07 aginies  <aginies@suse.com>
+    
+    avoid more than 79 per line
+    
+    
+2022-10-07 aginies  <aginies@suse.com>
+    
+    improve layout, update doc
+    
+    
+2022-10-07 aginies  <aginies@suse.com>
+    
+    improve doc
+    
+    
+2022-10-07 aginies  <aginies@suse.com>
+    
+    add a README file
+    
+    
+2022-10-07 aginies  <aginies@suse.com>
+    
+    first version
+    
