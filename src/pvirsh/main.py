@@ -167,7 +167,7 @@ def main():
                 code = util.check_group(args.file, args.group)
             # for now launch a virsh commande line
             if code != 666:
-                util.para_cmd(args.file, args.group, args.cmd, conn, show)
+                util.para_cmd(args.file, args.group, args.cmd, conn, show, "")
             else:
                 util.print_error('Unknow group!')
         return 0
@@ -181,8 +181,9 @@ class MyPrompt(Cmd):
     introl = {}
     introl[0] = " Welcome to "+util.esc('32;1;1') +"pvirsh "+util.esc(0)+ "Interactive Terminal!\n"
     introl[1] = util.esc('32;1;1')+" Parallel virsh"+util.esc(0)
-    introl[2] = " command to manage selected group of Virtual Machine (async mode)"
-    introl[3] = " Version: \n\n" #+pvirsh.__version__+",\n\n"
+    introl[2] = " command to manage selected group of Virtual Machine (async mode)\n"
+    # TOFIX (grab it from __init__)
+    introl[3] = " Version: 2.1\n\n"
     introl[4] = " Type: "+util.esc('36;1;1')+'help'+util.esc(0)+" for help with commands\n"
     introl[5] = "       "+util.esc('36;1;1')+'quit'+util.esc(0)+" to quit\n\n"
     introl[6] = util.esc('37;1;1')+"1) Connect to an Hypervisor\n"+util.esc(0)
@@ -355,7 +356,7 @@ class MyPrompt(Cmd):
 
     def do_select_group(self, args):
         """Select the group of VM to Manage"""
-        if self.check_file(self.file) !=1:
+        if self.check_file(self.file) != 1:
             vm_group = args
             if ',' in vm_group:
                 mgroup = vm_group.split(",")
@@ -388,7 +389,7 @@ class MyPrompt(Cmd):
 
     def do_show_group(self, args):
         """Show group from VM file content"""
-        if self.check_file(self.file) !=1:
+        if self.check_file(self.file) != 1:
             util.show_group(self.file)
 
     def help_show_group(self):
@@ -442,8 +443,8 @@ class MyPrompt(Cmd):
     def do_show_vm(self, args):
         """ Show all VM matching the selected group(s)"""
         group = Cmd.vm_group
-        if self.check_conn(Cmd.conn) != 1 and self.check_file(self.file) !=1:
-            if self.check_selected_group(group) !=1:
+        if self.check_conn(Cmd.conn) != 1 and self.check_file(self.file) != 1:
+            if self.check_selected_group(group) != 1:
                 vms = util.vm_selected(self.file, group, Cmd.conn)
                 print('Vm selected by ' +group +' group(s) on this Hypervisor are:')
                 print(util.esc('36;1;1')+str(vms)+util.esc(0))
