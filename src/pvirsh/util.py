@@ -167,7 +167,7 @@ def para_cmd(file, group, cmd, conn, show, VMS):
         # check virtm is not empty...
         if virtm:
             if show == 'on':
-                print('virsh ' +str(cmd) +' ' +virtm +' ' +str(cmdoptions))
+                print(str(cmd) +' ' +virtm +' ' +str(cmdoptions))
             pool.apply_async(do_virsh_cmd, args=(virtm, cmd, cmdoptions))
     pool.close()
     pool.join()
