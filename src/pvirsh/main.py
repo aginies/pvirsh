@@ -247,7 +247,7 @@ class MyPrompt(Cmd):
             print('Please select a group of VM: select_group GROUP_VM\nOr select a vm(s): select_vm VM1,VM2')
             return 1
 
-    def do_quit(self):
+    def do_quit(self, args):
         """Exit the application"""
         if Cmd.conn != '':
             print('Disconnecting ...')
