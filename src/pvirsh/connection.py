@@ -20,14 +20,16 @@ import libvirt
 import pvirsh.util as util
 
 class LibVirtConnect:
-    """Connection method to libvirt"""
-
+    """ Connection method to libvirt """
     def __init__(self, connector, dst):
         self.connector = connector
         self.dst = dst
         print(connector +" "+ dst)
 
     def local():
+        """
+        Local connection
+        """
         conn = None
         try:
             conn = libvirt.open("qemu:///system")
@@ -39,6 +41,9 @@ class LibVirtConnect:
             return 666
 
     def remote(connector, dst):
+        """
+        Remote connection
+        """
         dst_conn = None
         try:
             if connector.startswith('xen'):

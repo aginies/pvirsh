@@ -53,6 +53,7 @@ def find_xml_file(xmldir):
         return xml_list
     else:
         util.print_error('No' +xmldir +' directory found...')
+        return
 
 # list of domain command available with virsh
 # removed: create console domrename define managedsave-define managedsave-edit domid edit event
@@ -268,15 +269,15 @@ class MyPrompt(Cmd):
             if conn != 666:
                 Cmd.promptcon = 'Connector: ' +util.esc('32;1;1') +'qemu:///system'+util.esc(0)+'\n'
                 self.prompt = self.promptline+Cmd.promptfile+' | '+Cmd.promptcon+self.vm_group +'> '
-        elif conn == 'qemu+ssh':
-            remoteip = str(input("Remote IP address? "))
+        elif 'qemu+ssh' in conn:
+            remoteip = str(input("Remote IP address (USER@IP:PORT)? "))
             conn = connection.LibVirtConnect.remote('qemu+ssh', remoteip)
             Cmd.conn = conn
             if conn != 666:
                 Cmd.promptcon = 'Connector: ' +util.esc('32;1;1') +'qemu+ssh://' +remoteip + '/system'+util.esc(0)+'\n'
                 self.prompt = self.promptline+Cmd.promptfile+' | '+Cmd.promptcon+self.vm_group +'> '
-        elif conn == 'xen+ssh':
-            remoteip = str(input("Remote IP address? "))
+        elif 'xen+ssh' in conn:
+            remoteip = str(input("Remote IP address (USER@IP:PORT)? "))
             conn = connection.LibVirtConnect.remote('xen+ssh', remoteip)
             Cmd.conn = conn
             if conn != 666:
@@ -342,6 +343,7 @@ class MyPrompt(Cmd):
                 util.print_error("You need to select at least on VM")
 
     def help_select_vm(self):
+        """ help on select vm"""
         print('Select one/some VM from the list (separated by comma)')
 
     def complete_select_vm(self, text, line, begidx, endidx):
@@ -385,6 +387,7 @@ class MyPrompt(Cmd):
         return completions
 
     def help_select_group(self):
+        """ help on select group"""
         print("Select the group of VM to Manage")
 
     def do_show_group(self, args):
@@ -393,6 +396,7 @@ class MyPrompt(Cmd):
             util.show_group(self.file)
 
     def help_show_group(self):
+        """ help on show group"""
         print('Show group from VM file content')
 
     def complete_file(self, text, line, begidx, endidx):
@@ -419,6 +423,7 @@ class MyPrompt(Cmd):
             util.show_file_example()
 
     def help_file(self):
+        """ help show help group yaml file"""
         print('Select the group yaml file')
 
     def do_show_file(self, args):
@@ -426,6 +431,7 @@ class MyPrompt(Cmd):
         print("Group yaml file used is: "+util.esc('36;1;1')+self.file+util.esc(0))
 
     def help_show_file(self):
+        """ help on Show the Group yaml file used"""
         print("Show the Group yaml file used")
 
     def do_shell(self, args):
@@ -438,6 +444,7 @@ class MyPrompt(Cmd):
         print(out)
 
     def help_shell(self):
+        """ help on execute command"""
         print("Execute a system command")
 
     def do_show_vm(self, args):
@@ -457,12 +464,15 @@ class MyPrompt(Cmd):
             print(util.esc('36;1;1')+str(allvms)+util.esc(0))
 
     def help_show_all_vm(self):
+        """ help show all vm"""
         print("Show all VM from the current hypervisor")
 
     def help_show_vm(self):
+        """ help show vm"""
         print('Show all VM matching the selected group(s)')
 
     def do_show(self, args):
+        """ show command or not"""
         show = args
         if show == 'on':
             Cmd.show = 'on'
@@ -470,6 +480,7 @@ class MyPrompt(Cmd):
             Cmd.show = 'off'
 
     def help_show(self):
+        """ help show command"""
         print('Show command executed on VM (on|off)')
 
     def complete_show(self, text, line, begidx, endidx):
@@ -511,6 +522,7 @@ class MyPrompt(Cmd):
         return completions
 
     def help_cmd(self):
+        """ help command to execute"""
         print("Command to execute on a group of VM (virsh)")
 
     # same as complete_hcmd but sadly cant not copy it as it will not work...
@@ -532,6 +544,7 @@ class MyPrompt(Cmd):
             print(list_domain_all_cmd)
 
     def help_hcmd(self):
+        """ help on help virsh command"""
         print("Show the option of a virsh command")
 
     def do_xml_path(self, args):
@@ -547,13 +560,16 @@ class MyPrompt(Cmd):
             util.print_error('Please select an XML path dir')
 
     def help_xml_path(self):
+        """ help on xml path"""
         print('Define the path to xml devices definition')
 
     def do_show_xml_path(self, args):
+        """ show xml path"""
         if Cmd.xmldir != '':
             print("Current XML path is: "+Cmd.xmldir)
 
     def help_show_xml_path(self):
+        """ help show xml path"""
         print('show the current XML path to device definition')
 
     def do_start(self, args):
@@ -586,6 +602,7 @@ class MyPrompt(Cmd):
         return completions
 
     def help_add_dev(self):
+        """ help on add dev"""
         print('Add a device using an xml file')
 
     def do_remove_dev(self, args):
@@ -601,6 +618,7 @@ class MyPrompt(Cmd):
             self.help_remove_dev()
 
     def help_remove_dev(self):
+        """ help on remove dev"""
         print('Remove a device using an xml file')
 
     def complete_remove_dev(self, text, line, begidx, endidx):
