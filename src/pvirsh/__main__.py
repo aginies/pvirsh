@@ -22,7 +22,7 @@ import pvirsh.main
 
 if __name__ == "__main__":
     try:
-        pvirsh.main()
+        pvirsh.main.main()
     except KeyboardInterrupt:
         print('Cancelled by user.')
         exit(1)

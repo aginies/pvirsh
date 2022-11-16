@@ -20,25 +20,32 @@ from pathlib import Path
 import yaml
 
 def esc(code):
-    """ Better layout with some color"""
-
+    """
+    Better layout with some color
+    """
     # foreground: 31:red 32:green 34:blue 36:cyan
     # background: 41:red 44:blue 107:white
     # 0:reset
     return f'\033[{code}m'
 
 def print_error(text):
-    """ Print error in red"""
+    """
+    Print error in red
+    """
     formated_text = esc('31;1;1') +text +esc(0)
     print(formated_text)
 
 def print_ok(text):
-    """ Print ok in green"""
+    """
+    Print ok in green
+    """
     formated_text = esc('32;1;1') +text +esc(0)
     print(formated_text)
 
 def validate_file(file):
-    """ validate the yaml file"""
+    """
+    validate the yaml file
+    """
 
     with open(file, 'r') as stream:
         try:
@@ -49,7 +56,9 @@ def validate_file(file):
             exit(1)
 
 def show_file_example():
-    """ Show an example of a groups.yaml file"""
+    """
+    Show an example of a groups.yaml file
+    """
 
     example = """
 --------------------
@@ -70,7 +79,9 @@ Information/tips:
 
 
 def find_all_vm(conn):
-    """Find all VM from the current Hypervisor"""
+    """
+    Find all VM from the current Hypervisor
+    """
     allvm_list = []
     # Store all VM from the hypervisor
     domains = conn.listAllDomains(0)
@@ -81,6 +92,9 @@ def find_all_vm(conn):
     return allvm_list
 
 def check_file_exist(groupfile):
+    """
+    Check the gile exist
+    """
     my_file = Path(groupfile)
     if my_file.is_file():
         validate_file(my_file)
@@ -90,8 +104,9 @@ def check_file_exist(groupfile):
 
 
 def check_group(groupfile, group):
-    """check that the group exist in the yaml file"""
-
+    """
+    check that the group exist in the yaml file
+    """
     with open(groupfile) as file:
         groups = yaml.full_load(file)
         keys = list(groups.keys())
@@ -109,8 +124,9 @@ def check_group(groupfile, group):
     return 0
 
 def show_group(groupfile):
-    """show all group and machines"""
-
+    """
+    show all group and machines
+    """
     check_file_exist(groupfile)
     with open(groupfile) as file:
         groups = yaml.full_load(file)
@@ -120,9 +136,9 @@ def show_group(groupfile):
         print('\n')
 
 def system_command(cmd):
-    """Launch a system command"""
-
-    #print(cmd)
+    """
+    Launch a system command
+    """
     proc = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     proc.wait()
     out, errs = proc.communicate(timeout=2)
@@ -130,8 +146,9 @@ def system_command(cmd):
     return out, errs
 
 def do_virsh_cmd(virtum, cmd, cmdoptions):
-    """Execute the command on all the VM defined"""
-
+    """
+    Execute the command on all the VM defined
+    """
     cmdtolaunch = cmd + ' ' + virtum + ' ' + cmdoptions
     out, errs = system_command(cmdtolaunch)
     out = out.strip("\n")
@@ -143,8 +160,9 @@ def do_virsh_cmd(virtum, cmd, cmdoptions):
         print(out + " " + esc('32;1;4') + 'Done' + esc(0))
 
 def para_cmd(file, group, cmd, conn, show, VMS):
-    """Start pool of command"""
-
+    """
+    Start pool of command
+    """
     results = ''
     vms = vm_selected(file, group, conn, VMS)
 
@@ -174,6 +192,9 @@ def para_cmd(file, group, cmd, conn, show, VMS):
     print(results) #[:10])
 
 def vm_selected(file, group, conn, VMS=''):
+    """
+    return the vm selected matching on the hypervisor
+    """
     vms = ''
     # manual selection of VM
     if group == "SELECTED_VMS":
@@ -198,8 +219,9 @@ def vm_selected(file, group, conn, VMS=''):
 
 
 def find_matching_vm(groupfile, group, conn):
-    """Return the list of VM matching the group"""
-
+    """
+    Return the list of VM matching the group
+    """
     with open(groupfile) as file:
         groups = yaml.full_load(file)
         vms = ""
