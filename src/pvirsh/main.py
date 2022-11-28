@@ -441,7 +441,8 @@ class MyPrompt(Cmd):
             print(errs)
         if not out:
             util.print_error(' No output... seems weird...')
-        print(out)
+        else:
+            print(out)
 
     def help_shell(self):
         """ help on execute command"""
