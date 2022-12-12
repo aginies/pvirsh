@@ -2,8 +2,8 @@
 
 EXPERIMENTATION FOR [ALP OS](https://documentation.suse.com/alp/all/)
 
-This wrapper is a **parallel virsh** command to manage selected group of Virtual Machine.
-This provide an easy way to execute the same **command** on a **selected group of Virtual Machine**.
+This wrapper is a **parallel virsh** command to manage a selected group of Virtual Machine.
+This provides an easy way to execute the same **command** on a **selected group of Virtual Machine**.
 If you want to manage more than 1 VM you need to script you action and this will
 be done in a sequential way (most of the time). 
 
