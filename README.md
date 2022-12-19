@@ -42,7 +42,9 @@ cd pvirsh
 
 # Define Virtual Machine groups
 
-By default the script will use **groups.yaml** in the same path.
+It is possible to select VM directly on the connected hypervisir with **select_vm**,
+or you can use a group yaml file which contains list of VM per group.
+By default the script will use **groups.yaml**.
 The **yaml** file looks like:
 
 ```yaml
@@ -62,6 +64,8 @@ windows:
 * sle15sp31$ : will match exactly this machine name
 * sle15sp4 : will match all VM, including sle15sp4*
 
+NOTE: select_vm is only available in interactive mode.
+
 # TODO
 
 Probably a lot as this is for testing purpose...
@@ -73,7 +77,6 @@ Probably a lot as this is for testing purpose...
 
 ```bash
 usage: Interactive or Non Interactive command tool to manage multiple VM at the same Time
-       Version: 1.2
 
         Non interactive:
         pvirsh -n -f GROUP.yaml --conn CONNECTOR -g VM_GROUP,VM_GROUP2 -c 'CMD CMD_OPTION'
