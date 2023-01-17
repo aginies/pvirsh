@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # Authors: Antoine Ginies <aginies@suse.com>
 #
 #
