@@ -216,47 +216,55 @@ def vm_selected(file, group, conn, VMS=''):
         vms = find_matching_vm(file, group, conn)
     return vms
 
-
 def find_matching_vm(groupfile, group, conn):
     """
     Return the list of VM matching the group
     """
     with open(groupfile) as file:
         groups = yaml.full_load(file)
-        vms = ""
-        for item, value in groups.items():
-            # only match vm of the correct group
-            if item == group:
-                print('Selected group is ' +esc('36;1;4')+item+esc(0)+ ': ' + str(value))
-                # get the list of domain from the host
-                domains = conn.listAllDomains(0)
-                # check if there is a domain
-                if len(domains) != 0:
-                    # parse VM list on the host
-                    for domain in domains:
-                        # parse all VM which should be matched in the group.yaml file (virtum)
-                        for virtum in value:
-                            vmdomain = domain.name()
-                            # check the regex contains $ at the end
-                            if virtum.endswith('$'):
-                                # spliting the check
-                                check = virtum.split('$')
-                                # if same start and ending with $ this is an exact match
-                                if vmdomain.startswith(check[0]):
-                                    #print('exact matching ' +vmdomain +' ' +virtum)
-                                    vms = vmdomain + ' ' +vms
-                                else:
-                                    #print('not exact matching ' +vmdomain +' ' +virtum)
-                                    pass
-                            # case of regex does not finish with $
-                            else:
-                                # we can compare directly the vmdomain with the virtum start string
-                                if vmdomain.startswith(virtum):
-                                    #print('matching ' +vmdomain +' ' +virtum)
-                                    vms = vmdomain + ' ' +vms
-                                else:
-                                    #print('doesnt match anything....')
-                                    pass
+
+        # Get the value list for the selected group, or return an empty list if it doesn't exist
+        value = groups.get(group, [])
+        if not value:
+            print_error(f"No group '{group}' found in {groupfile}")
+            return ""
+
+        print(f"Selected group is {esc('36;1;4')}{group}{esc(0)}: {value}")
+
+        # Get the list of domain from the host
+        domains = conn.listAllDomains(0)
+
+        # check if there is a domain
+        if not domains:
+            print_error('No domain to manage on this host!')
+            return ""
+
+        vms = []
+        # parse VM list on the host
+        for domain in domains:
+            vmdomain = domain.name()
+
+            # parse all VM which should be matched in the group.yaml file (virtum)
+            for virtum in value:
+                # check the regex contains $ at the end
+                if virtum.endswith('$'):
+                    # spliting the check
+                    check = virtum.split('$')
+                    # if same start and ending with $ this is an exact match
+                    if vmdomain.startswith(check[0]):
+                        vms.append(vmdomain)
+                        #print('exact matching ' +vmdomain +' ' +virtum)
+                    else:
+                        #print('not exact matching ' +vmdomain +' ' +virtum)
+                        pass
+                # case of regex does not finish with $
                 else:
-                    print_error('No domain to manage on this host!')
-        return vms
+                    # we can compare directly the vmdomain with the virtum start string
+                    if vmdomain.startswith(virtum):
+                        vms.append(vmdomain)
+                        #print('matching ' +vmdomain +' ' +virtum)
+                    else:
+                        #print('doesnt match anything....')
+                        pass
+
+        return ' '.join(vms)
