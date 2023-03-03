@@ -1,3 +1,68 @@
+2023-02-24 aginies  <aginies@suse.com>
+    
+    code optimized by my new trainee
+    
+    
+2023-01-17 aginies  <aginies@suse.com>
+    
+    remove unwanted shebang
+    
+    
+2022-12-19 aginies  <aginies@suse.com>
+    
+    update info about select_vm
+    
+    
+2022-12-12 Antoine Giniès  <aginies@gmail.com>
+    
+    typo fix
+    typo fix
+    
+2022-11-28 aginies  <aginies@suse.com>
+    
+    fix missing else
+    
+    
+2022-11-16 Antoine Giniès  <aginies@gmail.com>
+    
+    Merge pull request #24 from aginies/v2.1
+    Merge pull request #23 from aginies/main
+    
+2022-11-16 Antoine Giniès  <aginies@gmail.com>
+    
+    Merge pull request #23 from aginies/main
+    various pylint fixes
+    
+2022-11-16 aginies  <aginies@suse.com>
+    
+    do_quit() takes 2 args not one :)
+    
+    
+2022-11-16 aginies  <aginies@suse.com>
+    
+    some pylint fixes
+    
+    
+2022-11-07 Antoine Giniès  <aginies@gmail.com>
+    
+    Merge pull request #22 from aginies/v2.1
+    Merge pull request #21 from aginies/main
+    
+2022-11-07 Antoine Giniès  <aginies@gmail.com>
+    
+    Merge pull request #21 from aginies/main
+    smal fixes
+    
+2022-11-07 aginies  <aginies@suse.com>
+    
+    remove duplicate virsh
+    
+    
+2022-11-03 aginies  <aginies@suse.com>
+    
+    use Changelog instead of CHANGES
+    
+    
 2022-11-03 aginies  <aginies@suse.com>
     
     few lint fix

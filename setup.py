@@ -188,19 +188,18 @@ class SdistCommand(sdist):
             os.mkdir("build")
 
         if os.path.exists(".git"):
-            try:
-                self.gen_authors()
-                self.gen_changelog()
-
-                sdist.run(self)
-
-            finally:
-                files = ["AUTHORS", "ChangeLog"]
-                for item in files:
-                    if os.path.exists(item):
-                        os.unlink(item)
-        else:
+            #try:
+            self.gen_authors()
+            self.gen_changelog()
             sdist.run(self)
+
+            #finally:
+                #files = ["AUTHORS", "ChangeLog"]
+                #for item in files:
+                    #if os.path.exists(item):
+                        #os.unlink(item)
+        #else:
+        #    sdist.run(self)
 
 
 setuptools.setup(

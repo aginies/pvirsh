@@ -1,3 +1,6 @@
+# sle15sp31$ : will match exactly this machine name
+# sle15sp4 : will match all VM, including all machine name like: sle15sp4*
+#
 suse:
   - sle15sp31$
   - sle15sp4
