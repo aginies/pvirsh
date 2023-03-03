@@ -28,6 +28,7 @@ See the **pvirsh.pod** file in **man/** directory
 
 * python3-libvirt-python
 * python3-PyYAML
+* python3-curses (to get completion)
 
 # Install
 
