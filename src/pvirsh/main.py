@@ -179,29 +179,28 @@ DEV_OPTIONS_LIST = ['--config', '--persistent', '--live', '--current']
 
 class MyPrompt(Cmd):
     prompt = '> '
-    introl = {}
-    introl[0] = " Welcome to "+util.esc('32;1;1') +"pvirsh "+util.esc(0)+ "Interactive Terminal!\n"
-    introl[1] = util.esc('32;1;1')+" Parallel virsh"+util.esc(0)
-    introl[2] = " command to manage selected group of Virtual Machine (async mode)\n"
+    lines = []
+    lines.append(" Welcome to "+util.esc('32;1;1') +"pvirsh "+util.esc(0)+ "Interactive Terminal!\n")
+    lines.append(util.esc('32;1;1')+" Parallel virsh"+util.esc(0))
+    lines.append(" command to manage selected group of Virtual Machine (async mode)\n")
     # TOFIX (grab it from __init__)
-    introl[3] = " Version: 2.1\n\n"
-    introl[4] = " Type: "+util.esc('36;1;1')+'help'+util.esc(0)+" for help with commands\n"
-    introl[5] = "       "+util.esc('36;1;1')+'quit'+util.esc(0)+" to quit\n\n"
-    introl[6] = util.esc('37;1;1')+"1) Connect to an Hypervisor\n"+util.esc(0)
-    introl[7] = util.esc('36;1;1')+"    conn [TAB]"+util.esc(0)+"\n"
-    introl[8] = "2) Option A:\n"
-    introl[9] = util.esc('37;1;1')+"  A1) Select the group yaml file\n"+util.esc(0)
-    introl[10] = util.esc('36;1;1')+"      file PATH_TO_FILE/FILE.YAML"+util.esc(0)+" | "+util.esc('36;1;1')+"file [TAB]\n"+util.esc(0)
-    introl[11] = util.esc('37;1;1')+"  A2) Select a group of VM to manage\n"+util.esc(0)
-    introl[12] = util.esc('36;1;1')+"      select_group [TAB]\n"+util.esc(0)
-    introl[13] = "2) Option B:\n"
-    introl[14] = util.esc('37;1;1')+"  B1) Select the VM to manage\n"+util.esc(0)
-    introl[15] = util.esc('36;1;1')+"      select_vm VM_NAME1,VM_NAME2,[TAB]\n" +util.esc(0)
-    introl[16] = util.esc('37;1;1')+"3) Run command on selected VM\n"+util.esc(0)
-    introl[17] = util.esc('36;1;1')+"    cmd [TAB]\n"+util.esc(0)
-    intro = ''
-    for line in range(18):
-        intro += introl[line]
+    lines.append(" Version: 2.1\n\n")
+    lines.append(" Type: "+util.esc('36;1;1')+'help'+util.esc(0)+" for help with commands\n")
+    lines.append("       "+util.esc('36;1;1')+'quit'+util.esc(0)+" to quit\n\n")
+    lines.append(util.esc('37;1;1')+"1) Connect to an Hypervisor\n"+util.esc(0))
+    lines.append(util.esc('36;1;1')+"    conn [TAB]"+util.esc(0)+"\n")
+    lines.append("2) Option A:\n")
+    lines.append(util.esc('37;1;1')+"  A1) Select the group yaml file\n"+util.esc(0))
+    lines.append(util.esc('36;1;1')+"      file PATH_TO_FILE/FILE.YAML"+util.esc(0)+" | "+util.esc('36;1;1')+"file [TAB]\n"+util.esc(0))
+    lines.append(util.esc('37;1;1')+"  A2) Select a group of VM to manage\n"+util.esc(0))
+    lines.append(util.esc('36;1;1')+"      select_group [TAB]\n"+util.esc(0))
+    lines.append("2) Option B:\n")
+    lines.append(util.esc('37;1;1')+"  B1) Select the VM to manage\n"+util.esc(0))
+    lines.append(util.esc('36;1;1')+"      select_vm VM_NAME1,VM_NAME2,[TAB]\n" +util.esc(0))
+    lines.append(util.esc('37;1;1')+"3) Run command on selected VM\n"+util.esc(0))
+    lines.append(util.esc('36;1;1')+"      cmd [TAB]\n"+util.esc(0))
+    intro = ''.join(lines)
+
     Cmd.vm_group = ''
     # define a default file to load (package)
     Cmd.file = '/etc/pvirsh/groups.yaml'
@@ -463,6 +462,7 @@ class MyPrompt(Cmd):
         if self.check_conn(Cmd.conn) != 1:
             allvms = util.find_all_vm(Cmd.conn)
             print(util.esc('36;1;1')+str(allvms)+util.esc(0))
+            Cmd.columnize(self, allvms)
 
     def help_show_all_vm(self):
         """ help show all vm"""
